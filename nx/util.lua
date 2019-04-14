@@ -188,28 +188,44 @@ function getKeys(table)
     return keyset
 end
 
--- Calculate linebreaks on given font
-function calcLineBreaks(input, width, font)
-    local text = ""
-    for i, word in ipairs(input:split(" ")) do
-        if font:getWidth(text .. word .. " ") + 10 > width then
-            -- Make sure it's actually worth linebreaking, if the line is still going, we should wrap instead
-            if text ~= "" then
-                text = text .. "\n" .. word
-            else
-                local wordWithoutLastChar = word:sub(1, word:len() - 1)
-                text = wordWithoutLastChar .. "\n" .. word:charAt(word:len())
-            end
-        else
-            if text == "" then
-                text = word
-            else
-                text = text .. " " .. word
-            end
-        end
+function collide(actor1, actor2)
+    if actor1 == actor2 then
+        return false
     end
 
-    return text
+    local x, y, w, h = actor1:getBoundingBox()
+    local x2, y2 = x + w, y + h
+
+    local a =
+        isWithinBox(x, y, actor2:getBoundingBox()) or isWithinBox(x, y2, actor2:getBoundingBox()) or
+        isWithinBox(x2, y, actor2:getBoundingBox()) or
+        isWithinBox(x2, y2, actor2:getBoundingBox())
+
+    local x, y, w, h = actor2:getBoundingBox()
+    local x2, y2 = x + w, y + h
+
+    local b =
+        isWithinBox(x, y, actor1:getBoundingBox()) or isWithinBox(x, y2, actor1:getBoundingBox()) or
+        isWithinBox(x2, y, actor1:getBoundingBox()) or
+        isWithinBox(x2, y2, actor1:getBoundingBox())
+
+    return a or b
+end
+
+-- From stackoverflow 
+-- https://stackoverflow.com/questions/31730923/check-if-point-lies-in-polygon-lua
+function insidePolygon(polygon, point)
+    local oddNodes = false
+    local j = #polygon
+    for i = 1, #polygon do
+        if (polygon[i].y < point.y and polygon[j].y >= point.y or polygon[j].y < point.y and polygon[i].y >= point.y) then
+            if (polygon[i].x + ( point.y - polygon[i].y ) / (polygon[j].y - polygon[i].y) * (polygon[j].x - polygon[i].x) < point.x) then
+                oddNodes = not oddNodes;
+            end
+        end
+        j = i;
+    end
+    return oddNodes 
 end
 
 Components = {}

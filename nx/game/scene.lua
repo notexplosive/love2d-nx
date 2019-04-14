@@ -61,9 +61,9 @@ function Scene:draw(inFocus)
     end
 end
 
-function Scene:keyPressed(key,scancode)
+function Scene:onKeyPress(key,scancode,isRepeat)
     for i,actor in ipairs(self.actors) do
-        actor:keyPressed(key,scancode)
+        actor:onKeyPress(key,scancode,isRepeat)
     end
 end
 
@@ -165,11 +165,7 @@ function Scene:onScroll(dx,dy)
 end
 
 function Scene:onClick(x,y,button,wasRelease)
-    local condition = function(actor) 
-        return actor:isWithinBoundingBox(x,y) or actor.disableBoundingBoxRequireClicking
-    end
-
-    self:propagate('onClick',{x,y,button,wasRelease},condition)
+    self:propagate('onClick',{x,y,button,wasRelease})
 end
 
 function Scene:onLoseFocus()

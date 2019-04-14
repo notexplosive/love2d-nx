@@ -12,11 +12,19 @@ function SampleComponent:awake()
 end
 
 function SampleComponent:draw(x,y,inFocus)
-    love.graphics.print('Hello world')
+    love.graphics.print(self.dt)
 end
 
 function SampleComponent:update(dt,inFocus)
-    print(dt)
+    self.dt = dt
+end
+
+function SampleComponent:onClick(x,y,button,wasRelease)
+    print('click',x,y,button,wasRelease)
+end
+
+function SampleComponent:onKeyPress(key,scancode,wasRepeat)
+    print('keypress',key,scancode,wasRepeat)
 end
 
 return SampleComponent

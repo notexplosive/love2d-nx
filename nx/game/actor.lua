@@ -57,10 +57,10 @@ function Actor:draw(inFocus,x,y)
 end
 
 -- called by scene
-function Actor:keyPressed(key,scancode)
+function Actor:onKeyPress(key,scancode,isRepeat)
     for i,component in ipairs(self.components) do
-        if component.keyPressed then
-            component:keyPressed(key,scancode)
+        if component.onKeyPress then
+            component:onKeyPress(key,scancode,isRepeat)
         end
     end
 end
@@ -147,6 +147,7 @@ function Actor:setPosition(pos)
     self.pos = pos:clone()
 end
 
+-- TODO: move all of this to new component
 function Actor:getBoundingBox()
     if self.spriteRenderer and (self.boundingOffset.x == 0 or self.boundingOffset.y == 0) and not self.useCustomBoundingBox then
         return self.spriteRenderer:getBoundingBox()
