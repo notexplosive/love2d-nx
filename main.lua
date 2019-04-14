@@ -1,9 +1,14 @@
-Json = require("nx/json")
+-- Global classes, you'll use vectors a lot so it's more convenient as globals
+-- More performant to require vector every time though, so your call.
 Vector = require("nx/vector")
+
+-- In case you need a Json parser, that's here too
+local Json = require("nx/json")
+
 require("nx/util")
 require("nx/update")
 require("nx/componentregistry")
-require("mousekeyboard")
+require("nx/input")
 require("templating")
 require("assets")
 

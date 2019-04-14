@@ -171,6 +171,22 @@ function string.split(inputstr, sep)
     return t
 end
 
+function string.join(table, joiner)
+    joiner = joiner or ''
+    assert(type(joiner) == 'string')
+
+    local result = ''
+    local len = #table
+    for i,v in ipairs(table) do
+        result = result .. v
+        if i ~= len then
+            result = result .. joiner
+        end
+    end
+
+    return result
+end
+
 function string.charAt(str, i)
     return string.sub(str, i, i)
 end

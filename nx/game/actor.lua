@@ -1,7 +1,11 @@
+-- You should only need to require this file if you're actually assembling an actor yourself
+-- 99% of the time you can juse use:
+--  `local actor = scene:addActor("actorName")`
+
 local Actor = {}
 
-function Actor.new(name,star)
-    assert(name ~= nil,"Must provide a name for actor")
+function Actor.new(name, star)
+    assert(name ~= nil, "Must provide a name for actor")
     local self = newObject(Actor)
     self.name = name
     self.pos = Vector.new()
@@ -9,12 +13,12 @@ function Actor.new(name,star)
     self.components = {}
     self.boundingWidth = 32
     self.boundingHeight = 32
-    self.boundingOffset = Vector.new(0,0)
+    self.boundingOffset = Vector.new(0, 0)
     self.visible = true
     self.useCustomBoundingBox = false
 
     function self:scene()
-        assert(self,'use Actor:scene() and not Actor.scene()')
+        assert(self, "use Actor:scene() and not Actor.scene()")
         return self.originalScene
     end
     -- Used for lens logic
@@ -26,115 +30,41 @@ function Actor.new(name,star)
     return self
 end
 
--- called by scene
-function Actor:sceneUpdate(dt,inFocus)
-    for i,component in ipairs(self.components) do
-        if component.update and (not component.needsFocusToUpdate or inFocus) and self:scene() then
-            component:update(dt,inFocus)
-        end
-    end
-end
-
--- called by scene
-function Actor:start()
-    for i,component in ipairs(self.components) do
-        if component.start then
-            component:start()
-        end
-    end
-end
-
--- called by scene
-function Actor:draw(inFocus,x,y)
-    if x == nil then
-        x,y = self.pos.x,self.pos.y
-    end
-    for i,component in ipairs(self.components) do
-        if component.draw and (not component.needsFocusToDraw or inFocus) then
-            component:draw(x,y,inFocus)
-        end
-    end
-end
-
--- called by scene
-function Actor:onKeyPress(key,scancode,isRepeat)
-    for i,component in ipairs(self.components) do
-        if component.onKeyPress then
-            component:onKeyPress(key,scancode,isRepeat)
-        end
-    end
-end
-
--- called by scene
-function Actor:textEntered(text)
-    for i,component in ipairs(self.components) do
-        if component.textEntered then
-            component:textEntered(text)
-        end
-    end
-end
-
--- Called by scene
-function Actor:onClick(x,y,button,wasRelease)
-    for i,component in ipairs(self.components) do
-        if component.onClick then
-            component:onClick(x,y,button,wasRelease)
-        end
-    end
-end
-
--- called by the scene
-function Actor:onDestroy()
-    for i,component in ipairs(self.components) do
-        if component.onDestroy then
-            component:onDestroy()
-        end
-    end
-end
-
--- called by colliders
-function Actor:onCollide(otherActor)
-    for i,component in ipairs(self.components) do
-        if component.onCollide then
-            component:onCollide(otherActor)
-        end
-    end
-end
-
 -- called by scene OR by others
 function Actor:destroy()
     self:onDestroy()
     self:removeFromScene()
 end
 
--- called by lens, doesn't technically "destroy" the actor
+-- Deletes actor from scene without calling onDestroy
 function Actor:removeFromScene()
     if self:scene() then
         local index = self:scene():getActorIndex(self)
         self:scene().actors[index] = nx_null
         for i = index, #self:scene().actors do
-            self:scene().actors[i] = self:scene().actors[i+1]
+            self:scene().actors[i] = self:scene().actors[i + 1]
         end
         self.originalScene = nil
     end
 end
 
--- a component is anything that has a draw function OR and update function
+-- a component is anything that has a draw function OR an update function
+-- TODO: relax this requirement? There are tons of other callbacks
 function Actor:addComponent(componentClass)
-    assert(componentClass,"Nil component")
-    assert(componentClass.name,"Component needs a name")
-    assert(componentClass.update or componentClass.draw,componentClass.name .. ' does not have update or draw')
+    assert(componentClass, "Nil component")
+    assert(componentClass.name, "Component needs a name")
+    assert(componentClass.update or componentClass.draw, componentClass.name .. " does not have update or draw")
     local component = componentClass.create()
     component.actor = self
 
     self[component.name] = component
-    
-    append(self.components,component)
+
+    append(self.components, component)
 
     if component.awake then
         component:awake()
     end
-    
+
     return component
 end
 
@@ -147,44 +77,69 @@ function Actor:setPosition(pos)
     self.pos = pos:clone()
 end
 
--- TODO: move all of this to new component
-function Actor:getBoundingBox()
-    if self.spriteRenderer and (self.boundingOffset.x == 0 or self.boundingOffset.y == 0) and not self.useCustomBoundingBox then
-        return self.spriteRenderer:getBoundingBox()
+function Actor:createEvent(functionName, args)
+    assert(Actor[functionName] == nil, "Actor already has an event called " .. functionName)
+    args = args or {}
+
+    print("Actor Event " .. 'Actor:' .. functionName .. "(" .. string.join(args,', ') .. ')' )
+
+    Actor[functionName] = function(self, ...)
+        assert(#{...} <= #args + 1, "Wrong number of arguments passed to Actor:" .. functionName)
+        for i, component in ipairs(self.components) do
+            if component[functionName] then
+                component[functionName](component, ...)
+            end
+        end
     end
-    return self.pos.x - self.boundingOffset.x,self.pos.y - self.boundingOffset.y,self.boundingWidth,self.boundingHeight
 end
 
-function Actor:setBoundingBoxDimensions(w,h)
+-- Called by Scene
+Actor:createEvent("update", {"dt"})
+Actor:createEvent("draw", {"x", "y"})
+Actor:createEvent("start")
+
+-- Called by Colliders, TODO: move this into BoundingBox component
+Actor:createEvent("onCollide", {"otherActor"})
+
+-- TODO: move all of this to new component
+function Actor:getBoundingBox()
+    if
+        self.spriteRenderer and (self.boundingOffset.x == 0 or self.boundingOffset.y == 0) and
+            not self.useCustomBoundingBox
+     then
+        return self.spriteRenderer:getBoundingBox()
+    end
+    return self.pos.x - self.boundingOffset.x, self.pos.y - self.boundingOffset.y, self.boundingWidth, self.boundingHeight
+end
+
+function Actor:setBoundingBoxDimensions(w, h)
     self.boundingWidth = w
     self.boundingHeight = h
 end
 
-function Actor:isWithinBoundingBox(x,y)
-    return isWithinBox(x,y,self:getBoundingBox())
+function Actor:isWithinBoundingBox(x, y)
+    return isWithinBox(x, y, self:getBoundingBox())
 end
 
 function Actor:isCenterOutOfBounds()
     if self.scene then
-        return not isWithinBox(self.pos.x,self.pos.y,self:scene():getBounds())
+        return not isWithinBox(self.pos.x, self.pos.y, self:scene():getBounds())
     end
 
-    print(self.actor.name .. ' bounds check not applicable, no scene')
+    print(self.actor.name .. " bounds check not applicable, no scene")
     return nil
 end
 
 function Actor:isOutOfBounds()
     if self.scene then
-        local x,y,w,h = self:getBoundingBox()
-        local x2,y2 = x+w,y+h
-        return 
-            not isWithinBox(x,y,self:scene():getBounds()) and
-            not isWithinBox(x,y2,self:scene():getBounds()) and
-            not isWithinBox(x2,y,self:scene():getBounds()) and
-            not isWithinBox(x2,y2,self:scene():getBounds())
+        local x, y, w, h = self:getBoundingBox()
+        local x2, y2 = x + w, y + h
+        return not isWithinBox(x, y, self:scene():getBounds()) and not isWithinBox(x, y2, self:scene():getBounds()) and
+            not isWithinBox(x2, y, self:scene():getBounds()) and
+            not isWithinBox(x2, y2, self:scene():getBounds())
     end
 
-    print(self.actor.name .. ' bounds check not applicable, no scene')
+    print(self.actor.name .. " bounds check not applicable, no scene")
 end
 
 return Actor
