@@ -1,11 +1,7 @@
 local SampleComponent = {}
 
 SampleComponent.name = 'SampleComponent'
-registerComponent(SampleComponent)
-
-function SampleComponent.create()
-    return newObject(SampleComponent)
-end
+registerComponent(SampleComponent, 'SampleComponent')
 
 function SampleComponent:awake()
     print('awake')

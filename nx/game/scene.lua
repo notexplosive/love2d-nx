@@ -33,7 +33,7 @@ function Scene:addActor(actor, ...)
         return self:addActor(Actor.new(actor))
     end
 
-    assert(actor.type == Actor, "Can't add a non-actor to a scene")
+    assert(actor:type() == Actor, "Can't add a non-actor to a scene")
 
     if actor.parentScene == nil then
         actor.parentScene = self

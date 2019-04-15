@@ -98,7 +98,7 @@ end
 -- Accessors and Mutators
 function SpriteRenderer:setSprite(sprite)
     assert(sprite,"Sprite is nil")
-    assert(sprite.type == Sprite)
+    assert(sprite:type() == Sprite)
 
     if self.sprite == sprite then
         return

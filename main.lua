@@ -7,8 +7,8 @@ local Json = require("nx/json")
 
 require("nx/util")
 require("nx/update")
-require("nx/componentregistry")
 require("nx/input")
+require("nx/componentregistry")
 require("templating")
 require("assets")
 

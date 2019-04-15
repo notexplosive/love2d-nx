@@ -48,12 +48,9 @@ function Actor:removeFromScene()
     end
 end
 
--- a component is anything that has a draw function OR an update function
--- TODO: relax this requirement? There are tons of other callbacks
 function Actor:addComponent(componentClass)
-    assert(componentClass, "Nil component")
+    assert(componentClass, "Actor:addComponent() was passed nil")
     assert(componentClass.name, "Component needs a name")
-    assert(componentClass.update or componentClass.draw, componentClass.name .. " does not have update or draw")
     local component = componentClass.create()
     component.actor = self
 
@@ -69,7 +66,7 @@ function Actor:addComponent(componentClass)
 end
 
 function Actor:move(velocity)
-    assert(velocity.type == Vector)
+    assert(velocity:type() == Vector)
     self.pos = self.pos + velocity
 end
 

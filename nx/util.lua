@@ -1,47 +1,13 @@
-nx_AllObjects = {}
-nx_AllDrawableObjects = {}
-nx_null = {NULL = "NULL"}
-
-function newObject(obj_t, addToList)
+function newObject(obj_t)
     object = {}
+
+    -- Do some lua magic so that myActor:update() calls Actor.update(myActor)
     setmetatable(object, obj_t)
-
     obj_t.__index = obj_t
-    object.type = obj_t
-
-    if addToList then
-        object.listIndex = #nx_AllObjects + 1
-        nx_AllObjects[object.listIndex] = object
-        nx_AllDrawableObjects[object.listIndex] = object
-
-        function object:destroy()
-            nx_AllObjects[self.listIndex] = nx_null
-            nx_AllDrawableObjects[getDrawIndex(self)] = nx_null
-        end
-
-        if obj_t.getAll == nil then
-            function obj_t.getAll()
-                local result = {}
-                for i, v in ipairs(nx_AllObjects) do
-                    if v.type == obj_t then
-                        append(result, v)
-                    end
-                end
-                return result
-            end
-        end
-
-        if obj_t.getAllDraw == nil then
-            function obj_t.getAllDraw()
-                local result = {}
-                for i, v in ipairs(nx_AllDrawableObjects) do
-                    if v.type == obj_t then
-                        append(result, v)
-                    end
-                end
-                return result
-            end
-        end
+    
+    -- Call actor:type to get Actor class.
+    function object:type() 
+        return obj_t
     end
 
     return object
@@ -49,29 +15,17 @@ end
 
 local Vector = require("nx/vector")
 
-gCameraPos = Vector.new(0, 0)
-gCameraZoom = 1
-
+-- TODO: move this into scene?
 function getDrawPos(worldx, worldy)
-    if type(worldx) ~= "number" and worldx.type == Vector then
+    if type(worldx) ~= "number" and worldx:type() == Vector then
         local vec = worldx
         return Vector.new(getDrawPos(vec.x, vec.y))
     end
 
-    local x = (worldx + (gCameraPos.x)) * gCameraZoom
-    local y = (worldy + (gCameraPos.y)) * gCameraZoom
+    local x = (worldx + (gCameraPos.x))
+    local y = (worldy + (gCameraPos.y))
 
     return x, y
-end
-
-function getDrawIndex(obj)
-    for i, v in ipairs(nx_AllDrawableObjects) do
-        if obj == v then
-            return i
-        end
-    end
-
-    return nil
 end
 
 -- math
@@ -242,13 +196,6 @@ function insidePolygon(polygon, point)
         j = i;
     end
     return oddNodes 
-end
-
-Components = {}
-function registerComponent(comp)
-    assert(comp.name, "Component needs a name")
-    print("REGISTERED: " .. comp.name)
-    Components[comp.name] = comp
 end
 
 function isWithinBox(mx, my, x, y, width, height)
