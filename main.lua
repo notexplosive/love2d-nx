@@ -18,15 +18,36 @@ local Actor = require("nx/game/actor")
 -- Global that everything has access to
 gameScene = Scene.new(love.graphics.getDimensions())
 
+--[[
 local example = gameScene:addActor("SampleActor")
-example.pos = Vector.new(30,30)
 example:addComponent(Components.SampleComponent)
+]]
 
+-- TODO: make this into Json, fix templater
 --[[
 example:addComponent(Components.GridBrush)
 example:addComponent(Components.GridRenderer)
 example:addComponent(Components.CameraPan)
 ]]
+
+local r1 = gameScene:addActor("Rect 1")
+local r2 = gameScene:addActor("Rect 2")
+local r3 = gameScene:addActor("Rect 3")
+-- TODO: Make templating parser support templates, they'd be helpful here
+r1.pos = Vector.new(300,300)
+r1:addComponent(Components.BoundingBox)
+r1:addComponent(Components.Layer)
+r1:addComponent(Components.Draggable)
+
+r2.pos = Vector.new(332+16,332)
+r2:addComponent(Components.BoundingBox)
+r2:addComponent(Components.Layer)
+r2:addComponent(Components.Draggable)
+
+r3.pos = Vector.new(332,340)
+r3:addComponent(Components.BoundingBox)
+r3:addComponent(Components.Layer)
+r3:addComponent(Components.Draggable)
 
 function lastDraw()
     gameScene:draw(true)

@@ -11,11 +11,7 @@ function Actor.new(name, star)
     self.pos = Vector.new()
     self.angle = 0
     self.components = {}
-    self.boundingWidth = 32
-    self.boundingHeight = 32
-    self.boundingOffset = Vector.new(0, 0)
     self.visible = true
-    self.useCustomBoundingBox = false
 
     function self:scene()
         assert(self, "use Actor:scene() and not Actor.scene()")
@@ -75,12 +71,12 @@ function Actor:setPosition(pos)
 end
 
 function Actor:createEvent(functionName, args)
-    assert(Actor[functionName] == nil, "Actor already has an event called " .. functionName)
+    assert(self[functionName] == nil, "Actor already has an event called " .. functionName)
     args = args or {}
 
     print("Actor Event " .. 'Actor:' .. functionName .. "(" .. string.join(args,', ') .. ')' )
 
-    Actor[functionName] = function(self, ...)
+    self[functionName] = function(self, ...)
         assert(#{...} <= #args + 1, "Wrong number of arguments passed to Actor:" .. functionName)
         for i, component in ipairs(self.components) do
             if component[functionName] then
@@ -95,28 +91,6 @@ Actor:createEvent("update", {"dt"})
 Actor:createEvent("draw", {"x", "y"})
 Actor:createEvent("start")
 
--- Called by Colliders, TODO: move this into BoundingBox component
-Actor:createEvent("onCollide", {"otherActor"})
-
--- TODO: move all of this to new component
-function Actor:getBoundingBox()
-    if
-        self.spriteRenderer and (self.boundingOffset.x == 0 or self.boundingOffset.y == 0) and
-            not self.useCustomBoundingBox
-     then
-        return self.spriteRenderer:getBoundingBox()
-    end
-    return self.pos.x - self.boundingOffset.x, self.pos.y - self.boundingOffset.y, self.boundingWidth, self.boundingHeight
-end
-
-function Actor:setBoundingBoxDimensions(w, h)
-    self.boundingWidth = w
-    self.boundingHeight = h
-end
-
-function Actor:isWithinBoundingBox(x, y)
-    return isWithinBox(x, y, self:getBoundingBox())
-end
 
 function Actor:isCenterOutOfBounds()
     if self.scene then
@@ -125,18 +99,6 @@ function Actor:isCenterOutOfBounds()
 
     print(self.actor.name .. " bounds check not applicable, no scene")
     return nil
-end
-
-function Actor:isOutOfBounds()
-    if self.scene then
-        local x, y, w, h = self:getBoundingBox()
-        local x2, y2 = x + w, y + h
-        return not isWithinBox(x, y, self:scene():getBounds()) and not isWithinBox(x, y2, self:scene():getBounds()) and
-            not isWithinBox(x2, y, self:scene():getBounds()) and
-            not isWithinBox(x2, y2, self:scene():getBounds())
-    end
-
-    print(self.actor.name .. " bounds check not applicable, no scene")
 end
 
 return Actor

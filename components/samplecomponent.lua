@@ -19,16 +19,16 @@ function SampleComponent:update(dt,inFocus)
     self.dt = dt
 end
 
-function SampleComponent:onClick(x,y,button,wasRelease)
-    print('onClick',x,y,button,wasRelease)
+function SampleComponent:onMousePress(x,y,button,wasRelease)
+    print('onMousePress',x,y,button,wasRelease)
 end
 
 function SampleComponent:onKeyPress(key,scancode,isRepeat)
     print('onKeyPress',key,scancode,isRepeat)
 end
 
-function SampleComponent:onMouseMoved(x,y,dx,dy)
-    --print('onMouseMoved',x,y,dx,dy)
+function SampleComponent:onMouseMove(x,y,dx,dy)
+    --print('onMouseMove',x,y,dx,dy)
 end
 
 function SampleComponent:onMouseScrolled(x,y)

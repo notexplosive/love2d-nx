@@ -158,9 +158,9 @@ function Scene:createEvent(functionName, args)
 end
 
 -- Input Events
-Scene:createEvent("onClick", {"x", "y", "button", "wasRelease"})
+Scene:createEvent("onMousePress", {"x", "y", "button", "wasRelease"})
 Scene:createEvent("onKeyPress", {"key", "scancode", "wasRelease"})
-Scene:createEvent("onMouseMoved", {"x", "y", "dx", "dy"})
+Scene:createEvent("onMouseMove", {"x", "y", "dx", "dy"})
 Scene:createEvent("onScroll", {"x", "y"})
 
 -- Game Events: These are special events that need special behavior

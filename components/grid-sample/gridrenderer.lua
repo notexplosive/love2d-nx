@@ -41,7 +41,7 @@ function GridRenderer:getRect(x, y, gx, gy)
     return gx * gridSize + x, gy * gridSize + y, gridSize, gridSize
 end
 
-function GridRenderer:onClick(x, y, button, wasRelease)
+function GridRenderer:onMousePress(x, y, button, wasRelease)
     if not wasRelease then
         if self.hoveredRect then
             if button == 1 then

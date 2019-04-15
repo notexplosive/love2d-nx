@@ -65,10 +65,11 @@ function copyReversed(list)
 end
 
 function deleteAt(table, index)
+    local deleted = table[index]
     for i = index, #table do
         table[i] = table[i + 1]
     end
-    return table[index]
+    return deleted
 end
 
 function deleteFromList(table, element)
@@ -104,6 +105,12 @@ function contains(table, element)
         end
     end
     return false
+end
+
+function swap(table,index1,index2)
+    local e1 = table[index1]
+    table[index1] = table[index2]
+    table[index2] = e1
 end
 
 -- Generic utility to get a random element of an array
