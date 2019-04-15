@@ -69,6 +69,10 @@ function Scene:getActor(actorName)
     return nil
 end
 
+function Scene:getMousePosition()
+    return (Vector.new(love.mouse.getPosition())):components()
+end
+
 -- Get index of actor in actor list
 function Scene:getActorIndex(actor)
     assert(actor)
@@ -106,6 +110,18 @@ function Scene:getAllActorsWithBehavior(behavior)
     return result
 end
 
+function Scene:getFirstActorWithBehavior(behavior)
+    local result = {}
+
+    for j, actor in ipairs(self.actors) do
+        if actor[behavior.name] then
+            return actor
+        end
+    end
+
+    return nil
+end
+
 function Scene:getBounds()
     return 0, 0, self.width, self.height
 end
@@ -124,7 +140,7 @@ end
 function Scene:createEvent(functionName, args)
     assert(Scene[functionName] == nil, "Scene already has an event called " .. functionName)
     assert(Actor[functionName] == nil, "Actor already has an event called " .. functionName)
-    print("Scene Event " .. 'Scene:' .. functionName .. "(" .. string.join(args,', ') .. ')' )
+    print("Scene Event " .. "Scene:" .. functionName .. "(" .. string.join(args, ", ") .. ")")
 
     -- Actor Event
     -- Calls Scene Event on all actor components
@@ -136,7 +152,7 @@ function Scene:createEvent(functionName, args)
         assert(#{...} <= #args + 1, "Wrong number of arguments passed to Scene:" .. functionName)
 
         for i, actor in ipairs(self:getAllActors()) do
-            actor[functionName](actor,...)
+            actor[functionName](actor, ...)
         end
     end
 end
@@ -144,8 +160,8 @@ end
 -- Input Events
 Scene:createEvent("onClick", {"x", "y", "button", "wasRelease"})
 Scene:createEvent("onKeyPress", {"key", "scancode", "wasRelease"})
-Scene:createEvent("onMouseMoved",{"x","y","dx","dy"})
-Scene:createEvent("onMouseScrolled",{"x","y"})
+Scene:createEvent("onMouseMoved", {"x", "y", "dx", "dy"})
+Scene:createEvent("onScroll", {"x", "y"})
 
 -- Game Events: These are special events that need special behavior
 function Scene:update(dt)
@@ -180,7 +196,7 @@ function Scene:draw()
     end
 
     if self.lastDraw then
-        self:lastDraw(x,y)
+        self:lastDraw(x, y)
     end
 end
 

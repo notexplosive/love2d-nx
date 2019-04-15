@@ -30,7 +30,7 @@ function requireComponents(path)
             moduleName = filename:split('.')[1]
             require(moduleName)
         else
-            -- Directory
+            -- Recurse into sub-directory
             requireComponents(filename..'/')
         end
     end

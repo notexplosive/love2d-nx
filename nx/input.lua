@@ -19,5 +19,5 @@ function love.keyreleased(key,scancode)
 end
 
 function love.wheelmoved(x,y)
-    gameScene:onMouseScrolled(x,y)
+    gameScene:onScroll(x,y)
 end

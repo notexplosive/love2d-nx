@@ -5,7 +5,6 @@ registerComponent(SampleComponent, 'SampleComponent')
 
 function SampleComponent:awake()
     print('awake')
-    self.actor.pos.x = 20
 end
 
 function SampleComponent:start()
@@ -13,7 +12,7 @@ function SampleComponent:start()
 end
 
 function SampleComponent:draw(x,y,inFocus)
-    love.graphics.print(self.dt,x,y)
+    love.graphics.print('Hello world!')
 end
 
 function SampleComponent:update(dt,inFocus)
@@ -29,7 +28,7 @@ function SampleComponent:onKeyPress(key,scancode,isRepeat)
 end
 
 function SampleComponent:onMouseMoved(x,y,dx,dy)
-    print('onMouseMoved',x,y,dx,dy)
+    --print('onMouseMoved',x,y,dx,dy)
 end
 
 function SampleComponent:onMouseScrolled(x,y)

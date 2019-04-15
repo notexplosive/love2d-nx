@@ -19,7 +19,14 @@ local Actor = require("nx/game/actor")
 gameScene = Scene.new(love.graphics.getDimensions())
 
 local example = gameScene:addActor("SampleActor")
+example.pos = Vector.new(30,30)
 example:addComponent(Components.SampleComponent)
+
+--[[
+example:addComponent(Components.GridBrush)
+example:addComponent(Components.GridRenderer)
+example:addComponent(Components.CameraPan)
+]]
 
 function lastDraw()
     gameScene:draw(true)
