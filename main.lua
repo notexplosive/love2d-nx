@@ -9,8 +9,8 @@ require("nx/util")
 require("nx/update")
 require("nx/input")
 require("nx/componentregistry")
-require("templating")
-require("assets")
+require("nx/game/assets")
+require("nx/templating")
 
 local Scene = require("nx/game/scene")
 local Actor = require("nx/game/actor")
@@ -57,6 +57,9 @@ local dependencySample = gameScene:addActor("Depender the Defender")
 dependencySample:addComponent(Components.SampleComponent)
 dependencySample:addComponent(Components.DependencyExample)
 ]]
+
+local spriteRendererExample = gameScene:addActor("Linkin the Swordboy")
+spriteRendererExample:addComponent(SpriteRenderer):init('linkin')
 
 function lastDraw()
     gameScene:draw(true)
