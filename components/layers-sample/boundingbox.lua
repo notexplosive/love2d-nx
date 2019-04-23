@@ -12,10 +12,10 @@ function BoundingBox:awake()
     self.forceCustom = false
 end
 
-function BoundingBox:draw(x, y, inFocus)
+function BoundingBox:draw(x, y)
 end
 
-function BoundingBox:update(dt, inFocus)
+function BoundingBox:update(dt)
 end
 
 function BoundingBox:getRect()

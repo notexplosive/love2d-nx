@@ -6,11 +6,11 @@ function CameraPan:awake()
     self.grabbed = false
 end
 
-function CameraPan:draw(x,y,inFocus)
+function CameraPan:draw(x,y)
     
 end
 
-function CameraPan:update(dt,inFocus)
+function CameraPan:update(dt)
     
 end
 

@@ -11,11 +11,11 @@ function SampleComponent:start()
     print('start')
 end
 
-function SampleComponent:draw(x,y,inFocus)
+function SampleComponent:draw(x,y)
     love.graphics.print('Hello world!')
 end
 
-function SampleComponent:update(dt,inFocus)
+function SampleComponent:update(dt)
     self.dt = dt
 end
 

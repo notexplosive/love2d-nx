@@ -12,6 +12,7 @@ function SpriteRenderer:setup(spriteName,anim,scale,color)
     assert(Assets[spriteName],"No sprite named " .. spriteName)
 
     self:setSprite(Assets[spriteName])
+    
     if anim then
         self:setAnimation(anim)
     end

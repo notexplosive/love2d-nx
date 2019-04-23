@@ -10,7 +10,7 @@ function GridRenderer:start()
     self.brush = self.actor:scene():getFirstActorWithBehavior(Components.GridBrush).GridBrush
 end
 
-function GridRenderer:draw(x, y, inFocus)
+function GridRenderer:draw(x, y)
     self.hoveredRect = nil
     for gy = 0, 100 do
         for gx = 0, 100 do
@@ -33,7 +33,7 @@ function GridRenderer:draw(x, y, inFocus)
     end
 end
 
-function GridRenderer:update(dt, inFocus)
+function GridRenderer:update(dt)
 end
 
 function GridRenderer:getRect(x, y, gx, gy)

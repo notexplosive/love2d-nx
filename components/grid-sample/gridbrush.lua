@@ -11,7 +11,7 @@ function GridBrush:awake()
     }
 end
 
-function GridBrush:draw(x, y, inFocus)
+function GridBrush:draw(x, y)
     love.graphics.setColor(1, 1, 1)
     love.graphics.print(self.colorIndex)
 end

@@ -6,13 +6,13 @@ function Draggable:awake()
     self.dragging = false
 end
 
-function Draggable:draw(x, y, inFocus)
+function Draggable:draw(x, y)
     if self.hover or self.dragging then
         
     end
 end
 
-function Draggable:update(dt, inFocus)
+function Draggable:update(dt)
 end
 
 function Draggable:onMouseMove(x, y, dx, dy)

@@ -1,5 +1,6 @@
 local Sprite = {}
 
+-- Called by templating code, should never be called directly.
 function Sprite.new(filename, gridSizeX, gridSizeY)
     local self = newObject(Sprite)
     self.filename = filename
@@ -29,6 +30,7 @@ function Sprite.new(filename, gridSizeX, gridSizeY)
     return self
 end
 
+-- Called by templating code, should never be called directly.
 function Sprite:createAnimation(animName, startQuad, endQuad)
     self.animations[animName] = {
         first = startQuad,
