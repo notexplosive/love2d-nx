@@ -1,7 +1,6 @@
 local TileMapRenderer = {}
 
-TileMapRenderer.name = "tileMapRenderer"
-registerComponent(TileMapRenderer)
+registerComponent(TileMapRenderer,"TileMapRenderer")
 
 function TileMapRenderer.create()
     return newObject(TileMapRenderer)

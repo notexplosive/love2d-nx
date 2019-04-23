@@ -1,14 +1,16 @@
 local Sprite = require('nx/game/assets/sprite')
 local SpriteRenderer = {}
 
-SpriteRenderer.name = 'spriteRenderer'
-registerComponent(SpriteRenderer)
+registerComponent(SpriteRenderer,'SpriteRenderer')
 
 function SpriteRenderer.create()
     return newObject(SpriteRenderer)
 end
 
 function SpriteRenderer:init(spriteName,anim,scale,color)
+    assert(spriteName,"Sprite name cannot be nil")
+    assert(Assets[spriteName],"No sprite named " .. spriteName)
+
     self:setSprite(Assets[spriteName])
     if anim then
         self:setAnimation(anim)

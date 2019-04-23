@@ -18,10 +18,9 @@ end
 function BoundingBox:update(dt, inFocus)
 end
 
--- TODO: move all of this to new component
 function BoundingBox:getRect()
-    if self.actor.spriteRenderer and (self.offset.x == 0 or self.offset.y == 0) and not self.forceCustom then
-        return self.spriteRenderer:getBoundingBox()
+    if self.actor.SpriteRenderer and (self.offset.x == 0 or self.offset.y == 0) and not self.forceCustom then
+        return self.SpriteRenderer:getBoundingBox()
     end
     return self.actor.pos.x - self.offset.x, self.actor.pos.y - self.offset.y, self.width, self.height
 end
@@ -29,6 +28,7 @@ end
 function BoundingBox:setBoundingBoxDimensions(w, h)
     self.width = w
     self.height = h
+    self.forceCustom = true
 end
 
 function BoundingBox:isWithinBoundingBox(x, y)

@@ -1,7 +1,6 @@
 local TileMap = {}
 
-TileMap.name = "tileMap"
-registerComponent(TileMap)
+registerComponent(TileMap,"TileMap")
 
 function TileMap.create()
     return newObject(TileMap)

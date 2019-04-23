@@ -1,7 +1,6 @@
 local TextRenderer = {}
 
-TextRenderer.name = "textRenderer"
-registerComponent(TextRenderer)
+registerComponent(TextRenderer,"TextRenderer")
 
 local fonts = {
     small = love.graphics.newFont(14),

@@ -1,7 +1,6 @@
 local Physics = {}
 
-Physics.name = 'physics'
-registerComponent(Physics)
+registerComponent(Physics,'Physics')
 
 function Physics.create()
     return newObject(Physics)
