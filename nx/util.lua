@@ -15,19 +15,6 @@ end
 
 local Vector = require("nx/vector")
 
--- TODO: move this into scene?
-function getDrawPos(worldx, worldy)
-    if type(worldx) ~= "number" and worldx:type() == Vector then
-        local vec = worldx
-        return Vector.new(getDrawPos(vec.x, vec.y))
-    end
-
-    local x = (worldx + (gCameraPos.x))
-    local y = (worldy + (gCameraPos.y))
-
-    return x, y
-end
-
 -- math
 function clamp(num, low, high)
     if num < low then

@@ -1,8 +1,11 @@
 -- This file handles all component registry
 
 Components = {}
-function registerComponent(componentClass,name)
+function registerComponent(componentClass,name,deps)
+    -- ComponentClass might have been named externally due to legacy reasons
+    -- TODO: refactor out the legacy code that requires me to do this.
     componentClass.name = componentClass.name or name
+    componentClass.dependencies = deps or {}
     print("REGISTERED: " .. componentClass.name)
     
     function componentClass.create()

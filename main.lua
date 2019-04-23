@@ -30,24 +30,33 @@ example:addComponent(Components.GridRenderer)
 example:addComponent(Components.CameraPan)
 ]]
 
-local r1 = gameScene:addActor("Rect 1")
-local r2 = gameScene:addActor("Rect 2")
-local r3 = gameScene:addActor("Rect 3")
+
 -- TODO: Make templating parser support templates, they'd be helpful here
+--[[
+local r1 = gameScene:addActor("Rect 1")
 r1.pos = Vector.new(300,300)
 r1:addComponent(Components.BoundingBox)
 r1:addComponent(Components.Layer)
 r1:addComponent(Components.Draggable)
 
+local r2 = gameScene:addActor("Rect 2")
 r2.pos = Vector.new(332+16,332)
 r2:addComponent(Components.BoundingBox)
 r2:addComponent(Components.Layer)
 r2:addComponent(Components.Draggable)
 
+local r3 = gameScene:addActor("Rect 3")
 r3.pos = Vector.new(332,340)
 r3:addComponent(Components.BoundingBox)
 r3:addComponent(Components.Layer)
 r3:addComponent(Components.Draggable)
+]]
+
+--[[
+local dependencySample = gameScene:addActor("Depender the Defender")
+dependencySample:addComponent(Components.SampleComponent)
+dependencySample:addComponent(Components.DependencyExample)
+]]
 
 function lastDraw()
     gameScene:draw(true)

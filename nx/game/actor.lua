@@ -47,6 +47,10 @@ end
 function Actor:addComponent(componentClass)
     assert(componentClass, "Actor:addComponent() was passed nil")
     assert(componentClass.name, "Component needs a name")
+    for i,dep in ipairs(componentClass.dependencies) do
+        assert(self[dep], componentClass.name .. ' depends on ' .. dep .. ', must :addComponent(' .. dep .. ')')
+    end
+    
     local component = componentClass.create()
     component.actor = self
 
