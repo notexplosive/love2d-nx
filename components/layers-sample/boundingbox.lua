@@ -2,7 +2,7 @@ local BoundingBox = {}
 
 registerComponent(BoundingBox, "BoundingBox")
 
--- TODO: BoundingBox:init(w,h,ox,oy)
+-- TODO: BoundingBox:setup(w,h,ox,oy)
 -- makes forceCustom = true
 
 function BoundingBox:awake()

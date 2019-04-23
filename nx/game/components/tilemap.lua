@@ -6,7 +6,7 @@ function TileMap.create()
     return newObject(TileMap)
 end
 
-function TileMap:init(mapName,posX,posY)
+function TileMap:setup(mapName,posX,posY)
     if mapName then
         self:setupTiles(mapName)
     end

@@ -11,7 +11,7 @@ function TextRenderer.create()
     return newObject(TextRenderer)
 end
 
-function TextRenderer:init(text, fontName, maxWidth, alignMode, scale, color, offsetx, offsety)
+function TextRenderer:setup(text, fontName, maxWidth, alignMode, scale, color, offsetx, offsety)
     self.text = text or self.text
     self.color = color or self.color
     self.maxWidth = maxWidth or self.maxWidth

@@ -7,7 +7,7 @@ function SpriteRenderer.create()
     return newObject(SpriteRenderer)
 end
 
-function SpriteRenderer:init(spriteName,anim,scale,color)
+function SpriteRenderer:setup(spriteName,anim,scale,color)
     assert(spriteName,"Sprite name cannot be nil")
     assert(Assets[spriteName],"No sprite named " .. spriteName)
 

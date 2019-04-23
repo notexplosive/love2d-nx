@@ -4,8 +4,8 @@ registerComponent(Layer,'Layer')
 
 Layer.total = 0
 
--- TODO: Layer:init(index,group)
--- After we determine what inits are going to look like in the new world
+-- TODO: Layer:setup(index,group)
+-- After we determine what setups are going to look like in the new world
 
 function Layer.__lt(small,big)
     return small.index < big.index

@@ -23,7 +23,7 @@ function Physics:update(dt)
         local px,left,right = clamp(self.actor.pos.x,0,self.actor.scene.width)
         local py,top,bottom = clamp(self.actor.pos.y,0,self.actor.scene.height)
 
-        -- this might mess with collision because pos was just definitively assigned
+        -- this might mess with collision because pos was just defsetupively assigned
         if not collided then
             --self.actor.pos = Vector.new(px,py)
         end

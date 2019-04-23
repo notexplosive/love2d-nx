@@ -76,8 +76,8 @@ function _applyActorProperties(actor,properties,path)
         if propName ~= 'pos' and propName ~= 'star' then
             assert(nx_Components[propName],propName .. ' is not a registered component\n'..path)
             local comp = actor:addComponent(nx_Components[propName])
-            if properties[propName] and comp.init then
-                comp:init(unpack(properties[propName]))
+            if properties[propName] and comp.setup then
+                comp:setup(unpack(properties[propName]))
             end
         end
     end

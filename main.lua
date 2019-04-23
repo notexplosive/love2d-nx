@@ -59,9 +59,12 @@ dependencySample:addComponent(Components.DependencyExample)
 ]]
 
 local SpriteRendererExample = gameScene:addActor("Linkin the Swordboy")
-SpriteRendererExample:addComponent(SpriteRenderer):init('linkin')
+SpriteRendererExample:addComponent(SpriteRenderer):setup('linkin')
 SpriteRendererExample.SpriteRenderer.scale = 4
 SpriteRendererExample.pos = Vector.new(200,200)
+
+local SpriteSheetRenderer = gameScene:addActor("Linkin the Newmaker")
+SpriteRendererExample:addComponent(Components.SpriteSheetRenderer):setup('linkin')
 
 function lastDraw()
     gameScene:draw(true)
