@@ -39,6 +39,15 @@ function Sprite:createAnimation(animName, startQuad, endQuad)
     }
 end
 
+function Sprite:getAllAnimations()
+    local names = getKeys(self.animations)
+    local anims = {}
+    for i, name in ipairs(names) do
+        anims[i] = self.animations[name]
+    end
+    return anims
+end
+
 -- Helper function for things that want to draw sprites that aren't spriterenderers
 function Sprite:draw(quadIndex, x, y, offx, offy, angle, scale, color)
     if not quadIndex or quadIndex < 1 then

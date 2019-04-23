@@ -82,12 +82,12 @@ end
 function SpriteRenderer:update(dt)
     if self.currentAnimation then
         self.currentFrame = self.currentFrame + dt * self.fps
-        if self.currentFrame > self.currentAnimation.last then
+        if self.currentFrame > self.currentAnimation.last+1 then
             self.onAnimationEnd()
             if self.isLooping then
                 self.currentFrame = self.currentAnimation.first
             else
-                self.currentFrame = self.currentAnimation.last - 1
+                self.currentFrame = self.currentAnimation.last
                 self.onAnimationEnd = function() end
             end
         end
@@ -100,7 +100,7 @@ end
 
 -- Accessors and Mutators
 function SpriteRenderer:setSprite(sprite)
-    assert(sprite,"Sprite is nil")
+    assert(sprite,"SpriteRenderer:setSprite was passed a nil")
     assert(sprite:type() == Sprite)
 
     if self.sprite == sprite then

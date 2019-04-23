@@ -1,8 +1,11 @@
 {
     "linkin": ["linkin.png",16,16,
         {
-            "stand":[1,3],
-            "slash1": [3,4]
+            "stand":[1,6],
+            "slash1": [11,15],
+            "slash2": [15,18],
+            "run":[7,10],
+            "focus":[18,24]
         }
     ]
 }
