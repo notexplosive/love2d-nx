@@ -188,10 +188,25 @@ function Scene:draw()
         self.shakeFrames = self.shakeFrames - 1
     end
 
+    -- Some actors draw early because of the layering system, we don't want to overdraw
+    local alreadyDrawnActors = {}
     for i, actor in ipairs(self.actors) do
-        if actor.visible then
-            local x, y = actor.pos.x - self.camera.x + shake.x, actor.pos.y - self.camera.y + shake.y
-            actor:draw(x, y)
+        if actor.Layer and not indexOf(alreadyDrawnActors, actor) then
+            for j, layerActor in ipairs(copyReversed(actor.Layer:getGroupInOrder())) do
+                append(alreadyDrawnActors, layerActor)
+                -- actually draw the actor
+                if layerActor.visible then
+                    local x, y = layerActor.pos.x - self.camera.x + shake.x, layerActor.pos.y - self.camera.y + shake.y
+                    layerActor:draw(x, y)
+                end
+            end
+        end
+
+        if not actor.Layer then
+            if actor.visible then
+                local x, y = actor.pos.x - self.camera.x + shake.x, actor.pos.y - self.camera.y + shake.y
+                actor:draw(x, y)
+            end
         end
     end
 

@@ -60,14 +60,14 @@ function deleteAt(table, index)
 end
 
 function deleteFromList(table, element)
-    local index = getIndex(table, element)
+    local index = indexOf(table, element)
     if index then
         return deleteAt(table, index)
     end
     return nil
 end
 
-function getIndex(table, element)
+function indexOf(table, element)
     for i, v in ipairs(table) do
         if v == element then
             return i

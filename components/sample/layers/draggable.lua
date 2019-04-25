@@ -22,7 +22,7 @@ function Draggable:onMouseMove(x, y, dx, dy)
         if not self.actor.Layer then
             self.hover = true
         else
-            for i, actor in ipairs(self.actor.Layer:getAllActorsInOrder()) do
+            for i, actor in ipairs(self.actor.Layer:getGroupInOrder()) do
                 if actor.Draggable.hover then
                     break
                 else
@@ -41,9 +41,13 @@ end
 
 function Draggable:onMousePress(x, y, button, wasRelease)
     if button == 1 and not wasRelease then
-        if self.hover and self.actor.Layer then
+        if not self.actor.Layer then
             self.dragging = true
+        end 
+        
+        if self.actor.Layer and self.hover then
             self.actor.Layer:bringToFront()
+            self.dragging = true
         end
     end
 

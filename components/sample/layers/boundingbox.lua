@@ -4,23 +4,31 @@ registerComponent(BoundingBox, "BoundingBox")
 
 -- TODO: BoundingBox:setup(w,h,ox,oy)
 -- makes forceCustom = true
+function BoundingBox:setup(w,h,ox,oy)
+    self.forceCustom = true
+    self.width = w
+    self.height = h
+    self.offset = Vector.new(ox,oy)
+end
+
 
 function BoundingBox:awake()
     self.width = 64
     self.height = 64
     self.offset = Vector.new(0, 0)
     self.forceCustom = false
+    self.visible = true
 end
 
 function BoundingBox:draw(x, y)
-end
-
-function BoundingBox:update(dt)
+    if self.visible then
+        love.graphics.rectangle("line", self:getRect())
+    end
 end
 
 function BoundingBox:getRect()
     if self.actor.SpriteRenderer and (self.offset.x == 0 or self.offset.y == 0) and not self.forceCustom then
-        return self.SpriteRenderer:getBoundingBox()
+        return self.actor.SpriteRenderer:getBoundingBox()
     end
     return self.actor.pos.x - self.offset.x, self.actor.pos.y - self.offset.y, self.width, self.height
 end

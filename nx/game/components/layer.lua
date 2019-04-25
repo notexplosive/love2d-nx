@@ -18,9 +18,7 @@ function Layer:awake()
 end
 
 function Layer:draw(x,y)
-    love.graphics.setColor(1, 1, 1, self.index / self:groupCount() / 2)
-    love.graphics.rectangle('fill', self.actor.BoundingBox:getRect())
-    love.graphics.print(self.index,x,y)
+    
 end
 
 function Layer:groupCount()
@@ -33,7 +31,7 @@ function Layer:groupCount()
     return count
 end
 
-function Layer:getAllActorsInOrder()
+function Layer:getGroupInOrder()
     local layers = {}
     for i,actor in ipairs(self.actor:scene():getAllActorsWithBehavior(Layer)) do
         if actor.Layer.group == self.group then
@@ -56,7 +54,7 @@ function Layer:bringToFront()
         return
     end
 
-    local actors = self:getAllActorsInOrder()
+    local actors = self:getGroupInOrder()
     deleteAt(actors,self.index)
     local oldFront = deleteAt(actors,1)
     oldFront.Layer.index = self.index
