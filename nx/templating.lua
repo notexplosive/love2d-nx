@@ -2,6 +2,7 @@ local Json = require('nx/json')
 local Actor = require('nx/game/actor')
 
 -- Mutates a scene into the result of a template
+-- TODO: rewrite this
 function SceneFromTemplate(scene,path)
     local data = readJson(path)
     

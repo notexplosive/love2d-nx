@@ -138,6 +138,7 @@ r4:addComponent(SpriteRenderer):setup('linkin','slash1',4)
 r4:setParent(r3)
 ]]
 
+--[[
 local angleBoy = gameScene:addActor("AngleBoy")
 angleBoy:setLocalPos(200,200)
 local cursor = gameScene:addActor("Cursor")
@@ -148,3 +149,4 @@ local angleChild = gameScene:addActor("AngleChild")
 angleChild:setParent(angleBoy)
 angleChild:setPos(300,200)
 angleChild:addComponent(Components.RotateTowards):setup(cursor)
+]]

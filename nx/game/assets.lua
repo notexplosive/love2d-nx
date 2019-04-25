@@ -3,4 +3,4 @@
 local Sprite = require('nx/game/assets/sprite')
 Assets = {}
 
-SpritesFromTemplate('templates/images.json')
+SpritesFromTemplate('templates/assets/images.json')
