@@ -150,8 +150,8 @@ function SpriteRenderer:getBoundingBox()
     -- Assumes sprites are always in one single horizontal strip, which is only sometimes true
     local w = self.scale * self.scaleX * self.sprite.image:getWidth() / quadCount
     local h = self.scale * self.scaleY * self.sprite.image:getHeight()
-    local x = self.actor.pos.x - w/2
-    local y = self.actor.pos.y - h/2
+    local x = self.actor:globalPos().x - w/2
+    local y = self.actor:globalPos().y - h/2
     return x, y, w, h
 end
 

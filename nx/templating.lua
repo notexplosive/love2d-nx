@@ -65,7 +65,7 @@ function _applyActorProperties(actor,properties,path)
         local propVal = properties[propName]
         if propName == 'pos' then
             assert(#propVal == 2,"Position must take two parameters\n"..path)
-            actor.pos = Vector.new(propVal[1],propVal[2])
+            actor:setPos(propVal[1],propVal[2])
         elseif propName == 'star' then
             actor.star = true
         end

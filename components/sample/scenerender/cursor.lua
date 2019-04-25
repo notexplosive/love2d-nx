@@ -18,7 +18,7 @@ function Cursor:draw(x, y)
 end
 
 function Cursor:onMouseMove(x, y, dx, dy)
-    self.actor.pos = Vector.new(x, y)
+    self.actor:setPos(x, y)
 end
 
 function Cursor:onMousePress(x, y, button, wasRelease)

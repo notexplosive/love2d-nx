@@ -21,6 +21,10 @@ function Layer:draw(x,y)
     
 end
 
+function Layer:onDestroy()
+
+end
+
 function Layer:groupCount()
     local count = 0
     for i,actor in ipairs(self.actor:scene():getAllActorsWithBehavior(Layer)) do

@@ -13,6 +13,7 @@ function Draggable:draw(x, y)
 end
 
 function Draggable:update(dt)
+    
 end
 
 function Draggable:onMouseMove(x, y, dx, dy)

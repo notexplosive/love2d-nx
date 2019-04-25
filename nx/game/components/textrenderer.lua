@@ -36,7 +36,7 @@ function TextRenderer:draw()
     love.graphics.setFont(fonts[self.fontName])
 
     if not self.maxWidth then
-        self.maxWidth = self.actor:scene().width - self.actor.pos.x
+        self.maxWidth = self.actor:scene().width - self.actor:globalPos().x
     end
 
     -- Gross corner case for centering
@@ -49,8 +49,8 @@ function TextRenderer:draw()
         love.graphics.setColor(0, 0, 0)
         love.graphics.printf(
             self.text,
-            math.floor(self.actor.pos.x + 1),
-            math.floor(self.actor.pos.y + 1),
+            math.floor(self.actor:globalPos().x + 1),
+            math.floor(self.actor:globalPos().y + 1),
             self.maxWidth,
             self.alignMode,
             self.actor.angle,
@@ -64,8 +64,8 @@ function TextRenderer:draw()
     love.graphics.setColor(self.color)
     love.graphics.printf(
         self.text,
-        math.floor(self.actor.pos.x),
-        math.floor(self.actor.pos.y),
+        math.floor(self.actor:globalPos().x),
+        math.floor(self.actor:globalPos().y),
         self.maxWidth,
         self.alignMode,
         self.actor.angle,

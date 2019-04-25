@@ -4,24 +4,23 @@
 
 local Actor = {}
 
-function Actor.new(name, star)
+function Actor.new(name)
     assert(name ~= nil, "Must provide a name for actor")
     local self = newObject(Actor)
     self.name = name
-    self.pos = Vector.new()
     self.angle = 0
     self.components = {}
     self.visible = true
+
+    -- Private
+    self._localPos = Vector.new()
 
     function self:scene()
         assert(self, "use Actor:scene() and not Actor.scene()")
         return self.originalScene
     end
-    -- Used for lens logic
+
     self.originalScene = nil
-    -- The scene that summoned this actor
-    self.parentScene = nil
-    self.star = star or false
 
     return self
 end
@@ -29,6 +28,13 @@ end
 -- called by scene OR by others
 function Actor:destroy()
     self:onDestroy()
+
+    -- Needs to be cached before the loop because the loop mutates self.children
+    local children = copyList(self.children or {})
+    for i, child in ipairs(children) do
+        child:destroy()
+    end
+
     self:removeFromScene()
 end
 
@@ -36,7 +42,6 @@ end
 function Actor:removeFromScene()
     if self:scene() then
         local index = self:scene():getActorIndex(self)
-        self:scene().actors[index] = nx_null
         for i = index, #self:scene().actors do
             self:scene().actors[i] = self:scene().actors[i + 1]
         end
@@ -44,10 +49,33 @@ function Actor:removeFromScene()
     end
 end
 
+function Actor:localPos()
+    return self._localPos
+end
+
+function Actor:globalPos()
+    if not self:parent() then
+        return self._localPos
+    else
+        return self:parent():globalPos() + self._localPos
+    end
+end
+
+-- takes a vector or x,y
+function Actor:setPos(v, y)
+    -- Handle (x,y) case
+    if tonumber(v) then
+        local x = v
+        v = Vector.new(x, y)
+    end
+
+    self._localPos = v:clone()
+end
+
 function Actor:addComponent(componentClass)
     assert(componentClass, "Actor:addComponent() was passed nil")
     assert(componentClass.name, "Component needs a name")
-    assert(self[componentClass.name] == nil, "Actor already has a " .. componentClass.name .. ' component')
+    assert(self[componentClass.name] == nil, "Actor already has a " .. componentClass.name .. " component")
 
     local component = componentClass.create()
 
@@ -76,13 +104,55 @@ function Actor:removeComponent(componentClass)
     self[componentClass.name] = nil
 end
 
-function Actor:move(velocity)
-    assert(velocity:type() == Vector)
-    self.pos = self.pos + velocity
+-- Specifically designed to allow nil. Setting to nil means "No Parent"
+function Actor:setParent(newParent)
+    -- Remove from old parent
+    local oldParent = self:parent()
+    if oldParent then
+        deleteFromList(oldParent.children, self)
+    end
+
+    -- Add to new parent
+    if newParent then
+        newParent.children = newParent.children or {}
+        append(newParent.children, self)
+
+        local offset = self._localPos - newParent:globalPos()
+        self:setPos(offset)
+    end
+
+    if not newParent and oldParent then
+        self:setPos(oldParent:globalPos() + self._localPos)
+    end
+
+    self:scene():sortActors()
 end
 
-function Actor:setPosition(pos)
-    self.pos = pos:clone()
+function Actor:parent()
+    if not self:scene() then
+        return nil
+    end
+
+    for i, actor in ipairs(self:scene().actors) do
+        if actor.children and indexOf(actor.children, self) then
+            return actor
+        end
+
+        if actor == self then
+            return nil
+        end
+    end
+end
+
+-- Takes vector or (x,y)
+function Actor:move(displacement, y)
+    if tonumber(displacement) then
+        local x = displacement
+        displacement = Vector.new(x, y)
+    end
+
+    assert(displacement:type() == Vector)
+    self._localPos = self._localPos + displacement
 end
 
 function Actor:createEvent(functionName, args)
@@ -105,10 +175,11 @@ end
 Actor:createEvent("update", {"dt"})
 Actor:createEvent("draw", {"x", "y"})
 Actor:createEvent("start")
+Actor:createEvent("onDestroy")
 
 function Actor:isCenterOutOfBounds()
     if self.scene then
-        return not isWithinBox(self.pos.x, self.pos.y, self:scene():getBounds())
+        return not isWithinBox(self:globalPos().x, self:globalPos().y, self:scene():getBounds())
     end
 
     print(self.actor.name .. " bounds check not applicable, no scene")

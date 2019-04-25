@@ -27,7 +27,7 @@ end
 -- Add actor to list
 -- Generally you want to call this with a string to create a new actor.
 -- Although you could remove an actor from a scene and re-add it, or add it to a different scene
-function Scene:addActor(actor, ...)
+function Scene:addActor(actor, parentActor)
     assert(actor ~= nil, "Scene:addActor must take at least one argument")
     if type(actor) == "string" then
         return self:addActor(Actor.new(actor))
@@ -48,10 +48,8 @@ function Scene:addActor(actor, ...)
     actor._justAddedToScene = true
     append(self.actors, actor)
 
-    if ... then
-        for i, v in ipairs({...}) do
-            self:addActor(v)
-        end
+    if parent then
+        actor:setParent(parent)
     end
 
     return actor
@@ -196,7 +194,7 @@ function Scene:draw()
                 append(alreadyDrawnActors, layerActor)
                 -- actually draw the actor
                 if layerActor.visible then
-                    local x, y = layerActor.pos.x - self.camera.x + shake.x, layerActor.pos.y - self.camera.y + shake.y
+                    local x, y = layerActor:globalPos().x - self.camera.x + shake.x, layerActor:globalPos().y - self.camera.y + shake.y
                     layerActor:draw(x, y)
                 end
             end
@@ -204,7 +202,7 @@ function Scene:draw()
 
         if not actor.Layer then
             if actor.visible then
-                local x, y = actor.pos.x - self.camera.x + shake.x, actor.pos.y - self.camera.y + shake.y
+                local x, y = actor:globalPos().x - self.camera.x + shake.x, actor:globalPos().y - self.camera.y + shake.y
                 actor:draw(x, y)
             end
         end
@@ -213,6 +211,27 @@ function Scene:draw()
     if self.lastDraw then
         self:lastDraw(x, y)
     end
+end
+
+function Scene:sortActors()
+    local sortedActors = {}
+    local alreadyVisistedMap = {}
+
+    for i, actor in ipairs(self.actors) do
+        if not alreadyVisistedMap[actor] then
+            append(sortedActors, actor)
+            alreadyVisistedMap[actor] = true
+        end
+
+        if actor.children then
+            for j, child in ipairs(actor.children) do
+                append(sortedActors, child)
+                alreadyVisistedMap[child] = true
+            end
+        end
+    end
+
+    self.actors = sortedActors
 end
 
 return Scene

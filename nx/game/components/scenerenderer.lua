@@ -34,8 +34,8 @@ function SceneRenderer:update(dt)
 end
 
 function SceneRenderer:onMouseMove(x, y, dx, dy)
-    x = x - self.actor.pos.x
-    y = y - self.actor.pos.y
+    x = x - self.actor:globalPos().x
+    y = y - self.actor:globalPos().y
     if self.scene then
         self.scene:onMouseMove(x, y, dx, dy)
     end
