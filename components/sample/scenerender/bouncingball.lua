@@ -14,19 +14,19 @@ end
 function BouncingBall:update(dt)
     self.actor:move(self.vel)
     
-    if self.actor:globalPos().x < 0 then
+    if self.actor:pos().x < 0 then
         self.vel.x = math.abs(self.vel.x)
     end
 
-    if self.actor:globalPos().x > self.actor:scene().width then
+    if self.actor:pos().x > self.actor:scene().width then
         self.vel.x = -math.abs(self.vel.x)
     end
     
-    if self.actor:globalPos().y < 0 then
+    if self.actor:pos().y < 0 then
         self.vel.y = math.abs(self.vel.y)
     end
 
-    if self.actor:globalPos().y > self.actor:scene().height then
+    if self.actor:pos().y > self.actor:scene().height then
         self.vel.y = -math.abs(self.vel.y)
     end
 end

@@ -8,12 +8,12 @@ function Actor.new(name)
     assert(name ~= nil, "Must provide a name for actor")
     local self = newObject(Actor)
     self.name = name
-    self.angle = 0
     self.components = {}
     self.visible = true
 
     -- Private
     self._localPos = Vector.new()
+    self._angle = 0
 
     function self:scene()
         assert(self, "use Actor:scene() and not Actor.scene()")
@@ -50,19 +50,39 @@ function Actor:removeFromScene()
 end
 
 function Actor:localPos()
-    return self._localPos
+    return self._localPos:clone()
 end
 
-function Actor:globalPos()
+function Actor:pos()
     if not self:parent() then
         return self._localPos
     else
-        return self:parent():globalPos() + self._localPos
+        return self:parent():pos() + self._localPos
     end
+end
+
+function Actor:angle()
+    return self._angle
+end
+
+function Actor:setAngle(angle)
+    assert(tonumber(angle), "Actor:setAngle takes a number")
+    self._angle = angle
 end
 
 -- takes a vector or x,y
 function Actor:setPos(v, y)
+    -- Handle (x,y) case
+    if tonumber(v) then
+        local x = v
+        v = Vector.new(x, y)
+    end
+
+    self._localPos = v - self:parent():pos()
+end
+
+-- takes a vector or x,y
+function Actor:setLocalPos(v, y)
     -- Handle (x,y) case
     if tonumber(v) then
         local x = v
@@ -117,12 +137,12 @@ function Actor:setParent(newParent)
         newParent.children = newParent.children or {}
         append(newParent.children, self)
 
-        local offset = self._localPos - newParent:globalPos()
-        self:setPos(offset)
+        local offset = self._localPos - newParent:pos()
+        self:setLocalPos(offset)
     end
 
     if not newParent and oldParent then
-        self:setPos(oldParent:globalPos() + self._localPos)
+        self:setLocalPos(oldParent:pos() + self._localPos)
     end
 
     self:scene():sortActors()
@@ -179,7 +199,7 @@ Actor:createEvent("onDestroy")
 
 function Actor:isCenterOutOfBounds()
     if self.scene then
-        return not isWithinBox(self:globalPos().x, self:globalPos().y, self:scene():getBounds())
+        return not isWithinBox(self:pos().x, self:pos().y, self:scene():getBounds())
     end
 
     print(self.actor.name .. " bounds check not applicable, no scene")

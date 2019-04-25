@@ -12,7 +12,7 @@ function TileMap:setup(mapName,posX,posY)
     end
 
     local gw,gh = self.actor.tileMapRenderer:getGridDimensions()
-    self.actor:setPos( posX * gw, posY * gh)
+    self.actor:setLocalPos( posX * gw, posY * gh)
 end
 
 function TileMap:awake()

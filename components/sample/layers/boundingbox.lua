@@ -30,7 +30,7 @@ function BoundingBox:getRect()
     if self.actor.SpriteRenderer and (self.offset.x == 0 or self.offset.y == 0) and not self.forceCustom then
         return self.actor.SpriteRenderer:getBoundingBox()
     end
-    return self.actor:globalPos().x - self.offset.x, self.actor:globalPos().y - self.offset.y, self.width, self.height
+    return self.actor:pos().x - self.offset.x, self.actor:pos().y - self.offset.y, self.width, self.height
 end
 
 function BoundingBox:setBoundingBoxDimensions(w, h)

@@ -34,7 +34,6 @@ function SpriteRenderer:awake()
     self.scale = 1
     self.scaleX = 1
     self.scaleY = 1
-    self.angle = 0
     self.flipX = false
     self.flipY = false
     self.color = {1,1,1,1}
@@ -69,7 +68,7 @@ function SpriteRenderer:draw(x,y)
                 quad,
                 math.floor(x),
                 math.floor(y),
-                self.angle,
+                self.actor:angle(),
                 self.scale*xFactor*self.scaleX,
                 self.scale*yFactor*self.scaleY,
                 math.floor(self.sprite.gridWidth/2),
@@ -150,8 +149,8 @@ function SpriteRenderer:getBoundingBox()
     -- Assumes sprites are always in one single horizontal strip, which is only sometimes true
     local w = self.scale * self.scaleX * self.sprite.image:getWidth() / quadCount
     local h = self.scale * self.scaleY * self.sprite.image:getHeight()
-    local x = self.actor:globalPos().x - w/2
-    local y = self.actor:globalPos().y - h/2
+    local x = self.actor:pos().x - w/2
+    local y = self.actor:pos().y - h/2
     return x, y, w, h
 end
 

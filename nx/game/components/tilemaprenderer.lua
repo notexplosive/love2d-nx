@@ -62,8 +62,8 @@ function TileMapRenderer:draw()
     for i, tile in ipairs(self.tiles) do
         self.spriteAsset:draw(
             tile.frame,
-            self.actor:globalPos().x + tile.x,
-            self.actor:globalPos().y + tile.y,
+            self.actor:pos().x + tile.x,
+            self.actor:pos().y + tile.y,
             math.floor(self.offset.x / self.scale) % self.spriteAsset.gridWidth,
             math.floor(self.offset.y / self.scale) % self.spriteAsset.gridHeight,
             0,

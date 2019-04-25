@@ -194,7 +194,7 @@ function Scene:draw()
                 append(alreadyDrawnActors, layerActor)
                 -- actually draw the actor
                 if layerActor.visible then
-                    local x, y = layerActor:globalPos().x - self.camera.x + shake.x, layerActor:globalPos().y - self.camera.y + shake.y
+                    local x, y = layerActor:pos().x - self.camera.x + shake.x, layerActor:pos().y - self.camera.y + shake.y
                     layerActor:draw(x, y)
                 end
             end
@@ -202,7 +202,7 @@ function Scene:draw()
 
         if not actor.Layer then
             if actor.visible then
-                local x, y = actor:globalPos().x - self.camera.x + shake.x, actor:globalPos().y - self.camera.y + shake.y
+                local x, y = actor:pos().x - self.camera.x + shake.x, actor:pos().y - self.camera.y + shake.y
                 actor:draw(x, y)
             end
         end
