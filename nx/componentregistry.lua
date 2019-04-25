@@ -10,6 +10,12 @@ function registerComponent(componentClass,name,deps)
         return newObject(componentClass)
     end
 
+    function componentClass.destroy(self)
+        if self.actor then
+            self.actor:removeComponent(componentClass)
+        end
+    end
+
     Components[componentClass.name] = componentClass
 end
 

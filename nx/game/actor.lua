@@ -47,11 +47,14 @@ end
 function Actor:addComponent(componentClass)
     assert(componentClass, "Actor:addComponent() was passed nil")
     assert(componentClass.name, "Component needs a name")
-    for i,dep in ipairs(componentClass.dependencies) do
-        assert(self[dep], componentClass.name .. ' depends on ' .. dep .. ', must :addComponent(' .. dep .. ')')
-    end
-    
+    assert(self[componentClass.name] == nil, "Actor already has a " .. componentClass.name .. ' component')
+
     local component = componentClass.create()
+
+    for i, dep in ipairs(componentClass.dependencies) do
+        assert(self[dep], componentClass.name .. " depends on " .. dep .. ", must :addComponent(" .. dep .. ")")
+    end
+
     component.actor = self
 
     self[component.name] = component
@@ -63,6 +66,14 @@ function Actor:addComponent(componentClass)
     end
 
     return component
+end
+
+function Actor:removeComponent(componentClass)
+    assert(componentClass, "Actor:removeComponent() was passed nil")
+    assert(componentClass.name, "Component needs a name")
+    assert(self[componentClass.name], "Actor does not have a " .. componentClass.name .. " component")
+    deleteFromList(self.components, self[componentClass.name])
+    self[componentClass.name] = nil
 end
 
 function Actor:move(velocity)
@@ -78,7 +89,7 @@ function Actor:createEvent(functionName, args)
     assert(self[functionName] == nil, "Actor already has an event called " .. functionName)
     args = args or {}
 
-    print("Actor Event " .. 'Actor:' .. functionName .. "(" .. string.join(args,', ') .. ')' )
+    print("Actor Event " .. "Actor:" .. functionName .. "(" .. string.join(args, ", ") .. ")")
 
     self[functionName] = function(self, ...)
         assert(#{...} <= #args + 1, "Wrong number of arguments passed to Actor:" .. functionName)
@@ -94,7 +105,6 @@ end
 Actor:createEvent("update", {"dt"})
 Actor:createEvent("draw", {"x", "y"})
 Actor:createEvent("start")
-
 
 function Actor:isCenterOutOfBounds()
     if self.scene then

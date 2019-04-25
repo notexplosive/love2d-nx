@@ -121,3 +121,6 @@ r2:addComponent(Components.BoundingBox)
 r2:addComponent(Layer)
 r2:addComponent(Components.Draggable)
 r2:addComponent(SpriteRenderer):setup('linkin','run',4)
+r2:addComponent(Parent):setup(r1)
+
+-- TODO: test component removal
