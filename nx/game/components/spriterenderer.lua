@@ -1,18 +1,18 @@
-local Sprite = require('nx/game/assets/sprite')
+local Sprite = require("nx/game/assets/sprite")
 local SpriteRenderer = {}
 
-registerComponent(SpriteRenderer,'SpriteRenderer')
+registerComponent(SpriteRenderer, "SpriteRenderer")
 
 function SpriteRenderer.create()
     return newObject(SpriteRenderer)
 end
 
-function SpriteRenderer:setup(spriteName,anim,scale,color)
-    assert(spriteName,"Sprite name cannot be nil")
-    assert(Assets[spriteName],"No sprite named " .. spriteName)
+function SpriteRenderer:setup(spriteName, anim, scale, color)
+    assert(spriteName, "Sprite name cannot be nil")
+    assert(Assets[spriteName], "No sprite named " .. spriteName)
 
     self:setSprite(Assets[spriteName])
-    
+
     if anim then
         self:setAnimation(anim)
     end
@@ -36,13 +36,13 @@ function SpriteRenderer:awake()
     self.scaleY = 1
     self.flipX = false
     self.flipY = false
-    self.color = {1,1,1,1}
+    self.color = {1, 1, 1, 1}
 
     self.onAnimationEnd = function()
     end
 end
 
-function SpriteRenderer:draw(x,y)
+function SpriteRenderer:draw(x, y)
     if self.sprite then
         local quad = self.sprite.quads[math.floor(self.currentFrame)]
         if self.currentAnimation then
@@ -50,10 +50,17 @@ function SpriteRenderer:draw(x,y)
         end
 
         if quad == nil then
-            quad = love.graphics.newQuad(0, 0, self.sprite.gridWidth, self.sprite.gridWidth, self.sprite.image:getDimensions())
+            quad =
+                love.graphics.newQuad(
+                0,
+                0,
+                self.sprite.gridWidth,
+                self.sprite.gridWidth,
+                self.sprite.image:getDimensions()
+            )
         end
 
-        local xFactor,yFactor = 1,1
+        local xFactor, yFactor = 1, 1
         if self.flipX then
             xFactor = -1
         end
@@ -64,30 +71,32 @@ function SpriteRenderer:draw(x,y)
         love.graphics.setColor(self.color)
 
         if self.actor.visible then
-            love.graphics.draw(self.sprite.image,
+            love.graphics.draw(
+                self.sprite.image,
                 quad,
                 math.floor(x),
                 math.floor(y),
                 self.actor:angle(),
-                self.scale*xFactor*self.scaleX,
-                self.scale*yFactor*self.scaleY,
-                math.floor(self.sprite.gridWidth/2),
-                math.floor(self.sprite.gridHeight/2))
+                self.scale * xFactor * self.scaleX,
+                self.scale * yFactor * self.scaleY,
+                math.floor(self.sprite.gridWidth / 2),
+                math.floor(self.sprite.gridHeight / 2)
+            )
         end
-            
     end
 end
 
 function SpriteRenderer:update(dt)
     if self.currentAnimation then
         self.currentFrame = self.currentFrame + dt * self.fps
-        if self.currentFrame > self.currentAnimation.last+1 then
+        if self.currentFrame > self.currentAnimation.last + 1 then
             self.onAnimationEnd()
             if self.isLooping then
                 self.currentFrame = self.currentAnimation.first
             else
                 self.currentFrame = self.currentAnimation.last
-                self.onAnimationEnd = function() end
+                self.onAnimationEnd = function()
+                end
             end
         end
 
@@ -99,7 +108,7 @@ end
 
 -- Accessors and Mutators
 function SpriteRenderer:setSprite(sprite)
-    assert(sprite,"SpriteRenderer:setSprite was passed a nil")
+    assert(sprite, "SpriteRenderer:setSprite was passed a nil")
     assert(sprite:type() == Sprite)
 
     if self.sprite == sprite then
@@ -113,7 +122,7 @@ end
 
 function SpriteRenderer:setAnimation(animName)
     assert(self.sprite)
-    assert(self.sprite.animations[animName],'No animation called ' .. animName)
+    assert(self.sprite.animations[animName], "No animation called " .. animName)
 
     if self.currentAnimation == self.sprite.animations[animName] then
         return
@@ -130,9 +139,9 @@ end
 
 function SpriteRenderer:getAnimation()
     if self.currentAnimation == nil then
-        return 'nil'
+        return "nil"
     end
-    
+
     return self.currentAnimation.name
 end
 
@@ -149,8 +158,9 @@ function SpriteRenderer:getBoundingBox()
     -- Assumes sprites are always in one single horizontal strip, which is only sometimes true
     local w = self.scale * self.scaleX * self.sprite.image:getWidth() / quadCount
     local h = self.scale * self.scaleY * self.sprite.image:getHeight()
-    local x = self.actor:pos().x - w/2
-    local y = self.actor:pos().y - h/2
+    local camera = self.actor:scene().camera
+    local x = self.actor:pos().x - w / 2 - camera.x
+    local y = self.actor:pos().y - h / 2 - camera.y
     return x, y, w, h
 end
 

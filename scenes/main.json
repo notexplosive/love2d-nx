@@ -1,0 +1,25 @@
+{
+    "settings": {
+        "allParamsMustBeFilled": false
+    },
+    "root": [
+        ["CameraPan","_","_"],
+        ["GridBrush"],
+        ["GridRenderer"]
+    ],
+    "actors":
+    [
+        {
+            "name": "Linkin",
+            "components": [
+                ["SpriteRenderer","linkin","stand"]
+            ],
+            "pos": [200,200]
+        },
+        {
+            "prefab": "sample",
+            "arguments": ["stand"],
+            "pos": [300,300]
+        }
+    ]
+}

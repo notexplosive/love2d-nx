@@ -4,13 +4,12 @@ registerComponent(BoundingBox, "BoundingBox")
 
 -- TODO: BoundingBox:setup(w,h,ox,oy)
 -- makes forceCustom = true
-function BoundingBox:setup(w,h,ox,oy)
+function BoundingBox:setup(w, h, ox, oy)
     self.forceCustom = true
     self.width = w
     self.height = h
-    self.offset = Vector.new(ox,oy)
+    self.offset = Vector.new(ox, oy)
 end
-
 
 function BoundingBox:awake()
     self.width = 64
@@ -27,10 +26,12 @@ function BoundingBox:draw(x, y)
 end
 
 function BoundingBox:getRect()
+    local camera = self.actor:scene().camera
     if self.actor.SpriteRenderer and (self.offset.x == 0 or self.offset.y == 0) and not self.forceCustom then
         return self.actor.SpriteRenderer:getBoundingBox()
     end
-    return self.actor:pos().x - self.offset.x, self.actor:pos().y - self.offset.y, self.width, self.height
+
+    return self.actor:pos().x - self.offset.x - camera.x, self.actor:pos().y - self.offset.y - camera.y, self.width, self.height
 end
 
 function BoundingBox:setBoundingBoxDimensions(w, h)

@@ -78,7 +78,11 @@ function Actor:setPos(v, y)
         v = Vector.new(x, y)
     end
 
-    self._localPos = v - self:parent():pos()
+    if self:parent() then
+        self._localPos = v - self:parent():pos()
+    else
+        self:setLocalPos(v)
+    end
 end
 
 -- takes a vector or x,y

@@ -2,14 +2,10 @@
 -- More performant to require vector every time though, so your call.
 Vector = require("nx/vector")
 
--- In case you need a Json parser, that's here too
-local Json = require("nx/json")
-
 require("nx/util")
-require("nx/update")
 require("nx/input")
 require("nx/componentregistry")
-require("nx/templating")
+require("nx/template-loader")
 require("nx/game/assets")
 
 local Scene = require("nx/game/scene")
@@ -17,13 +13,16 @@ local Actor = require("nx/game/actor")
 
 -- Global that everything has access to
 gameScene = Scene.new(love.graphics.getDimensions())
-function lastDraw()
+
+function love.update(dt)
+    gameScene:update(dt, true)
+end
+
+function love.draw()
     gameScene:draw(true)
 end
 
-function lastUpdate(dt)
-    gameScene:update(dt,true)
-end
+gameScene = loadScene("main", 200, 300)
 
 --[[
 local example = gameScene:addActor("SampleActor")
@@ -36,7 +35,6 @@ example:addComponent(Components.GridBrush)
 example:addComponent(Components.GridRenderer)
 example:addComponent(Components.CameraPan)
 ]]
-
 
 -- TODO: Make templating parser support templates, they'd be helpful here
 --[[

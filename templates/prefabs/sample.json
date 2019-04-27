@@ -1,0 +1,13 @@
+{
+  "name": "Draggable Sprite",
+  "components": [
+    ["BoundingBox"],
+    ["Layer"],
+    ["Draggable"],
+    ["SpriteRenderer", "linkin", "_", 4]
+  ],
+
+  "settings": {
+    "allParamsMustBeFilled": true
+  }
+}

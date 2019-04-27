@@ -7,8 +7,7 @@ function Scene.new(width, height)
     self.hasStarted = false
     self.actors = {}
     self.originalActors = {}
-    self.width = width
-    self.height = height
+    self:setDimensions(width,height)
     self.freeze = false
     self.camera = Vector.new(0, 0)
 
@@ -17,11 +16,15 @@ function Scene.new(width, height)
     self.shakeVariance = 0
 
     if width == nil then
-        self.width = love.graphics.getWidth()
-        self.height = love.graphics.getHeight()
+        self:setDimensions(love.graphics.getDimensions())
     end
 
     return self
+end
+
+function Scene:setDimensions(width,height)
+    self.width = width
+    self.height = height
 end
 
 -- Add actor to list
