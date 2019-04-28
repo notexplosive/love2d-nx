@@ -1,0 +1,20 @@
+{
+    "settings": {
+        "allParamsMustBeFilled": false
+    },
+    "root": [
+        
+    ],
+    "actors":
+    [
+        {
+            "name": "3D Plane",
+            "components": [
+                ["Plane"],
+                ["BoundingBox"],
+                ["Draggable"]
+            ],
+            "pos": [200,200]
+        }
+    ]
+}

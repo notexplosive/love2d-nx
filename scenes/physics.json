@@ -1,0 +1,25 @@
+{
+    "settings": {
+        "allParamsMustBeFilled": false
+    },
+    "root": [
+        
+    ],
+    "actors":
+    [
+        {
+            "name": "Box",
+            "components": [
+                
+            ],
+            "pos": [200,200]
+        },
+        {
+            "name": "Floor",
+            "components": [
+                
+            ],
+            "pos": [200,400]
+        }
+    ]
+}

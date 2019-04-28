@@ -42,7 +42,7 @@ end
 
 function Draggable:onMousePress(x, y, button, wasRelease)
     if button == 1 and not wasRelease then
-        if not self.actor.Layer then
+        if not self.actor.Layer and self.hover then
             self.dragging = true
         end 
         

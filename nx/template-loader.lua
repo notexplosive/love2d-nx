@@ -4,6 +4,8 @@ local Scene = require("nx/game/scene")
 function loadTemplateFile(path,args)
     local json = love.filesystem.read(path)
 
+    assert(json,"Cannot find json file "..path)
+
     for i, arg in ipairs(args or {}) do
         json = string.gsub(json, '"_"', '"' .. arg .. '"', 1)
     end
