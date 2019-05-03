@@ -4,9 +4,6 @@ registerComponent(Layer,'Layer')
 
 Layer.total = 0
 
--- TODO: Layer:setup(index,group)
--- After we determine what setups are going to look like in the new world
-
 function Layer.__lt(small,big)
     return small.index < big.index
 end
@@ -14,7 +11,6 @@ end
 function Layer:awake()
     Layer.total = Layer.total + 1
     self.index = Layer.total
-    self.group = 'default'
 end
 
 function Layer:draw(x,y)
@@ -25,17 +21,11 @@ function Layer:onDestroy()
 
 end
 
-function Layer:groupCount()
-    local count = 0
-    for i,actor in ipairs(self.actor:scene():getAllActorsWithBehavior(Layer)) do
-        if actor.Layer.group == self.group then
-            count = count + 1
-        end
-    end
-    return count
+function Layer:getInDrawOrder()
+    return copyReversed(self:getInOrder())
 end
 
-function Layer:getGroupInOrder()
+function Layer:getInOrder()
     local layers = {}
     for i,actor in ipairs(self.actor:scene():getAllActorsWithBehavior(Layer)) do
         if actor.Layer.group == self.group then
@@ -58,7 +48,7 @@ function Layer:bringToFront()
         return
     end
 
-    local actors = self:getGroupInOrder()
+    local actors = self:getInOrder()
     deleteAt(actors,self.index)
     local oldFront = deleteAt(actors,1)
     oldFront.Layer.index = self.index
@@ -68,6 +58,13 @@ function Layer:bringToFront()
     local list = {self.actor,oldFront,unpack(actors)}
     for i,actor in ipairs(list) do
         actor.Layer.index = i
+    end
+
+    -- I took the easy way out.
+    for i,child in ipairs(self.actor.children or {}) do
+        if child.Layer then
+            child.Layer:bringToFront()
+        end
     end
 end
 

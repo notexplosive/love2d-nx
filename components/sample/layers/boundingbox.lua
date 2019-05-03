@@ -34,10 +34,14 @@ function BoundingBox:getRect()
     return self.actor:pos().x - self.offset.x - camera.x, self.actor:pos().y - self.offset.y - camera.y, self.width, self.height
 end
 
-function BoundingBox:setBoundingBoxDimensions(w, h)
+function BoundingBox:setDimensions(w, h)
     self.width = w
     self.height = h
     self.forceCustom = true
+end
+
+function BoundingBox:getDimensions()
+    return self.width, self.height
 end
 
 function BoundingBox:isWithinBoundingBox(x, y)

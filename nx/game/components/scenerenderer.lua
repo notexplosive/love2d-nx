@@ -1,16 +1,22 @@
+local Scene = require('nx/game/scene')
 local SceneRenderer = {}
+
 
 registerComponent(SceneRenderer, "SceneRenderer")
 
-function SceneRenderer:setup(scene)
-    assert(scene,"Scene is nil")
-    self.scene = scene
-    self.canvas = love.graphics.newCanvas(scene:getDimensions())
+-- equivalent to loadScene
+function SceneRenderer:setup(path,args)
+    local sceneData = loadTemplateFile("scenes/" .. path .. ".json",args)
+    self.scene = loadSceneData(sceneData,self.scene)
 end
 
 function SceneRenderer:awake()
-    self.scene = nil
-    self.canvas = nil
+    if self.actor.BoundingBox then
+        self.scene = Scene.new(self.actor.BoundingBox:getDimensions())
+    else
+        self.scene = Scene.new(128,32)
+    end
+    self.canvas = love.graphics.newCanvas(self.scene:getDimensions())
 end
 
 function SceneRenderer:draw(x, y)
@@ -18,7 +24,7 @@ function SceneRenderer:draw(x, y)
         local oldCanvas = love.graphics.getCanvas()
         love.graphics.setCanvas(self.canvas)
         love.graphics.clear()
-        love.graphics.setColor(1,0,1)
+        love.graphics.setColor(0.5,0,0.5)
         love.graphics.rectangle('fill', 0, 0, self.canvas:getDimensions())
         love.graphics.setColor(1,1,1)
         self.scene:draw()

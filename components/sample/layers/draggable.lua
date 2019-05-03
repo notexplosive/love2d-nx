@@ -23,8 +23,8 @@ function Draggable:onMouseMove(x, y, dx, dy)
         if not self.actor.Layer then
             self.hover = true
         else
-            for i, actor in ipairs(self.actor.Layer:getGroupInOrder()) do
-                if actor.Draggable.hover then
+            for i, actor in ipairs(self.actor.Layer:getInOrder()) do
+                if actor.Draggable and actor.Draggable.hover then
                     break
                 else
                     if actor == self.actor then

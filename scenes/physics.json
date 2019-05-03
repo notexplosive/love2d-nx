@@ -8,9 +8,10 @@
     "actors":
     [
         {
-            "name": "Box",
+            "name": "Circle",
             "components": [
-                
+                ["Body","dynamic"],
+                ["CircleShape",32]
             ],
             "pos": [200,200]
         },

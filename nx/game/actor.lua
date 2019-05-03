@@ -179,6 +179,15 @@ function Actor:move(displacement, y)
     self._localPos = self._localPos + displacement
 end
 
+function Actor:getChildByName(name)
+    for i,actor in ipairs(self.children or {}) do
+        if actor.name == name then
+            return actor
+        end
+    end
+    return nil
+end
+
 function Actor:createEvent(functionName, args)
     assert(self[functionName] == nil, "Actor already has an event called " .. functionName)
     args = args or {}

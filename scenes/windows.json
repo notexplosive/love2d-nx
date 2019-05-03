@@ -1,0 +1,10 @@
+{
+  "settings": {
+    "allParamsMustBeFilled": false
+  },
+  "root": [],
+  "actors": [
+    { "prefab": "window", "arguments": ["Hello", 400, 300], "pos": [200, 200] },
+    { "prefab": "window", "arguments": ["Goodbye", 400, 500], "pos": [500, 200] }
+  ]
+}

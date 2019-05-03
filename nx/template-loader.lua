@@ -39,15 +39,28 @@ function loadComponentListData(actor, componentList)
     end
 end
 
-function loadActorData(scene, actorData)
+function loadActorData(scene, actorData,parent)
     local actor = scene:addActor(actorData.name or "ACTOR" .. love.math.random(899) + 100)
+    actor:setParent(parent)
 
     if actorData.pos then
         assert(#actorData.pos == 2, "pos should be two numbers: [x,y]")
         actor:setPos(unpack(actorData.pos))
     end
 
+    if actorData.localPos then
+        assert(#actorData.localPos == 2, "localPos should be two numbers: [x,y]")
+        actor:setLocalPos(unpack(actorData.localPos))
+    end
+
     loadComponentListData(actor, actorData.components)
+    
+    if actorData.children then
+        for i,childActorData in ipairs(actorData.children) do
+            local childActor = loadActorData(scene,childActorData,actor)
+        end
+    end
+    
     return actor
 end
 
@@ -69,8 +82,8 @@ function loadPrefabData(scene, nodeData)
     return loadActorData(scene, prefabData)
 end
 
-function loadSceneData(sceneData)
-    local scene = Scene.new()
+function loadSceneData(sceneData,scene)
+    scene = scene or Scene.new()
 
     if sceneData.dimensions then
         assert(#sceneData.dimensions == 2, "Dimensions should be two numbers: [x,y]")
