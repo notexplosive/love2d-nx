@@ -1,3 +1,5 @@
+require('nx/util_3d')
+
 function newObject(obj_t)
     object = {}
 

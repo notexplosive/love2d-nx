@@ -22,7 +22,7 @@ function love.draw()
     gameScene:draw(true)
 end
 
-gameScene = loadScene("3d", 200, 300)
+gameScene = loadScene("grid", 200, 300)
 
 --[[
 local example = gameScene:addActor("SampleActor")

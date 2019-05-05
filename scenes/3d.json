@@ -5,15 +5,16 @@
   "root": [],
   "actors": [
     {
-      "name": "3D Plane",
-      "components": [["Plane"], ["BoundingBox"], ["Draggable"]],
-      "pos": [200, 200],
-      "children": [
-        {
-          "components": [["Plane"]],
-          "localPos": [0,64]
-        }
-      ]
+      "prefab": "cube",
+      "pos": [200, 200]
+    },
+    {
+      "prefab": "cube",
+      "pos": [400, 200]
+    },
+    {
+      "prefab": "cube",
+      "pos": [600, 200]
     }
   ]
 }
