@@ -39,9 +39,8 @@ function loadComponentListData(actor, componentList)
     end
 end
 
-function loadActorData(scene, actorData,parent)
+function loadActorData(scene, actorData)
     local actor = scene:addActor(actorData.name or "ACTOR" .. love.math.random(899) + 100)
-    actor:setParent(parent)
 
     if actorData.pos then
         assert(#actorData.pos == 2, "pos should be two numbers: [x,y]")

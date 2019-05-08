@@ -120,20 +120,17 @@ r2:addComponent(Components.BoundingBox)
 r2:addComponent(Layer)
 r2:addComponent(Components.Draggable)
 r2:addComponent(SpriteRenderer):setup('linkin','run',4)
-r2:setParent(r1)
 
 local r3 = gameScene:addActor("Rect 3")
 r3:addComponent(Components.BoundingBox)
 r3:addComponent(Layer)
 r3:addComponent(Components.Draggable)
 r3:addComponent(SpriteRenderer):setup('linkin','slash1',4)
-r3:setParent(r2)
 r3:setLocalPos(400,350)
 
 local r4 = gameScene:addActor("Rect 3.5")
 r4:setLocalPos(400,350)
 r4:addComponent(SpriteRenderer):setup('linkin','slash1',4)
-r4:setParent(r3)
 ]]
 
 --[[
@@ -144,7 +141,6 @@ cursor:addComponent(Components.Cursor)
 angleBoy:addComponent(Components.RotateTowards):setup(cursor)
 
 local angleChild = gameScene:addActor("AngleChild")
-angleChild:setParent(angleBoy)
 angleChild:setPos(300,200)
 angleChild:addComponent(Components.RotateTowards):setup(cursor)
 ]]

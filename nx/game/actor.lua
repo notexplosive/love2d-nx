@@ -54,11 +54,7 @@ function Actor:localPos()
 end
 
 function Actor:pos()
-    if not self:parent() then
-        return self._localPos
-    else
-        return self:parent():pos() + self._localPos
-    end
+    return self._localPos:clone()
 end
 
 function Actor:angle()
@@ -77,12 +73,8 @@ function Actor:setPos(v, y)
         local x = v
         v = Vector.new(x, y)
     end
-
-    if self:parent() then
-        self._localPos = v - self:parent():pos()
-    else
-        self:setLocalPos(v)
-    end
+    
+    self._localPos = v
 end
 
 -- takes a vector or x,y
@@ -126,46 +118,6 @@ function Actor:removeComponent(componentClass)
     assert(self[componentClass.name], "Actor does not have a " .. componentClass.name .. " component")
     deleteFromList(self.components, self[componentClass.name])
     self[componentClass.name] = nil
-end
-
--- Specifically designed to allow nil. Setting to nil means "No Parent"
-function Actor:setParent(newParent)
-    -- Remove from old parent
-    local oldParent = self:parent()
-    if oldParent then
-        deleteFromList(oldParent.children, self)
-    end
-
-    -- Add to new parent
-    if newParent then
-        newParent.children = newParent.children or {}
-        append(newParent.children, self)
-
-        local offset = self._localPos - newParent:pos()
-        self:setLocalPos(offset)
-    end
-
-    if not newParent and oldParent then
-        self:setLocalPos(oldParent:pos() + self._localPos)
-    end
-
-    self:scene():sortActors()
-end
-
-function Actor:parent()
-    if not self:scene() then
-        return nil
-    end
-
-    for i, actor in ipairs(self:scene().actors) do
-        if actor.children and indexOf(actor.children, self) then
-            return actor
-        end
-
-        if actor == self then
-            return nil
-        end
-    end
 end
 
 -- Takes vector or (x,y)

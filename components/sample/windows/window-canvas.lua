@@ -23,7 +23,7 @@ function WindowCanvas:onMousePress(x,y,button,wasRelease)
 
         if wasRelease then
             if self._wasClickInitiated and inRect then
-                self.actor:parent().Layer:bringToFront()
+                
             end
             self._wasClickInitiated = false
         end

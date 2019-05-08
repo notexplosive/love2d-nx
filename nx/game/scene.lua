@@ -31,17 +31,13 @@ end
 -- Add actor to list
 -- Generally you want to call this with a string to create a new actor.
 -- Although you could remove an actor from a scene and re-add it, or add it to a different scene
-function Scene:addActor(actor, parentActor)
+function Scene:addActor(actor)
     assert(actor ~= nil, "Scene:addActor must take at least one argument")
     if type(actor) == "string" then
         return self:addActor(Actor.new(actor))
     end
 
     assert(actor:type() == Actor, "Can't add a non-actor to a scene")
-
-    if actor.parentScene == nil then
-        actor.parentScene = self
-    end
 
     --actor.scene = self
     if actor.originalScene == nil then
@@ -51,10 +47,6 @@ function Scene:addActor(actor, parentActor)
 
     actor._justAddedToScene = true
     append(self.actors, actor)
-
-    if parent then
-        actor:setParent(parent)
-    end
 
     return actor
 end
