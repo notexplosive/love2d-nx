@@ -1,4 +1,4 @@
 {
   "name": "Cube-ish",
-  "components": [["Plane", "horizontal"], ["BoundingBox"], ["Draggable"]]
+  "components": [["Plane"], ["BoundingBox"], ["Draggable"]]
 }
