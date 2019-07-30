@@ -9,7 +9,7 @@ function BoundingBox:setup(w, h, ox, oy)
 end
 
 function BoundingBox:reverseSetup()
-    return self.width,self.height,self.offset.x,self.offset.y
+    return self.size.width,self.size.height,self.offset.x,self.offset.y
 end
 
 function BoundingBox:awake()
@@ -27,6 +27,14 @@ end
 
 function BoundingBox:getArea()
     return self.size:area()
+end
+
+function BoundingBox:width()
+    return self.size.width
+end
+
+function BoundingBox:height()
+    return self.size.height
 end
 
 function BoundingBox:getRect()

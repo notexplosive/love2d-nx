@@ -23,7 +23,7 @@ function ArrangeGroupInGrid:update(dt)
             row = row + 1
         end
         actors[i]:setPos(
-            Vector.new(col * actors[i].BoundingBox.width, row * actors[i].BoundingBox.height) * 1.2 + self.actor:pos()
+            Vector.new(col * actors[i].BoundingBox:width(), row * actors[i].BoundingBox:height()) * 1.2 + self.actor:pos()
         )
         col = col + 1
     end

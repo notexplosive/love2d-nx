@@ -12,8 +12,8 @@ function BoundingBoxEditor:draw(x, y)
         return
     end
 
-    local width = self.actor.BoundingBox.width
-    local height = self.actor.BoundingBox.height
+    local width = self.actor.BoundingBox:width()
+    local height = self.actor.BoundingBox:height()
     love.graphics.setColor(0.5, 0.5, 1)
     self.points = {
         {x + width / 2, y - 15},
@@ -40,17 +40,17 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
     if self.selectedIndex then
         if self.selectedIndex == 1 then
             self.actor:setPos(self.actor:pos() + Vector.new(0, dy))
-            self.actor.BoundingBox.height = self.actor.BoundingBox.height - dy
+            self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() - dy
         end
         if self.selectedIndex == 2 then
-            self.actor.BoundingBox.height = self.actor.BoundingBox.height + dy
+            self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() + dy
         end
         if self.selectedIndex == 3 then
             self.actor:setPos(self.actor:pos() + Vector.new(dx, 0))
-            self.actor.BoundingBox.width = self.actor.BoundingBox.width - dx
+            self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() - dx
         end
         if self.selectedIndex == 4 then
-            self.actor.BoundingBox.width = self.actor.BoundingBox.width + dx
+            self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() + dx
         end
 
         self.actor:callForAllComponents("onBoundingBoxResize")

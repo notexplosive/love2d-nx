@@ -13,9 +13,9 @@ function LinearButtonLayout:start()
         if i == 1 then
             actor:setPos(self.actor:pos())
         else
-            local offset = Vector.new(actors[i-1].BoundingBox.width + self.padding,0)
+            local offset = Vector.new(actors[i-1].BoundingBox:width() + self.padding,0)
             if self.orientation == 'vertical' then
-                offset = Vector.new(0,actors[i-1].BoundingBox.height + self.padding)
+                offset = Vector.new(0,actors[i-1].BoundingBox:height() + self.padding)
             end
             actor:setPos(actors[i-1]:pos() + offset )
         end

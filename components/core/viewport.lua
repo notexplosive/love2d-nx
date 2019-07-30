@@ -25,7 +25,7 @@ function Viewport:update(dt)
             local displacement = actor:pos() - centerPos
             averagePos = averagePos + displacement / 2
 
-            if displacement:length() > self.actor.BoundingBox.width * 2 then
+            if displacement:length() > self.actor.BoundingBox:width() * 2 then
                 self.cooldown = 1
                 actor:destroy()
             end
