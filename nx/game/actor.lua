@@ -23,9 +23,9 @@ function Actor.new(name)
 
     self.originalScene = nil
 
-    -- TODO: remove "Components.", just "Serialize"
-    -- Serialize needs to be moved to nx/game/components
-    self:addComponent(Components.Serialize)
+    -- TODO: remove "Components.", just "Serializable"
+    -- Serializable needs to be moved to nx/game/components
+    self:addComponent(Components.Serializable)
 
     return self
 end
@@ -177,11 +177,11 @@ function Actor:callForAllComponents(methodName, ...)
 end
 
 function Actor:duplicate()
-    assert(self.Serialize, "cannot duplicate an actor with no Serialize component")
-    if self.Serialize:isPrefab() then
-        return loadActorData(self:scene(), self.Serialize:createActorNode(), self.Serialize:getPrefabData())
+    assert(self.Serializable, "cannot duplicate an actor with no Serializable component")
+    if self.Serializable:isPrefab() then
+        return loadActorData(self:scene(), self.Serializable:createActorNode(), self.Serializable:getPrefabData())
     else
-        return loadActorData(self:scene(), self.Serialize:createActorNode())
+        return loadActorData(self:scene(), self.Serializable:createActorNode())
     end
 end
 

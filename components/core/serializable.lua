@@ -1,18 +1,18 @@
-local Serialize = {}
+local Serializable = {}
 
-registerComponent(Serialize, "Serialize")
+registerComponent(Serializable, "Serializable")
 
-function Serialize:awake()
+function Serializable:awake()
     self.componentListsAtSpawn = {}
     self.prefabTemplateName = nil
     self.prefabArgumentsAtSpawn = nil
 end
 
-function Serialize:addComponentList(componentData)
+function Serializable:addComponentList(componentData)
     append(self.componentListsAtSpawn, componentData)
 end
 
-function Serialize:setPrefabInfo(prefabName, arguments, reverseEngineerList)
+function Serializable:setPrefabInfo(prefabName, arguments, reverseEngineerList)
     self.prefabTemplateName = prefabName
     self.prefabArgumentsAtSpawn = arguments
     self.reverseEngineerList = reverseEngineerList
@@ -25,11 +25,11 @@ function Serialize:setPrefabInfo(prefabName, arguments, reverseEngineerList)
     end
 end
 
-function Serialize:getPrefabInfo()
+function Serializable:getPrefabInfo()
     return self.prefabTemplateName, unpack(self:getPrefabArgumentsAsList())
 end
 
-function Serialize:getPrefabArgumentsAsList()
+function Serializable:getPrefabArgumentsAsList()
     local prefabArguments = {}
     for i, node in ipairs(self.reverseEngineerList or {}) do
         local componentName = node[1]
@@ -44,26 +44,26 @@ function Serialize:getPrefabArgumentsAsList()
     return prefabArguments
 end
 
-function Serialize:getPrefabData()
+function Serializable:getPrefabData()
     return self.prefabTemplateName,self.prefabArguments,self.reverseEngineerList
 end
 
-function Serialize:isPrefab()
+function Serializable:isPrefab()
     return self.prefabTemplateName ~= nil
 end
 
-function Serialize:getPrefabInfoFromSpawn()
+function Serializable:getPrefabInfoFromSpawn()
     return self.prefabTemplateName, unpack(self.prefabArgumentsAtSpawn)
 end
 
-function Serialize:scrubAwayPrefabness()
+function Serializable:scrubAwayPrefabness()
     self.prefabTemplateName = nil
 end
 
-function Serialize.createActorNode(actor)
+function Serializable.createActorNode(actor)
     local newComponentLists = {}
 
-    for i, componentList in ipairs(actor.Serialize.componentListsAtSpawn) do
+    for i, componentList in ipairs(actor.Serializable.componentListsAtSpawn) do
         local componentName = componentList[1]
         if actor[componentName].reverseSetup then
             newComponentLists[i] = {componentName, actor[componentName]:reverseSetup()}
@@ -93,4 +93,4 @@ function Serialize.createActorNode(actor)
     }
 end
 
-return Serialize
+return Serializable
