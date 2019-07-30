@@ -24,7 +24,6 @@ function Rect:height()
 end
 
 function Rect:x()
-    local keys = getKeys(self.pos)
     return self.pos.x
 end
 
@@ -65,7 +64,17 @@ function Rect:xywh()
 end
 
 function Rect:asTwoVectors()
-    return self.pos:clone(), self.pos:clone() + Vector.new(self.size.width,self.size.height)
+    return self.pos:clone(), self.pos:clone() + Vector.new(self.size.width, self.size.height)
+end
+
+function Rect:isVectorWithin(vector)
+    assert(vector,"isVectorWithin needs an argument")
+    local cond1 = vector.x > self:x()
+    local cond2 = vector.x < self:x() + self:width()
+    local cond3 = vector.y > self:y()
+    local cond4 = vector.y < self:y() + self:height()
+
+    return cond1 and cond2 and cond3 and cond4
 end
 
 ----
@@ -95,21 +104,30 @@ Test.register(
         Test.assert(-40, testRect2:y(), "Height after Rect:inflate")
 
         -- Test intersection
-        local leftRect = Rect.new(0,0,100,100)
-        local rightRect = Rect.new(50,25,100,100)
+        local leftRect = Rect.new(0, 0, 100, 100)
+        local rightRect = Rect.new(50, 25, 100, 100)
         local intersection = leftRect:getIntersection(rightRect)
-        Test.assert(50,intersection:width(),"Intersection width")
-        Test.assert(75,intersection:height(),"Intersection height")
-        Test.assert(50,intersection:x(),"Intersection x")
-        Test.assert(25,intersection:y(),"Intersection y")
+        Test.assert(50, intersection:width(), "Intersection width")
+        Test.assert(75, intersection:height(), "Intersection height")
+        Test.assert(50, intersection:x(), "Intersection x")
+        Test.assert(25, intersection:y(), "Intersection y")
 
         -- Test asTwoVectors
-        local cornerRect = Rect.new(123,456,100,200)
-        local v1,v2 = cornerRect:asTwoVectors()
-        Test.assert(123,v1.x,"testing a corner of asTwoVectors")
-        Test.assert(456,v1.y,"testing a corner of asTwoVectors")
-        Test.assert(223,v2.x,"testing a corner of asTwoVectors")
-        Test.assert(656,v2.y,"testing a corner of asTwoVectors")
+        local cornerRect = Rect.new(123, 456, 100, 200)
+        local v1, v2 = cornerRect:asTwoVectors()
+        Test.assert(123, v1.x, "testing a corner of asTwoVectors")
+        Test.assert(456, v1.y, "testing a corner of asTwoVectors")
+        Test.assert(223, v2.x, "testing a corner of asTwoVectors")
+        Test.assert(656, v2.y, "testing a corner of asTwoVectors")
+
+        -- Test isVectorWithin
+        local surface = Rect.new(100, 100, 100, 100)
+        local pointInside = Vector.new(150, 150)
+        local pointOnBoundary = Vector.new(100, 100)
+        local pointOutside = Vector.new(50, 150)
+        Test.assert(true, surface:isVectorWithin(pointInside), "Rect:isVectorWithinRect(), pointInside")
+        Test.assert(false, surface:isVectorWithin(pointOnBoundary), "Rect:isVectorWithinRect(), pointOnBoundary")
+        Test.assert(false, surface:isVectorWithin(pointOutside), "Rect:isVectorWithinRect(), pointOutside")
     end
 )
 

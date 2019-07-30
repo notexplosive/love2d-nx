@@ -7,6 +7,7 @@ function Test.register(name, fn)
         assert(fn)
         assert(type(fn) == "function")
 
+        Test.currentSuiteName = name
         fn()
         print(name .. " tests completed successfully")
     end
@@ -14,8 +15,14 @@ end
 
 function Test.assert(expected, actual, message)
     assert(message, "no description supplied for test case")
-    assert(expected, message .. "\nfailed to supply expected (first arg)")
-    assert(actual, message .. "\nactual is nil")
+    message = Test.currentSuiteName .. ': ' .. message
+    if type(actual) == "boolean" then
+        actual = booleanToString(actual)
+    end
+    
+    if type(expected) == "boolean" then
+        expected = booleanToString(expected)
+    end
 
     assert(expected == actual, message .. "\nexpected: " .. expected .. "\nactual:" .. actual)
 end
