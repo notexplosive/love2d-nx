@@ -5,11 +5,12 @@
   "root": [["AnnounceSceneNotifications"]],
   "actors": [
     {
-      "components": [["TextRenderer","LOVE2D-nx",22]]
+      "components": [["TextRenderer","LOVE2D-nx",22],["SelectionState"]]
     },
     {
       "prefab": "button",
       "arguments": [500,64,"do-foobar","Foobar"],
+      "components": [["Selectable"]],
       "pos": [100,200]
     }
   ]
