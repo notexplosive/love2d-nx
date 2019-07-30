@@ -43,8 +43,29 @@ function Rect:inflate(dx, dy)
     self.size:grow(dx, dy)
 end
 
+function Rect:getArea()
+    return self.size.width * self.size.height
+end
+
+function Rect:getIntersection(other)
+    local left = math.max(self:x(), other:x())
+    local right = math.min(self:x() + self:width(), other:x() + other:width())
+    local top = math.max(self:y(), other:y())
+    local bottom = math.min(self:y() + self:height(), other:y() + other:height())
+
+    if left < right and top < bottom then
+        return Rect.new(left, top, right - left, bottom - top)
+    else
+        return Rect.new(0, 0, 0, 0)
+    end
+end
+
 function Rect:xywh()
     return self.pos.x, self.pos.y, self.size:wh()
+end
+
+function Rect:asTwoVectors()
+    return self.pos:clone(), self.pos:clone() + Vector.new(self.size.width,self.size.height)
 end
 
 ----
@@ -55,7 +76,7 @@ Test.register(
         local testRect1 = Rect.new(10, 20, 300, 400)
         local testRect2 = Rect.new(0, 10, 100, 32)
 
-        -- The basics
+        -- Test the accessors
         local w1, h1 = testRect1:wh()
         Test.assert(300, testRect1:width(), "Rect:width()")
         Test.assert(400, testRect1:height(), "Rect:height()")
@@ -63,14 +84,32 @@ Test.register(
         Test.assert(20, testRect1:y(), "Rect:y()")
         Test.assert(w1, testRect1:width(), "Rect:width()")
         Test.assert(h1, testRect1:height(), "Rect:height()")
-        Test.assert(100, testRect2:width(), "Rect:width(), with a different rect")
+        Test.assert(100, testRect2:width(), "Rect:width() of a different rect")
 
+        -- Test inflate
         testRect2:inflate(100, 100)
         Test.assert(200, testRect2:width(), "Width after Rect:inflate")
         Test.assert(132, testRect2:height(), "Height after Rect:inflate")
 
         Test.assert(-50, testRect2:x(), "Height after Rect:inflate")
         Test.assert(-40, testRect2:y(), "Height after Rect:inflate")
+
+        -- Test intersection
+        local leftRect = Rect.new(0,0,100,100)
+        local rightRect = Rect.new(50,25,100,100)
+        local intersection = leftRect:getIntersection(rightRect)
+        Test.assert(50,intersection:width(),"Intersection width")
+        Test.assert(75,intersection:height(),"Intersection height")
+        Test.assert(50,intersection:x(),"Intersection x")
+        Test.assert(25,intersection:y(),"Intersection y")
+
+        -- Test asTwoVectors
+        local cornerRect = Rect.new(123,456,100,200)
+        local v1,v2 = cornerRect:asTwoVectors()
+        Test.assert(123,v1.x,"testing a corner of asTwoVectors")
+        Test.assert(456,v1.y,"testing a corner of asTwoVectors")
+        Test.assert(223,v2.x,"testing a corner of asTwoVectors")
+        Test.assert(656,v2.y,"testing a corner of asTwoVectors")
     end
 )
 
