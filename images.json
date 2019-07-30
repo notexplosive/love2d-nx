@@ -1,2 +1,3 @@
 {
+    "linkin" : ["linkin.png",16,16,{"walk":[7,11]}]
 }

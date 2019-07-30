@@ -9,9 +9,9 @@ end
 
 function SpriteRenderer:setup(spriteName, anim, scale, color, offx, offy)
     assert(spriteName, "Sprite name cannot be nil")
-    assert(Assets.sprites[spriteName], "No sprite named " .. spriteName)
+    assert(Assets.images[spriteName], "No sprite named " .. spriteName)
 
-    self:setSprite(Assets.sprites[spriteName])
+    self:setSprite(Assets.images[spriteName])
 
     if anim then
         self:setAnimation(anim)
@@ -154,7 +154,7 @@ end
 
 function SpriteRenderer:getBoundingBox()
     local quadCount = #self.sprite.quads
-    -- Assumes sprites are always in one single horizontal strip, which is only sometimes true
+    -- Assumes images are always in one single horizontal strip, which is only sometimes true
     local w = self.scale * self.scaleX * self.sprite.image:getWidth() / quadCount
     local h = self.scale * self.scaleY * self.sprite.image:getHeight()
     local camera = self.actor:scene().camera

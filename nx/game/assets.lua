@@ -22,6 +22,7 @@ function SpritesFromTemplate(path)
 
         table[name] = sprite
     end
+    return table
 end
 
 function SoundsFromTemplate(path)
@@ -34,7 +35,8 @@ function SoundsFromTemplate(path)
         local sound = Sound.new(unpack(parameters))
         table[name] = sound
     end
+    return table
 end
 
-Assets['sprites'] = SpritesFromTemplate('images.json')
+Assets['images'] = SpritesFromTemplate('images.json')
 Assets['sounds'] = SoundsFromTemplate('sounds.json')

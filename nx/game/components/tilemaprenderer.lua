@@ -7,7 +7,7 @@ function TileMapRenderer.create_object()
 end
 
 function TileMapRenderer:setup(spriteName, scale, color)
-    self.spriteAsset = Assets.sprites[spriteName]
+    self.spriteAsset = Assets.images[spriteName]
     if scale then
         self.scale = scale
     end

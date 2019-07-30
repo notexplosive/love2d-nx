@@ -34,7 +34,10 @@ end
 -- Generally you want to call this with a string to create a new actor.
 -- Although you could remove an actor from a scene and re-add it, or add it to a different scene
 function Scene:addActor(actor)
-    assert(actor ~= nil, "Scene:addActor must take at least one argument")
+    if actor == nil then
+        actor = Actor.new("ACTOR"..math.random(1000))
+    end
+
     if type(actor) == "string" then
         return self:addActor(Actor.new(actor))
     end
@@ -42,8 +45,8 @@ function Scene:addActor(actor)
     assert(actor:type() == Actor, "Can't add a non-actor to a scene")
 
     actor.originalScene = self
-
     actor._justAddedToScene = true
+    
     append(self.actors, actor)
 
     return actor
