@@ -1,6 +1,6 @@
 local Test = {}
 
-function Test.register(name, fn)
+function Test.register(name, testCaseFunction)
     if DEBUG then
         assert(name)
         assert(type(name) == "string")
@@ -8,7 +8,7 @@ function Test.register(name, fn)
         assert(type(fn) == "function")
 
         Test.currentSuiteName = name
-        fn()
+        testCaseFunction()
         print(name .. " tests completed successfully")
     end
 end
