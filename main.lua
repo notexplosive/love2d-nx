@@ -6,13 +6,10 @@ require("nx/input")
 require("nx/componentregistry")
 require("nx/game/assets")
 
--- Global classes, you'll use vectors a lot so it's more convenient as globals
--- More performant to require vector every time though, so your call.
+-- Global classes, for better performance these should be require'd in each file as needed
 Vector = require("nx/vector")
 Size = require("nx/size")
 Rect = require("nx/rect")
-
-local Scene = require("nx/game/scene")
 
 uiScene = nil
 gameScene = nil
@@ -44,5 +41,6 @@ function debugLog(str, ...)
     end
 end
 
+local Scene = require("nx/game/scene")
 uiScene = Scene.fromPath("ui")
 gameScene = Scene.fromPath("game")
