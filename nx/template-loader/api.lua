@@ -1,5 +1,4 @@
 local DataLoader = require("nx/template-loader/data-loader")
-local Dehydrate = require("nx/template-loader/dehydrate")
 local Json = require("nx/json")
 local Scene = require("nx/game/scene")
 

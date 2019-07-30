@@ -1,4 +1,3 @@
-local Dehydrate = require("nx/template-loader/dehydrate")
 local Serialize = {}
 
 registerComponent(Serialize, "Serialize")
@@ -49,10 +48,6 @@ function Serialize:getPrefabData()
     return self.prefabTemplateName,self.prefabArguments,self.reverseEngineerList
 end
 
-function Serialize:getData()
-    return Dehydrate.actorToNode(self.actor)
-end
-
 function Serialize:isPrefab()
     return self.prefabTemplateName ~= nil
 end
@@ -61,10 +56,41 @@ function Serialize:getPrefabInfoFromSpawn()
     return self.prefabTemplateName, unpack(self.prefabArgumentsAtSpawn)
 end
 
--- gale hack?: why would anyone want this?
 function Serialize:scrubAwayPrefabness()
     self.prefabTemplateName = nil
 end
--- /gale hack
+
+function Serialize.createActorNode(actor)
+    local newComponentLists = {}
+
+    for i, componentList in ipairs(actor.Serialize.componentListsAtSpawn) do
+        local componentName = componentList[1]
+        if actor[componentName].reverseSetup then
+            newComponentLists[i] = {componentName, actor[componentName]:reverseSetup()}
+        else
+            newComponentLists[i] = copyList(componentList)
+        end
+    end
+
+    for i, v in ipairs(newComponentLists) do
+        print(unpack(newComponentLists[i]))
+    end
+
+    -- gale hack: until we move this component into nx
+    if actor.PreserveTransform then
+        actor.PreserveTransform:load()
+    end
+    -- /gale hack
+
+    local actorXY = {actor:pos():xy()}
+    local actorAngle = actor:angle() * 180 / math.pi
+
+    return {
+        pos = actorXY,
+        angle = actorAngle,
+        components = newComponentLists,
+        name = actor.name
+    }
+end
 
 return Serialize

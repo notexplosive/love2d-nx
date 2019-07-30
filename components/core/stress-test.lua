@@ -3,7 +3,7 @@ local StressTest = {}
 registerComponent(StressTest,'StressTest')
 
 function StressTest:awake()
-    for i=1, 10000 do
+    for i=1, 3000 do
         local actor = self.actor:scene():addActor()
         actor:addComponent(Components.DestroyAtRandomTime)
         actor:addComponent(Components.MoveByRandom)

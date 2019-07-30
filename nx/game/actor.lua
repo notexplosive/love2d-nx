@@ -179,9 +179,9 @@ end
 function Actor:duplicate()
     assert(self.Serialize, "cannot duplicate an actor with no Serialize component")
     if self.Serialize:isPrefab() then
-        return loadActorData(self:scene(), self.Serialize:getData(), self.Serialize:getPrefabData())
+        return loadActorData(self:scene(), self.Serialize:createActorNode(), self.Serialize:getPrefabData())
     else
-        return loadActorData(self:scene(), self.Serialize:getData())
+        return loadActorData(self:scene(), self.Serialize:createActorNode())
     end
 end
 
