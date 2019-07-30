@@ -32,17 +32,11 @@ end
 
 -- called by scene OR by others
 function Actor:destroy()
-    if self.isDestroyed then return end
+    if self.isDestroyed then
+        return
+    end
     self.isDestroyed = true
     self:onDestroy()
-
-    -- Needs to be cached before the loop because the loop mutates self.children
-    local children = copyList(self.children or {})
-    for i, child in ipairs(children) do
-        child:destroy()
-    end
-
-    self.isDestroyed = true
     self:removeFromScene()
 end
 
@@ -53,7 +47,6 @@ function Actor:removeFromScene()
         for i = index, #self:scene().actors do
             self:scene().actors[i] = self:scene().actors[i + 1]
         end
-        self.originalScene = nil
     end
 end
 
@@ -153,32 +146,15 @@ function Actor:move(displacement, y)
     self._localPos = self._localPos + displacement
 end
 
-function Actor:getChildByName(name)
-    for i, actor in ipairs(self.children or {}) do
-        if actor.name == name then
-            return actor
-        end
-    end
-    return nil
-end
-
-function Actor:createEvent(functionName, args)
-    assert(self[functionName] == nil, "Actor already has an event called " .. functionName)
+function Actor:createEvent(methodName, args)
+    assert(self[methodName] == nil, "Actor already has an event called " .. methodName)
     args = args or {}
 
-    print("Actor Event " .. "Actor:" .. functionName .. "(" .. string.join(args, ", ") .. ")")
+    print("Actor Event " .. "Actor:" .. methodName .. "(" .. string.join(args, ", ") .. ")")
 
-    self[functionName] = function(self, ...)
-        assert(#{...} <= #args + 1, "Wrong number of arguments passed to Actor:" .. functionName)
-        for i, component in ipairs(self.components) do
-            if component[functionName] then
-                -- gale hack, nx doesn't have a concept of "editMode" yet
-                if (not gameScene.editMode or (gameScene.editMode and not component.disableInEditMode)) then
-                    -- /gale hack
-                    component[functionName](component, ...)
-                end
-            end
-        end
+    self[methodName] = function(self, ...)
+        assert(#{...} <= #args + 1, "Wrong number of arguments passed to Actor:" .. methodName)
+        self:callForAllComponents(methodName, ...)
     end
 end
 
@@ -189,20 +165,13 @@ Actor:createEvent("start")
 Actor:createEvent("onDestroy")
 Actor:createEvent("onMousePress", {"x", "y", "button", "wasRelease", "isClickConsumed"})
 
-function Actor:isCenterOutOfBounds()
-    if self.scene then
-        return not isWithinRect(self:pos().x, self:pos().y, self:scene():getBounds())
-    end
-
-    print(self.actor.name .. " bounds check not applicable, no scene")
-    return nil
-end
-
 -- Calls method on all components that have this method
 function Actor:callForAllComponents(methodName, ...)
     for i, component in ipairs(self.components) do
         if component[methodName] then
-            component[methodName](component, ...)
+            if (not self:scene().editMode or (self:scene().editMode and not component.disableInEditMode)) then
+                component[methodName](component, ...)
+            end
         end
     end
 end

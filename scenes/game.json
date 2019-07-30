@@ -12,6 +12,9 @@
       "arguments": [500,64,"do-foobar","Foobar"],
       "components": [["Selectable"]],
       "pos": [100,200]
+    },
+    {
+      "components": [["DestroyImmediately"],["CountHowManyActorsInScene"]]
     }
   ]
 }

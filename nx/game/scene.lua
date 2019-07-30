@@ -6,7 +6,6 @@ function Scene.new(width, height)
     local self = newObject(Scene)
     self.hasStarted = false
     self.actors = {}
-    self.originalActors = {}
     self:setDimensions(width, height)
     self.freeze = false
     self.camera = Vector.new(0, 0)
@@ -42,10 +41,7 @@ function Scene:addActor(actor)
 
     assert(actor:type() == Actor, "Can't add a non-actor to a scene")
 
-    if actor.originalScene == nil then
-        actor.originalScene = self
-        append(self.originalActors, actor)
-    end
+    actor.originalScene = self
 
     actor._justAddedToScene = true
     append(self.actors, actor)
@@ -63,10 +59,6 @@ function Scene:getActor(actorName)
     end
 
     return nil
-end
-
-function Scene:getMousePosition()
-    return (Vector.new(love.mouse.getPosition())):xy()
 end
 
 -- Get index of actor in actor list
@@ -229,7 +221,7 @@ function Scene:sendToBack(actor)
         self.actors = {}
         self.actors[1] = movedActor
         for i = 1, #actors do
-            self.actors[i+1] = actors[i]
+            self.actors[i + 1] = actors[i]
         end
     end
 end
