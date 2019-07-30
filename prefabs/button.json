@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "allParamsMustBeFilled": true
+  },
+  "components": [
+    ["BoundingBox", "_1_", "_2_"],
+    ["Clickable"],
+    ["NotifyOnClick", 1, "_3_"],
+    ["ButtonRenderer", "_4_"]
+  ]
+}

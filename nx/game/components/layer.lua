@@ -11,10 +11,12 @@ end
 function Layer:awake()
     Layer.total = Layer.total + 1
     self.index = Layer.total
+    self.swallowed = false
 end
 
 function Layer:draw(x,y)
-    
+    -- Resets every frame
+    self.swallowed = false
 end
 
 function Layer:onDestroy()
@@ -59,13 +61,13 @@ function Layer:bringToFront()
     for i,actor in ipairs(list) do
         actor.Layer.index = i
     end
+end
 
-    -- I took the easy way out.
-    for i,child in ipairs(self.actor.children or {}) do
-        if child.Layer then
-            child.Layer:bringToFront()
-        end
-    end
+function Layer:swallowCursor()
+    local alreadySwallowed = self.swallowed
+    self.swallowed = true
+
+    return not alreadySwallowed
 end
 
 return Layer

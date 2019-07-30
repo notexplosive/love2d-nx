@@ -7,7 +7,7 @@ local fonts = {
     large = love.graphics.newFont(50)
 }
 
-function TextRenderer.create()
+function TextRenderer.create_object()
     return newObject(TextRenderer)
 end
 

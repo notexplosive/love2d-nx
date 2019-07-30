@@ -1,4 +1,0 @@
-{
-  "name": "Cube-ish",
-  "components": [["Plane"], ["BoundingBox"], ["Draggable"]]
-}

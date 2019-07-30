@@ -1,17 +1,37 @@
 local Vector = {}
 
 function Vector.new(x, y)
+    if type(x) == 'table' then
+        return x:clone()
+    end
+
     local vector = newObject(Vector)
     vector.x = x or 0
     vector.y = y or 0
     return vector
 end
 
+function Vector.newPolar(distance,angle)
+    return Vector.new(distance,0):setAngle(angle)
+end
+
+function Vector.__eq(lhs, rhs)
+    return lhs.x == rhs.x and lhs.y == rhs.y
+  end
+
 function Vector.__add(left, right)
+    assert(right,"attempted to add a nil vector (right side)")
+    assert(left,"attempted to add to a nil vector (left side)")
+    assert(right:type() == Vector,"attempted to add a nonvector (right side)")
+    assert(left:type() == Vector,"attempted to add to a nonvector (left side)")
     return Vector.new(left.x + right.x, left.y + right.y)
 end
 
 function Vector.__sub(left, right)
+    assert(right,"attempted to subtract a nil vector (right side)")
+    assert(left,"attempted to subtract from a nil vector (left side)")
+    assert(right:type() == Vector,"attempted to subtract a nonvector (right side)")
+    assert(left:type() == Vector,"attempted to subtract from a nonvector (left side)")
     return Vector.new(left.x - right.x, left.y - right.y)
 end
 
@@ -51,6 +71,12 @@ function Vector:components()
     return self.x, self.y
 end
 
+function Vector:floor()
+    self.x = math.floor(self.x)
+    self.y = math.floor(self.y)
+    return self
+end
+
 function Vector:length()
     return math.sqrt((self.x * self.x) + (self.y * self.y))
 end
@@ -61,6 +87,10 @@ function Vector:normalized()
         return Vector.new(0, 0)
     end
     return Vector.new(self.x / l, self.y / l)
+end
+
+function Vector:dot(other)
+    return self.x * other.x + self.y * other.y
 end
 
 function Vector:rotate(theta)

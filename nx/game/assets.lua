@@ -1,10 +1,12 @@
 -- TODO: add sound assets
 local Json = require("nx/json")
 local Sprite = require('nx/game/assets/sprite')
+local Sound = require('nx/game/assets/sound')
 
 Assets = {}
 
 function SpritesFromTemplate(path)
+    local table = {}
     local data = Json.decode(love.filesystem.read(path))
 
     for i,name in ipairs(getKeys(data)) do
@@ -18,8 +20,21 @@ function SpritesFromTemplate(path)
             end
         end
 
-        Assets[name] = sprite
+        table[name] = sprite
     end
 end
 
-SpritesFromTemplate('templates/assets/images.json')
+function SoundsFromTemplate(path)
+    local table = {}
+    local data = Json.decode(love.filesystem.read(path))
+
+    for i,name in ipairs(getKeys(data)) do
+        local parameters = data[name]
+        parameters[1] = 'sounds/'..parameters[1]
+        local sound = Sound.new(unpack(parameters))
+        table[name] = sound
+    end
+end
+
+Assets['sprites'] = SpritesFromTemplate('images.json')
+Assets['sounds'] = SoundsFromTemplate('sounds.json')

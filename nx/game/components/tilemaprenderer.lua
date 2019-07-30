@@ -2,12 +2,12 @@ local TileMapRenderer = {}
 
 registerComponent(TileMapRenderer,"TileMapRenderer")
 
-function TileMapRenderer.create()
+function TileMapRenderer.create_object()
     return newObject(TileMapRenderer)
 end
 
 function TileMapRenderer:setup(spriteName, scale, color)
-    self.spriteAsset = Assets[spriteName]
+    self.spriteAsset = Assets.sprites[spriteName]
     if scale then
         self.scale = scale
     end

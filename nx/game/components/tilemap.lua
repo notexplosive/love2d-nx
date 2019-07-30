@@ -2,7 +2,7 @@ local TileMap = {}
 
 registerComponent(TileMap,"TileMap")
 
-function TileMap.create()
+function TileMap.create_object()
     return newObject(TileMap)
 end
 

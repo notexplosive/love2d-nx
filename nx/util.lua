@@ -1,4 +1,4 @@
-require('nx/util_3d')
+require("nx/util_3d")
 
 function newObject(obj_t)
     object = {}
@@ -6,9 +6,9 @@ function newObject(obj_t)
     -- Do some lua magic so that myActor:update() calls Actor.update(myActor)
     setmetatable(object, obj_t)
     obj_t.__index = obj_t
-    
+
     -- Call actor:type to get Actor class.
-    function object:type() 
+    function object:type()
         return obj_t
     end
 
@@ -30,9 +30,18 @@ function clamp(num, low, high)
     return num, false, false
 end
 
+function degreeToRadian(degree)
+    return degree * math.pi / 180
+end
+
+function radianToDegree(radian)
+    return radian * 180 / math.pi
+end
+
 -- Generic list utilities
 function append(table, element)
     table[#table + 1] = element
+    return element
 end
 
 function copyList(list)
@@ -46,7 +55,7 @@ end
 function copyReversed(list)
     local copy = {}
     local sz = 1
-    for i=#list,1,-1 do
+    for i = #list, 1, -1 do
         copy[sz] = list[i]
         sz = sz + 1
     end
@@ -96,17 +105,29 @@ function contains(table, element)
     return false
 end
 
-function swap(table,index1,index2)
+function swap(table, index1, index2)
     local e1 = table[index1]
     table[index1] = table[index2]
     table[index2] = e1
 end
 
--- Generic utility to get a random element of an array
-function getRandom(table)
-    return table[math.random(#table)]
+-- TODO: get index of maximum, also does this function do what it claims?
+function getIndexOfMinimum(list)
+    local index = 1
+    for i = 2, #list do
+        if not list[index] or list[i] and math.abs(list[index]) > math.abs(list[i]) then
+            index = i
+        end
+    end
+
+    return index
 end
 
+function getRandom(list)
+    return list[love.math.random(#list)]
+end
+
+-- string utilities
 -- Taken from SuperFastNinja on StackOverflow
 function string.split(inputstr, sep)
     if sep == nil then
@@ -122,12 +143,12 @@ function string.split(inputstr, sep)
 end
 
 function string.join(table, joiner)
-    joiner = joiner or ''
-    assert(type(joiner) == 'string')
+    joiner = joiner or ""
+    assert(type(joiner) == "string")
 
-    local result = ''
+    local result = ""
     local len = #table
-    for i,v in ipairs(table) do
+    for i, v in ipairs(table) do
         result = result .. v
         if i ~= len then
             result = result .. joiner
@@ -154,6 +175,14 @@ function getKeys(table)
     return keyset
 end
 
+function booleanToString(b)
+    if b then
+        return "true"
+    else
+        return "false"
+    end
+end
+
 function collide(actor1, actor2)
     if actor1 == actor2 then
         return false
@@ -163,38 +192,41 @@ function collide(actor1, actor2)
     local x2, y2 = x + w, y + h
 
     local a =
-        isWithinBox(x, y, actor2:getBoundingBox()) or isWithinBox(x, y2, actor2:getBoundingBox()) or
-        isWithinBox(x2, y, actor2:getBoundingBox()) or
-        isWithinBox(x2, y2, actor2:getBoundingBox())
+        isWithinRect(x, y, actor2:getBoundingBox()) or isWithinRect(x, y2, actor2:getBoundingBox()) or
+        isWithinRect(x2, y, actor2:getBoundingBox()) or
+        isWithinRect(x2, y2, actor2:getBoundingBox())
 
     local x, y, w, h = actor2:getBoundingBox()
     local x2, y2 = x + w, y + h
 
     local b =
-        isWithinBox(x, y, actor1:getBoundingBox()) or isWithinBox(x, y2, actor1:getBoundingBox()) or
-        isWithinBox(x2, y, actor1:getBoundingBox()) or
-        isWithinBox(x2, y2, actor1:getBoundingBox())
+        isWithinRect(x, y, actor1:getBoundingBox()) or isWithinRect(x, y2, actor1:getBoundingBox()) or
+        isWithinRect(x2, y, actor1:getBoundingBox()) or
+        isWithinRect(x2, y2, actor1:getBoundingBox())
 
     return a or b
 end
 
--- From stackoverflow 
+-- From stackoverflow
 -- https://stackoverflow.com/questions/31730923/check-if-point-lies-in-polygon-lua
 function insidePolygon(polygon, point)
     local oddNodes = false
     local j = #polygon
     for i = 1, #polygon do
         if (polygon[i].y < point.y and polygon[j].y >= point.y or polygon[j].y < point.y and polygon[i].y >= point.y) then
-            if (polygon[i].x + ( point.y - polygon[i].y ) / (polygon[j].y - polygon[i].y) * (polygon[j].x - polygon[i].x) < point.x) then
-                oddNodes = not oddNodes;
+            if
+                (polygon[i].x + (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) * (polygon[j].x - polygon[i].x) <
+                    point.x)
+             then
+                oddNodes = not oddNodes
             end
         end
-        j = i;
+        j = i
     end
-    return oddNodes 
+    return oddNodes
 end
 
-function isWithinBox(mx, my, x, y, width, height)
+function isWithinRect(mx, my, x, y, width, height)
     assert(height, "Not enough arguments")
     return mx > x and mx < x + width and my > y and my < y + height
 end

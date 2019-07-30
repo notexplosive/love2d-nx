@@ -3,27 +3,25 @@ local SpriteRenderer = {}
 
 registerComponent(SpriteRenderer, "SpriteRenderer")
 
-function SpriteRenderer.create()
+function SpriteRenderer.create_object()
     return newObject(SpriteRenderer)
 end
 
-function SpriteRenderer:setup(spriteName, anim, scale, color)
+function SpriteRenderer:setup(spriteName, anim, scale, color, offx, offy)
     assert(spriteName, "Sprite name cannot be nil")
-    assert(Assets[spriteName], "No sprite named " .. spriteName)
+    assert(Assets.sprites[spriteName], "No sprite named " .. spriteName)
 
-    self:setSprite(Assets[spriteName])
+    self:setSprite(Assets.sprites[spriteName])
 
     if anim then
         self:setAnimation(anim)
     end
 
-    if scale then
-        self.scale = scale
+    if offx and offy then
+        self.offset = Vector.new(offx, offy)
     end
-
-    if color then
-        self.color = color
-    end
+    self.scale = scale or self.scale
+    self.color = color or self.color
 end
 
 function SpriteRenderer:awake()
@@ -37,6 +35,7 @@ function SpriteRenderer:awake()
     self.flipX = false
     self.flipY = false
     self.color = {1, 1, 1, 1}
+    self.offset = Vector.new()
 
     self.onAnimationEnd = function()
     end
@@ -79,8 +78,8 @@ function SpriteRenderer:draw(x, y)
                 self.actor:angle(),
                 self.scale * xFactor * self.scaleX,
                 self.scale * yFactor * self.scaleY,
-                math.floor(self.sprite.gridWidth / 2),
-                math.floor(self.sprite.gridHeight / 2)
+                math.floor(self.sprite.gridWidth / 2) + self.offset.x,
+                math.floor(self.sprite.gridHeight / 2) + self.offset.y
             )
         end
     end

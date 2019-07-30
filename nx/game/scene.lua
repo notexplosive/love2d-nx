@@ -11,6 +11,7 @@ function Scene.new(width, height)
     self.freeze = false
     self.camera = Vector.new(0, 0)
     self.world = love.physics.newWorld(0, 9.8, true)
+    self.isClickConsumed = false
 
     -- Scene Shake
     self.shakeFrames = 0
@@ -19,6 +20,8 @@ function Scene.new(width, height)
     if width == nil then
         self:setDimensions(love.graphics.getDimensions())
     end
+
+    self.editMode = false
 
     return self
 end
@@ -103,6 +106,7 @@ function Scene:getAllActorsWithBehavior(behavior)
     return result
 end
 
+-- Convenience
 function Scene:getFirstActorWithBehavior(behavior)
     local result = {}
 
@@ -113,6 +117,15 @@ function Scene:getFirstActorWithBehavior(behavior)
     end
 
     return nil
+end
+
+-- Convenience
+function Scene:getFirstBehavior(behavior)
+    for j, actor in ipairs(self.actors) do
+        if actor[behavior.name] then
+            return actor[behavior.name]
+        end
+    end
 end
 
 function Scene:getBounds()
@@ -151,10 +164,28 @@ function Scene:createEvent(functionName, args)
 end
 
 -- Input Events
-Scene:createEvent("onMousePress", {"x", "y", "button", "wasRelease"})
 Scene:createEvent("onKeyPress", {"key", "scancode", "wasRelease"})
 Scene:createEvent("onMouseMove", {"x", "y", "dx", "dy"})
 Scene:createEvent("onScroll", {"x", "y"})
+Scene:createEvent("onTextInput", {"text"})
+Scene:createEvent("onMouseFocus", {"focus"})
+
+-- Custom events
+Scene:createEvent("onNotify", {"msg"})
+
+-- MousePress has specialized behavior (click consuming) so it needs to be implemented directly
+-- MousePress is handled in REVERSE order because we want them in order with drawing
+function Scene:onMousePress(x, y, button, wasRelease)
+    self.isClickConsumed = false
+    for i, actor in ipairs(copyReversed(self.actors)) do
+        actor:onMousePress(x, y, button, wasRelease, self.isClickConsumed)
+    end
+end
+
+-- called by components in their onMousePress methods
+function Scene:consumeClick()
+    self.isClickConsumed = true
+end
 
 -- Game Events: These are special events that need special behavior
 function Scene:update(dt)
@@ -181,8 +212,6 @@ function Scene:draw()
         self.shakeFrames = self.shakeFrames - 1
     end
 
-    -- Draw all the actors that aren't layer actors, they get first priority so they aren't missed
-    -- TODO: review this decision
     for i, actor in ipairs(self.actors) do
         if not actor.Layer then
             if actor.visible then
@@ -191,42 +220,18 @@ function Scene:draw()
             end
         end
     end
-
-    -- to draw layers we need to find an actor with the layer component
-    local layerActor = self:getAllActorsWithBehavior(Layer)[1]
-    if layerActor then
-        for i, actor in ipairs(layerActor.Layer:getInDrawOrder()) do
-            if actor.visible then
-                local x, y = actor:pos().x - self.camera.x + shake.x, actor:pos().y - self.camera.y + shake.y
-                actor:draw(x, y)
-            end
-        end
-    end
-
-    if self.lastDraw then
-        self:lastDraw(x, y)
-    end
 end
 
-function Scene:sortActors()
-    local sortedActors = {}
-    local alreadyVisistedMap = {}
-
-    for i, actor in ipairs(self.actors) do
-        if not alreadyVisistedMap[actor] then
-            append(sortedActors, actor)
-            alreadyVisistedMap[actor] = true
-        end
-
-        if actor.children then
-            for j, child in ipairs(actor.children) do
-                append(sortedActors, child)
-                alreadyVisistedMap[child] = true
-            end
+function Scene:sendToBack(actor)
+    local movedActor = deleteFromList(self.actors, actor)
+    if movedActor then
+        local actors = copyList(self.actors)
+        self.actors = {}
+        self.actors[1] = movedActor
+        for i = 1, #actors do
+            self.actors[i+1] = actors[i]
         end
     end
-
-    self.actors = sortedActors
 end
 
 return Scene
