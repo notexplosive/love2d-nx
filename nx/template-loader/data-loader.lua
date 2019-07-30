@@ -58,11 +58,9 @@ function DataLoader.replaceUnderscoresWithValues(data, args)
                     data.components[j][i] = arg
                     local componentName = data.components[j][1]
                     local indexInComponent = i - 1
-                    data.reverseEngineerList = data.reverseEngineerList or {}
-                    append(data.reverseEngineerList, {componentName, indexInComponent})
+                    data.templatedVarsList = data.templatedVarsList or {}
+                    append(data.templatedVarsList, {componentName, indexInComponent})
                     numberOfArgsLeft = numberOfArgsLeft - 1
-
-                    --debugLog(componentName,indexInComponent)
                 end
             end
         end
@@ -97,11 +95,11 @@ function DataLoader.loadComponentListData(actor, componentList)
     end
 end
 
-function DataLoader.loadActorData(scene, actorData, prefabName, prefabArguments, prefabReverseEngineerList)
+function DataLoader.loadActorData(scene, actorData, prefabName, prefabArguments, prefabTemplatedVars)
     local actor = scene:addActor(actorData.name or "ACTOR" .. love.math.random(899) + 100)
 
     if prefabName then
-        actor.Serializable:setPrefabInfo(prefabName, prefabArguments, prefabReverseEngineerList)
+        actor.Serializable:setPrefabInfo(prefabName, prefabArguments, prefabTemplatedVars)
     end
 
     if actorData.pos then
@@ -145,9 +143,8 @@ function DataLoader.loadPrefabData(scene, nodeData)
         prefabData,
         nodeData.prefab,
         nodeData.arguments,
-        prefabData.reverseEngineerList
+        prefabData.templatedVarsList
     )
 end
-
 
 return DataLoader

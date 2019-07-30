@@ -12,15 +12,15 @@ function Serializable:addComponentList(componentData)
     append(self.componentListsAtSpawn, componentData)
 end
 
-function Serializable:setPrefabInfo(prefabName, arguments, reverseEngineerList)
+function Serializable:setPrefabInfo(prefabName, arguments, templatedVarsList)
     self.prefabTemplateName = prefabName
     self.prefabArgumentsAtSpawn = arguments
-    self.reverseEngineerList = reverseEngineerList
+    self.templatedVarsList = templatedVarsList
 
-    if reverseEngineerList then
+    if templatedVarsList then
         assert(
-            type(reverseEngineerList) == "table",
-            "reverseEngineerList is " .. type(reverseEngineerList) .. ", should be a table"
+            type(templatedVarsList) == "table",
+            "templatedVarsList is " .. type(templatedVarsList) .. ", should be a table"
         )
     end
 end
@@ -31,7 +31,7 @@ end
 
 function Serializable:getPrefabArgumentsAsList()
     local prefabArguments = {}
-    for i, node in ipairs(self.reverseEngineerList or {}) do
+    for i, node in ipairs(self.templatedVarsList or {}) do
         local componentName = node[1]
         local index = node[2]
         assert(self.actor[componentName], "Actor needs " .. componentName .. " in order to getPrefabInfo()")
@@ -45,7 +45,7 @@ function Serializable:getPrefabArgumentsAsList()
 end
 
 function Serializable:getPrefabData()
-    return self.prefabTemplateName,self.prefabArguments,self.reverseEngineerList
+    return self.prefabTemplateName,self.prefabArguments,self.templatedVarsList
 end
 
 function Serializable:isPrefab()

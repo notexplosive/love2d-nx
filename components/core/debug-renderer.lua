@@ -16,6 +16,13 @@ function DebugRenderer:awake()
     self._contentSize = 0
 end
 
+function DebugRenderer:start()
+    if DEBUG then
+        debugLog(love.window.getTitle())
+        debugLog("DebugMode is enabled")
+    end
+end
+
 function DebugRenderer:draw(x,y)
     love.graphics.setFont(font)
     love.graphics.setColor(1,1,1,self.opacity)

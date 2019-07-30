@@ -1,7 +1,7 @@
 -- You should only need to require this file if you're actually assembling an actor yourself
 -- 99% of the time you can juse use:
 --  `local actor = scene:addActor("actorName")`
-
+local DataLoader = require("nx/template-loader/data-loader")
 local Actor = {}
 
 function Actor.new(name)
@@ -28,6 +28,10 @@ function Actor.new(name)
     self:addComponent(Components.Serializable)
 
     return self
+end
+
+function Actor:loadActorData(...)
+    return DataLoader.loadActorData(...)
 end
 
 -- called by scene OR by others
@@ -179,9 +183,9 @@ end
 function Actor:duplicate()
     assert(self.Serializable, "cannot duplicate an actor with no Serializable component")
     if self.Serializable:isPrefab() then
-        return loadActorData(self:scene(), self.Serializable:createActorNode(), self.Serializable:getPrefabData())
+        return self:loadActorData(self:scene(), self.Serializable:createActorNode(), self.Serializable:getPrefabData())
     else
-        return loadActorData(self:scene(), self.Serializable:createActorNode())
+        return self:loadActorData(self:scene(), self.Serializable:createActorNode())
     end
 end
 
