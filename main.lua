@@ -16,8 +16,8 @@ Rect = require("nx/rect")
 local Scene = require("nx/game/scene")
 
 -- Global that everything has access to
-gameScene = Scene.new(love.graphics.getDimensions())
-uiScene = Scene.new(love.graphics.getDimensions())
+gameScene = nil
+uiScene = nil
 
 function love.update(dt)
     uiScene:update(dt, true)
@@ -46,8 +46,8 @@ function debugLog(str, ...)
     end
 end
 
-gameScene = loadScene("game")
-uiScene = loadScene("ui")
+gameScene = Scene.fromPath("game")
+uiScene = Scene.fromPath("ui")
 
 if DEBUG then
     debugLog(love.window.getTitle())

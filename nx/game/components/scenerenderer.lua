@@ -9,8 +9,7 @@ function SceneRenderer:setup(path, args)
     if args then
         assert(type(args) == "table", "SceneRenderer must take arguments as a list")
     end
-    local sceneData = DataLoader.loadTemplateFile("scenes/" .. path .. ".json", args)
-    self.scene = DataLoader.loadSceneData(sceneData, self.scene)
+    self.scene = Scene.fromPath(path,args)
 end
 
 function SceneRenderer:awake()

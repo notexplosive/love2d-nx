@@ -54,6 +54,15 @@ function Scene.fromSceneData(sceneData)
     return scene
 end
 
+function Scene.fromPath(path, ...)
+    local args = {...}
+    local sceneData = DataLoader.loadTemplateFile("scenes/" .. path .. ".json", args)
+
+    local scene = Scene.fromSceneData(sceneData)
+
+    return scene
+end
+
 function Scene:setDimensions(width, height)
     self.width = width
     self.height = height
