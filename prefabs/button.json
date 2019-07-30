@@ -6,7 +6,7 @@
     ["BoundingBox", "_1_", "_2_"],
     ["Hoverable"],
     ["Clickable"],
-    ["NotifyOnClick", 1, "_3_"],
+    ["NotifySceneOnClick", "_3_"],
     ["ButtonRenderer", "_4_"]
   ]
 }

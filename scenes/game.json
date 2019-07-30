@@ -2,7 +2,7 @@
   "settings": {
     "allParamsMustBeFilled": false
   },
-  "root": [],
+  "root": [["AnnounceSceneNotifications"]],
   "actors": [
     {
       "components": [["TextRenderer","LOVE2D-nx",22]]
