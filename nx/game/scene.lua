@@ -66,7 +66,7 @@ function Scene:getActor(actorName)
 end
 
 function Scene:getMousePosition()
-    return (Vector.new(love.mouse.getPosition())):components()
+    return (Vector.new(love.mouse.getPosition())):xy()
 end
 
 -- Get index of actor in actor list

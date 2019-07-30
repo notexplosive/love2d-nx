@@ -12,7 +12,7 @@ function Hoverable:onMouseMove(x, y, dx, dy)
 end
 
 function Hoverable:getHoverOfPoint(v, y)
-    local x, y = Vector.new(v, y):components()
+    local x, y = Vector.new(v, y):xy()
     return isWithinRect(x, y, self.actor.BoundingBox:getRect())
 end
 

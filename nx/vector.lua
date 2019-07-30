@@ -67,7 +67,7 @@ function Vector:toString()
     return self.x .. ", " .. self.y
 end
 
-function Vector:components()
+function Vector:xy()
     return self.x, self.y
 end
 

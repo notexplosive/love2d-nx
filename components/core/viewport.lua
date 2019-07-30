@@ -61,7 +61,7 @@ function Viewport:sceneDraw()
     love.graphics.push()
     local scale = self:getScale()
     love.graphics.scale(scale, scale)
-    love.graphics.translate((-self.actor:pos()):components())
+    love.graphics.translate((-self.actor:pos()):xy())
     gameScene:draw(true)
     love.graphics.pop()
 end

@@ -23,7 +23,7 @@ function Dehydrate.actorToNode(actor)
     end
     -- /gale hack
 
-    local actorXY = {actor:pos():components()}
+    local actorXY = {actor:pos():xy()}
     local actorAngle = actor:angle() * 180 / math.pi
 
     return {
