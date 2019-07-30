@@ -26,6 +26,34 @@ function Scene.new(width, height)
     return self
 end
 
+function Scene.fromSceneData(sceneData)
+    local scene = Scene.new()
+    
+    if sceneData.dimensions then
+        assert(#sceneData.dimensions == 2, "Dimensions should be two numbers: [x,y]")
+        scene:setDimensions(unpack(sceneData.dimensions))
+    end
+
+    -- Root is just an actor with components just like anybody else.
+    -- Root will be at 0,0 and can technically be reassigned although probably shouldn't.
+    if sceneData.root then
+        local actor = scene:addActor("root")
+        DataLoader.loadComponentListData(actor, sceneData.root)
+    end
+
+    if sceneData.actors then
+        for i, actorData in ipairs(sceneData.actors) do
+            if actorData.prefab then
+                DataLoader.loadPrefabData(scene, actorData)
+            else
+                DataLoader.loadActorData(scene, actorData)
+            end
+        end
+    end
+
+    return scene
+end
+
 function Scene:setDimensions(width, height)
     self.width = width
     self.height = height
@@ -63,34 +91,6 @@ function Scene:addPrefab(prefabName,...)
     local actor = DataLoader.loadPrefabData(self, nodeData)
 
     return actor
-end
-
-function Scene.fromSceneData(sceneData)
-    local scene = Scene.new()
-    
-    if sceneData.dimensions then
-        assert(#sceneData.dimensions == 2, "Dimensions should be two numbers: [x,y]")
-        scene:setDimensions(unpack(sceneData.dimensions))
-    end
-
-    -- Root is just an actor with components just like anybody else.
-    -- Root will be at 0,0 and can technically be reassigned although probably shouldn't.
-    if sceneData.root then
-        local actor = scene:addActor("root")
-        DataLoader.loadComponentListData(actor, sceneData.root)
-    end
-
-    if sceneData.actors then
-        for i, actorData in ipairs(sceneData.actors) do
-            if actorData.prefab then
-                DataLoader.loadPrefabData(scene, actorData)
-            else
-                DataLoader.loadActorData(scene, actorData)
-            end
-        end
-    end
-
-    return scene
 end
 
 -- Get actor by name
