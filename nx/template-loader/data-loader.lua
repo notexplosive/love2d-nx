@@ -94,7 +94,7 @@ function DataLoader.loadComponentListData(actor, componentList)
             actor[componentName]:setup(unpack(params))
         end
 
-        actor.ActorData:addComponentList(componentData)
+        actor.Serialize:addComponentList(componentData)
     end
 end
 
@@ -102,7 +102,7 @@ function DataLoader.loadActorData(scene, actorData, prefabName, prefabArguments,
     local actor = scene:addActor(actorData.name or "ACTOR" .. love.math.random(899) + 100)
 
     if prefabName then
-        actor.ActorData:setPrefabInfo(prefabName, prefabArguments, prefabReverseEngineerList)
+        actor.Serialize:setPrefabInfo(prefabName, prefabArguments, prefabReverseEngineerList)
     end
 
     if actorData.pos then

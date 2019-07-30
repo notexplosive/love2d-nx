@@ -1,19 +1,19 @@
 local Dehydrate = require("nx/template-loader/dehydrate")
-local ActorData = {}
+local Serialize = {}
 
-registerComponent(ActorData, "ActorData")
+registerComponent(Serialize, "Serialize")
 
-function ActorData:awake()
+function Serialize:awake()
     self.componentListsAtSpawn = {}
     self.prefabTemplateName = nil
     self.prefabArgumentsAtSpawn = nil
 end
 
-function ActorData:addComponentList(componentData)
+function Serialize:addComponentList(componentData)
     append(self.componentListsAtSpawn, componentData)
 end
 
-function ActorData:setPrefabInfo(prefabName, arguments, reverseEngineerList)
+function Serialize:setPrefabInfo(prefabName, arguments, reverseEngineerList)
     self.prefabTemplateName = prefabName
     self.prefabArgumentsAtSpawn = arguments
     self.reverseEngineerList = reverseEngineerList
@@ -26,11 +26,11 @@ function ActorData:setPrefabInfo(prefabName, arguments, reverseEngineerList)
     end
 end
 
-function ActorData:getPrefabInfo()
+function Serialize:getPrefabInfo()
     return self.prefabTemplateName, unpack(self:getPrefabArgumentsAsList())
 end
 
-function ActorData:getPrefabArgumentsAsList()
+function Serialize:getPrefabArgumentsAsList()
     local prefabArguments = {}
     for i, node in ipairs(self.reverseEngineerList or {}) do
         local componentName = node[1]
@@ -45,26 +45,26 @@ function ActorData:getPrefabArgumentsAsList()
     return prefabArguments
 end
 
-function ActorData:getPrefabData()
+function Serialize:getPrefabData()
     return self.prefabTemplateName,self.prefabArguments,self.reverseEngineerList
 end
 
-function ActorData:getData()
+function Serialize:getData()
     return Dehydrate.actorToNode(self.actor)
 end
 
-function ActorData:isPrefab()
+function Serialize:isPrefab()
     return self.prefabTemplateName ~= nil
 end
 
-function ActorData:getPrefabInfoFromSpawn()
+function Serialize:getPrefabInfoFromSpawn()
     return self.prefabTemplateName, unpack(self.prefabArgumentsAtSpawn)
 end
 
 -- gale hack?: why would anyone want this?
-function ActorData:scrubAwayPrefabness()
+function Serialize:scrubAwayPrefabness()
     self.prefabTemplateName = nil
 end
 -- /gale hack
 
-return ActorData
+return Serialize

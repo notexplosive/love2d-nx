@@ -4,7 +4,7 @@ local Dehydrate = {}
 function Dehydrate.actorToNode(actor)
     local newComponentLists = {}
 
-    for i, componentList in ipairs(actor.ActorData.componentListsAtSpawn) do
+    for i, componentList in ipairs(actor.Serialize.componentListsAtSpawn) do
         local componentName = componentList[1]
         if actor[componentName].reverseSetup then
             newComponentLists[i] = {componentName, actor[componentName]:reverseSetup()}
