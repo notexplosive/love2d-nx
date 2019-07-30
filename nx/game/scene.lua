@@ -39,7 +39,6 @@ function Scene:addActor(actor)
 
     assert(actor:type() == Actor, "Can't add a non-actor to a scene")
 
-    --actor.scene = self
     if actor.originalScene == nil then
         actor.originalScene = self
         append(self.originalActors, actor)
