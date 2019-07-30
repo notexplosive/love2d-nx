@@ -4,6 +4,8 @@
   },
   "root": [],
   "actors": [
-    
+    {
+      "components": [["TextRenderer","LOVE2D-nx",22]]
+    }
   ]
 }

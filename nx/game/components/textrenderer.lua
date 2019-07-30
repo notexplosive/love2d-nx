@@ -1,23 +1,32 @@
 local TextRenderer = {}
 
-registerComponent(TextRenderer,"TextRenderer")
+registerComponent(TextRenderer, "TextRenderer")
 
-local fonts = {
-    small = love.graphics.newFont(14),
-    large = love.graphics.newFont(50)
+-- love.graphics.newFont is slow, so we cache all the fonts we create
+local fontCache = {
+    data = {},
+    get = function(self,fontSize)
+        fontSize = math.floor(fontSize)
+        if self.data[fontSize] then
+            return self.data[fontSize]
+        else
+            self.data[fontSize] = love.graphics.newFont(fontSize)
+            return self.data[fontSize]
+        end
+    end
 }
 
 function TextRenderer.create_object()
     return newObject(TextRenderer)
 end
 
-function TextRenderer:setup(text, fontName, maxWidth, alignMode, scale, color, offsetx, offsety)
+function TextRenderer:setup(text, fontSize, maxWidth, alignMode, scale, color, offsetx, offsety)
     self.text = text or self.text
     self.color = color or self.color
     self.maxWidth = maxWidth or self.maxWidth
     self.alignMode = alignMode or self.alignMode
     self.scale = scale or self.scale
-    self.fontName = fontName or self.fontName
+    self.font = fontCache:get(fontSize)
     self.offset = Vector.new(offsetx, offsety)
     self.shadow = false
 end
@@ -28,12 +37,12 @@ function TextRenderer:awake()
     self.alignMode = "left"
     self.scale = 1
     self.color = {1, 1, 1}
-    self.fontName = "small"
+    self.font = fontCache:get(12)
     self.offset = Vector.new()
 end
 
 function TextRenderer:draw()
-    love.graphics.setFont(fonts[self.fontName])
+    love.graphics.setFont(self.font)
 
     if not self.maxWidth then
         self.maxWidth = self.actor:scene().width - self.actor:pos().x
@@ -80,16 +89,16 @@ function TextRenderer:update(dt)
 end
 
 function TextRenderer:getWrap()
-    local width, lines = fonts[self.fontName]:getWrap(self.text, self.maxWidth or 0)
+    local width, lines = self.font:getWrap(self.text, self.maxWidth or 0)
     local widthLastLine = width
     if lines[1] then
-        widthLastLine = fonts[self.fontName]:getWrap(lines[#lines], self.maxWidth or 0)
+        widthLastLine = self.font:getWrap(lines[#lines], self.maxWidth or 0)
     end
     return width, lines, widthLastLine
 end
 
 function TextRenderer:getFont()
-    return fonts[self.fontName]
+    return self.font
 end
 
 return TextRenderer
