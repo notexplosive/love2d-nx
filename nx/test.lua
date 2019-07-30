@@ -4,8 +4,8 @@ function Test.register(name, testCaseFunction)
     if DEBUG then
         assert(name)
         assert(type(name) == "string")
-        assert(fn)
-        assert(type(fn) == "function")
+        assert(testCaseFunction)
+        assert(type(testCaseFunction) == "function")
 
         Test.currentSuiteName = name
         testCaseFunction()
