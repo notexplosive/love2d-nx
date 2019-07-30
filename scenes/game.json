@@ -6,6 +6,11 @@
   "actors": [
     {
       "components": [["TextRenderer","LOVE2D-nx",22]]
+    },
+    {
+      "prefab": "button",
+      "arguments": [500,64,"do-foobar","Foobar"],
+      "pos": [100,200]
     }
   ]
 }

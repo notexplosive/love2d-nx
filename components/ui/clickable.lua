@@ -1,6 +1,6 @@
 local Clickable = {}
 
-registerComponent(Clickable, "Clickable", {"BoundingBox"})
+registerComponent(Clickable, "Clickable", {"BoundingBox","Hoverable"})
 
 function Clickable:awake()
     self.currentPressedButton = nil
@@ -12,7 +12,7 @@ function Clickable:onMousePress(x, y, button, wasRelease, isClickConsumed)
     end
 
     if not isClickConsumed then
-        if isWithinRect(x, y, self.actor.BoundingBox:getRect()) then
+        if self.actor.Hoverable:getHover(x, y) then
             if not wasRelease then
                 self.currentPressedButton = button
                 self.actor:callForAllComponents("Clickable_onClickStart", button)
