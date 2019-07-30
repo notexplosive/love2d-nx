@@ -3,7 +3,7 @@ local Json = require("nx/json")
 local Sprite = require('nx/game/assets/sprite')
 local Sound = require('nx/game/assets/sound')
 
-Assets = {}
+local Assets = {}
 
 function SpritesFromTemplate(path)
     local table = {}
@@ -38,5 +38,7 @@ function SoundsFromTemplate(path)
     return table
 end
 
-Assets['images'] = SpritesFromTemplate('images.json')
-Assets['sounds'] = SoundsFromTemplate('sounds.json')
+Assets['images'] = SpritesFromTemplate('assets/images.json')
+Assets['sounds'] = SoundsFromTemplate('assets/sounds.json')
+
+return Assets

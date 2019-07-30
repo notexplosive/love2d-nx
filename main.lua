@@ -4,9 +4,9 @@ DEBUG = true
 require("nx/util")
 require("nx/input")
 require("nx/componentregistry")
-require("nx/game/assets")
 
 -- Global classes, for better performance these should be require'd in each file as needed
+Assets = require("nx/game/assets")
 Vector = require("nx/vector")
 Size = require("nx/size")
 Rect = require("nx/rect")
