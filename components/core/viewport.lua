@@ -49,7 +49,7 @@ function Viewport:correctHeight()
 end
 
 function Viewport:getScale()
-    local x, y, w, h = self.actor.BoundingBox:getRect()
+    local x, y, w, h = self.actor.BoundingBox:getRect():xywh()
     return love.graphics.getWidth() / w
 end
 

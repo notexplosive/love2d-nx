@@ -10,7 +10,7 @@ function Rect.new(x, y, width, height)
     assert(y)
 
     self.pos = Vector.new(x, y)
-    self.size = Size.new(width, height)
+    self.size = Size.new(width or 0, height or 0)
 
     return self
 end
@@ -42,8 +42,8 @@ function Rect:inflate(dx, dy)
     self.size:grow(dx, dy)
 end
 
-function Rect:getArea()
-    return self.size.width * self.size.height
+function Rect:area()
+    return self.size:area()
 end
 
 function Rect:getIntersection(other)
@@ -59,16 +59,21 @@ function Rect:getIntersection(other)
     end
 end
 
+function Rect:xy()
+    return self:x(), self:y()
+end
+
 function Rect:xywh()
-    return self.pos.x, self.pos.y, self.size:wh()
+    return self:x(), self:y(), self.size:wh()
 end
 
 function Rect:asTwoVectors()
     return self.pos:clone(), self.pos:clone() + Vector.new(self.size.width, self.size.height)
 end
 
-function Rect:isVectorWithin(vector)
-    assert(vector,"isVectorWithin needs an argument")
+function Rect:isVectorWithin(v,y)
+    assert(v,"isVectorWithin needs an argument")
+    local vector = Vector.new(v,y)
     local cond1 = vector.x > self:x()
     local cond2 = vector.x < self:x() + self:width()
     local cond3 = vector.y > self:y()

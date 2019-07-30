@@ -5,7 +5,7 @@ registerComponent(Selectable, "Selectable", {"Clickable"})
 function Selectable:draw(x, y)
     love.graphics.setColor(1, 0.5, 0)
     if self:selected() then
-        local x, y, w, h = self.actor.BoundingBox:getRect()
+        local x, y, w, h = self.actor.BoundingBox:getRect():xywh()
         love.graphics.rectangle("line", x - 2, y - 2, w + 4, h + 4)
     end
 end

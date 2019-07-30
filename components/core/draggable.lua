@@ -10,7 +10,7 @@ end
 function Draggable:onMouseMove(x, y, dx, dy)
     self.hover = false
 
-    if isWithinRect(x, y, self.actor.BoundingBox:getRect()) then
+    if self.actor.BoundingBox:getRect():isVectorWithin(x,y) then
         self.hover = true
     end
 

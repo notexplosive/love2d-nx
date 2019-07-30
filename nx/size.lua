@@ -12,6 +12,10 @@ function Size:grow(dx,dy)
     self.height = self.height + dy
 end
 
+function Size:area()
+    return self.width * self.height
+end
+
 function Size:wh()
     return self.width,self.height
 end

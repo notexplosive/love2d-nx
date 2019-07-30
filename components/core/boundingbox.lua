@@ -4,8 +4,7 @@ registerComponent(BoundingBox, "BoundingBox")
 
 function BoundingBox:setup(w, h, ox, oy)
     self.forceCustom = true
-    self.width = w
-    self.height = h
+    self.size = Size.new(w,h)
     self.offset = Vector.new(ox, oy)
 end
 
@@ -14,8 +13,7 @@ function BoundingBox:reverseSetup()
 end
 
 function BoundingBox:awake()
-    self.width = 64
-    self.height = 64
+    self.size = Size.new(64,64)
     self.offset = Vector.new(0, 0)
     self.forceCustom = false
     self.visible = false
@@ -23,12 +21,12 @@ end
 
 function BoundingBox:draw(x, y)
     if self.visible then
-        love.graphics.rectangle("line", self:getRect())
+        love.graphics.rectangle("line", self:getRect():xywh())
     end
 end
 
 function BoundingBox:getArea()
-    return self.width * self.height
+    return self.size:area()
 end
 
 function BoundingBox:getRect()
@@ -37,38 +35,24 @@ function BoundingBox:getRect()
         return self.actor.SpriteRenderer:getBoundingBox()
     end
 
-    return self.actor:pos().x - self.offset.x - camera.x, self.actor:pos().y - self.offset.y - camera.y, self.width, self.height
+    return Rect.new(self.actor:pos().x - self.offset.x - camera.x, self.actor:pos().y - self.offset.y - camera.y, self.size.width, self.size.height)
 end
 
 function BoundingBox:setDimensions(w, h)
-    self.width = w
-    self.height = h
+    self.size = Size.new(w,h)
     self.forceCustom = true
 end
 
 function BoundingBox:getDimensions()
-    return self.width, self.height
+    return self.size:wh()
 end
 
 function BoundingBox:isWithinBoundingBox(x, y)
-    return isWithinRect(x, y, self:getRect())
-end
-
-function BoundingBox:isOutOfBounds()
-    if self.actor.scene then
-        local x, y, w, h = self:getRect()
-        local x2, y2 = x + w, y + h
-        return not isWithinRect(x, y, self.actor:scene():getBounds()) and
-            not isWithinRect(x, y2, self.actor:scene():getBounds()) and
-            not isWithinRect(x2, y, self.actor:scene():getBounds()) and
-            not isWithinRect(x2, y2, self.actor:scene():getBounds())
-    end
-
-    print(self.actor.name .. " bounds check not applicable, no scene")
+    return self:getRect():isVectorWithin(Vector.new(x,y))
 end
 
 function BoundingBox:getSideCollidedOn(pos, velocity)
-    local left, top, bw, bh = self.actor.BoundingBox:getRect()
+    local left, top, bw, bh = self.actor.BoundingBox:getRect():xywh()
     local right = left + bw
     local bottom = top + bh
 

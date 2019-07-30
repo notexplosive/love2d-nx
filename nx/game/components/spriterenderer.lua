@@ -160,7 +160,7 @@ function SpriteRenderer:getBoundingBox()
     local camera = self.actor:scene().camera
     local x = self.actor:pos().x - w / 2 - camera.x
     local y = self.actor:pos().y - h / 2 - camera.y
-    return x, y, w, h
+    return Rect.new(x, y, w, h)
 end
 
 function SpriteRenderer:hasAnimation(animName)
