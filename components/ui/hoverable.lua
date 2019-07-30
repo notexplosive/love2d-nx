@@ -11,9 +11,13 @@ function Hoverable:onMouseMove(x, y, dx, dy)
     end
 end
 
-function Hoverable:getHover(v, y)
+function Hoverable:getHoverOfPoint(v, y)
     local x, y = Vector.new(v, y):components()
     return isWithinRect(x, y, self.actor.BoundingBox:getRect())
+end
+
+function Hoverable:getHover()
+    return self:getHoverOfPoint(self.cachedMousePos)
 end
 
 return Hoverable

@@ -1,15 +1,14 @@
 local ButtonRenderer = {}
 
-registerComponent(ButtonRenderer, "ButtonRenderer")
+registerComponent(ButtonRenderer, "ButtonRenderer", {"Hoverable"})
 
-local font = love.graphics.newFont(32)
+local font = love.graphics.newFont(16)
 
 function ButtonRenderer:setup(name)
     self.name = name
 end
 
 function ButtonRenderer:awake()
-    self.hover = false
     self.name = ""
 end
 
@@ -19,7 +18,7 @@ function ButtonRenderer:draw(x, y)
         pressed = self.actor.Clickable.currentPressedButton == 1
     end
 
-    local hover = self.hover
+    local hover = self.actor.Hoverable:getHover()
 
     love.graphics.setColor(0.5, 0, 0)
     if hover then
@@ -35,10 +34,6 @@ function ButtonRenderer:draw(x, y)
     love.graphics.print(self.name, math.floor(x), math.floor(y))
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("line", x, y, self.actor.BoundingBox:getDimensions())
-end
-
-function ButtonRenderer:onMouseMove(x, y, dx, dy)
-    self.hover = isWithinRect(x, y, self.actor.BoundingBox:getRect())
 end
 
 return ButtonRenderer
