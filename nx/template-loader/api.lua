@@ -7,7 +7,7 @@ function loadScene(path, ...)
     local args = {...}
     local sceneData = DataLoader.loadTemplateFile("scenes/" .. path .. ".json", args)
 
-    local scene = DataLoader.loadSceneData(sceneData, Scene.new())
+    local scene = Scene.fromSceneData(sceneData)
 
     return scene
 end

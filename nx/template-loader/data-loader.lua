@@ -149,30 +149,5 @@ function DataLoader.loadPrefabData(scene, nodeData)
     )
 end
 
-function DataLoader.loadSceneData(sceneData, scene)
-    if sceneData.dimensions then
-        assert(#sceneData.dimensions == 2, "Dimensions should be two numbers: [x,y]")
-        scene:setDimensions(unpack(sceneData.dimensions))
-    end
-
-    -- Root is just an actor with components just like anybody else.
-    -- Root will be at 0,0 and can technically be reassigned although probably shouldn't.
-    if sceneData.root then
-        local actor = scene:addActor("root")
-        DataLoader.loadComponentListData(actor, sceneData.root)
-    end
-
-    if sceneData.actors then
-        for i, actorData in ipairs(sceneData.actors) do
-            if actorData.prefab then
-                DataLoader.loadPrefabData(scene, actorData)
-            else
-                DataLoader.loadActorData(scene, actorData)
-            end
-        end
-    end
-
-    return scene
-end
 
 return DataLoader
