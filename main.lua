@@ -36,9 +36,9 @@ function debugLog(str, ...)
         for i, v in ipairs({...}) do
             str = str .. "\t" .. tostring(v)
         end
-        local debugRenderers = uiScene:getAllActorsWithBehavior(Components.DebugRenderer)
-        if debugRenderers[1] then
-            debugRenderers[1].DebugRenderer:append(str)
+        local debugRenderer = uiScene:getFirstBehavior(Components.DebugRenderer)
+        if debugRenderer then
+            debugRenderer:append(str)
             print(str, ...)
         end
     else
