@@ -1,6 +1,7 @@
 -- Global classes, you'll use vectors a lot so it's more convenient as globals
 -- More performant to require vector every time though, so your call.
 Vector = require("nx/vector")
+Rect = require("nx/rect")
 
 --- DEBUG
 DEBUG = true
