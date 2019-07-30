@@ -1,5 +1,4 @@
 local Json = require("nx/json")
-local Scene = require("nx/game/scene")
 
 local DataLoader = {}
 
@@ -151,8 +150,6 @@ function DataLoader.loadPrefabData(scene, nodeData)
 end
 
 function DataLoader.loadSceneData(sceneData, scene)
-    scene = scene or Scene.new()
-
     if sceneData.dimensions then
         assert(#sceneData.dimensions == 2, "Dimensions should be two numbers: [x,y]")
         scene:setDimensions(unpack(sceneData.dimensions))

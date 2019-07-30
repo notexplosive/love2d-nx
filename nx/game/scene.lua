@@ -1,5 +1,6 @@
 local Actor = require("nx/game/actor")
 local Vector = require("nx/vector")
+local DataLoader = require("nx/template-loader/data-loader")
 local Scene = {}
 
 function Scene.new(width, height)
@@ -35,7 +36,7 @@ end
 -- Although you could remove an actor from a scene and re-add it, or add it to a different scene
 function Scene:addActor(actor)
     if actor == nil then
-        actor = Actor.new("ACTOR"..math.random(1000))
+        actor = Actor.new("ACTOR" .. math.random(1000))
     end
 
     if type(actor) == "string" then
@@ -46,8 +47,20 @@ function Scene:addActor(actor)
 
     actor.originalScene = self
     actor._justAddedToScene = true
-    
+
     append(self.actors, actor)
+
+    return actor
+end
+
+function Scene:addPrefab(prefabName,...)
+    -- Dehydrate the actor to a prefab node
+    local nodeData = {
+        prefab = prefabName,
+        arguments = {...}
+    }
+
+    local actor = DataLoader.loadPrefabData(self, nodeData)
 
     return actor
 end

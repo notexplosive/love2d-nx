@@ -7,22 +7,9 @@ function loadScene(path, ...)
     local args = {...}
     local sceneData = DataLoader.loadTemplateFile("scenes/" .. path .. ".json", args)
 
-    local scene = DataLoader.loadSceneData(sceneData)
+    local scene = DataLoader.loadSceneData(sceneData, Scene.new())
 
     return scene
-end
-
-function loadPrefab(scene, prefabName, ...)
-    assert(scene.type and scene:type() == Scene,"first param must be a scene")
-    -- Dehydrate the actor to a prefab node
-    local nodeData = {
-        prefab = prefabName,
-        arguments = {...}
-    }
-
-    local actor = DataLoader.loadPrefabData(scene, nodeData)
-
-    return actor
 end
 
 -- temporary workaround that will probably be here forever.
