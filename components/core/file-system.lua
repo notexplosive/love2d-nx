@@ -63,4 +63,28 @@ function FileSystem:upOneLevel()
     return newDirectory
 end
 
+local Test = require("nx/test")
+Test.registerComponentTest(
+    Components.FileSystem,
+    function()
+        local Actor = require('nx/game/actor')
+        local actor = Actor.new("testActor")
+
+        local subject = actor:addComponent(Components.FileSystem)
+
+        subject:setDirectory('components/core')
+        Test.assert(49,#subject:getItems(),"Count files")
+
+        subject:upOneLevel()
+        Test.assert('components',subject:getCurrentDirectory(),"Up one level")
+
+        subject:upOneLevel()
+        Test.assert('',subject:getCurrentDirectory(),"Up one level to root directory")
+
+        subject:setDirectoryLocal('nx')
+        subject:setDirectoryLocal('game')
+        Test.assert('nx/game',subject:getCurrentDirectory(), "setDirectoryLocal")
+    end
+)
+
 return FileSystem

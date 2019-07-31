@@ -84,7 +84,7 @@ end
 
 ----
 
-Test.register(
+Test.run(
     "Rect",
     function()
         local testRect1 = Rect.new(10, 20, 300, 400)
