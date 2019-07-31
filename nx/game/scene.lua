@@ -171,6 +171,20 @@ function Scene:getFirstBehavior(behavior)
     end
 end
 
+-- for i,actor in self.actor:scene():eachActorWith(Components.foo) do
+function Scene:eachActor()
+    return ipairs(self.actors)
+end
+
+function Scene:eachActorWith(componentClass)
+    return ipairs(self:getAllActorsWith(componentClass))
+end
+
+-- aliases, eventually "Behavior" will become "Component"
+Scene.getFirstComponent = Scene.getfirstBehavior
+Scene.getFirstActorWith = Scene.getFirstActorWithBehavior
+Scene.getAllActorsWith = Scene.getAllActorsWithBehavior
+
 -- Ordering functions
 function Scene:sendToBack(actor)
     local movedActor = deleteFromList(self.actors, actor)
