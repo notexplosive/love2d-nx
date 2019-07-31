@@ -7,7 +7,7 @@ function StressTest:awake()
         local actor = self.actor:scene():addActor()
         actor:addComponent(Components.DestroyAtRandomTime)
         actor:addComponent(Components.MoveByRandom)
-        actor:addComponent(Components.SpriteRenderer):setup("linkin",'walk',2)
+        actor:addComponent(Components.SpriteRenderer, "linkin",'walk',2)
     end
 end
 
