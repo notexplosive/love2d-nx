@@ -151,7 +151,6 @@ function Scene:getAllActorsWithBehavior(behavior)
     return result
 end
 
--- Convenience
 function Scene:getFirstActorWithBehavior(behavior)
     local result = {}
 
@@ -164,11 +163,23 @@ function Scene:getFirstActorWithBehavior(behavior)
     return nil
 end
 
--- Convenience
 function Scene:getFirstBehavior(behavior)
     for j, actor in ipairs(self.actors) do
         if actor[behavior.name] then
             return actor[behavior.name]
+        end
+    end
+end
+
+-- Ordering functions
+function Scene:sendToBack(actor)
+    local movedActor = deleteFromList(self.actors, actor)
+    if movedActor then
+        local actors = copyList(self.actors)
+        self.actors = {}
+        self.actors[1] = movedActor
+        for i = 1, #actors do
+            self.actors[i + 1] = actors[i]
         end
     end
 end
@@ -218,7 +229,7 @@ Scene:createEvent("onMouseFocus", {"focus"})
 -- Custom events
 Scene:createEvent("onNotify", {"msg"})
 
--- MousePress has specialized behavior (click consuming) so it needs to be implemented directly
+-- MousePress handles click consuming so it needs to be implemented directly
 -- MousePress is handled in REVERSE order because we want them in order with drawing
 function Scene:onMousePress(x, y, button, wasRelease)
     self.isClickConsumed = false
@@ -232,7 +243,7 @@ function Scene:consumeClick()
     self.isClickConsumed = true
 end
 
--- Game Events: These are special events that need special behavior
+-- Game Events: These are special events that don't work like regular events
 function Scene:update(dt)
     -- Run any applicable start functions
     for i, actor in ipairs(self.actors) do
@@ -263,18 +274,6 @@ function Scene:draw()
                 local x, y = actor:pos().x - self.camera.x + shake.x, actor:pos().y - self.camera.y + shake.y
                 actor:draw(x, y)
             end
-        end
-    end
-end
-
-function Scene:sendToBack(actor)
-    local movedActor = deleteFromList(self.actors, actor)
-    if movedActor then
-        local actors = copyList(self.actors)
-        self.actors = {}
-        self.actors[1] = movedActor
-        for i = 1, #actors do
-            self.actors[i + 1] = actors[i]
         end
     end
 end
