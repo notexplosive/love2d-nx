@@ -10,7 +10,7 @@
     {
       "prefab": "button",
       "arguments": [500,64,"do-foobar","Foobar"],
-      "components": [["Selectable"]],
+      "components": [["ClickSelectable"]],
       "pos": [100,200]
     },
     {

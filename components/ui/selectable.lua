@@ -1,6 +1,14 @@
 local Selectable = {}
 
-registerComponent(Selectable, "Selectable", {"Clickable"})
+registerComponent(Selectable, "Selectable", {"BoundingBox"})
+
+function Selectable:setup(suppressWarning)
+    if DEBUG then
+        if not suppressWarning then
+            debugLog("WARNING: Selectable shouldn't be used directly, call setup(true) if you know what you're doing")
+        end
+    end
+end
 
 function Selectable:draw(x, y)
     love.graphics.setColor(1, 0.5, 0)
@@ -8,12 +16,6 @@ function Selectable:draw(x, y)
         local rect = self.actor.BoundingBox:getRect()
         rect:inflate(16,16)
         love.graphics.rectangle("line", rect:xywh())
-    end
-end
-
-function Selectable:Clickable_onClickOn(button)
-    if button == 1 and not self:selected() then
-        self:select()
     end
 end
 
