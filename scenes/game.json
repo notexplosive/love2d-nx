@@ -15,6 +15,9 @@
     },
     {
       "components": [["StressTest"]]
+    },
+    {
+      "components": [["FileSystem","components/core"]]
     }
   ]
 }
