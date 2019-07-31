@@ -5,7 +5,7 @@
   "root": [["AnnounceSceneNotifications"]],
   "actors": [
     {
-      "components": [["TextRenderer","LOVE2D-nx",22],["SelectionState"]]
+      "components": [["TextRenderer","LOVE2D-nx",22],["Selector"]]
     },
     {
       "prefab": "button",

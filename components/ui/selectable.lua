@@ -23,12 +23,12 @@ function Selectable:Draggable_onDragStart()
     end
 end
 
-function Selectable:getSelectionState()
-    return gameScene:getFirstBehavior(Components.SelectionState)
+function Selectable:getSelector()
+    return gameScene:getFirstBehavior(Components.Selector)
 end
 
 function Selectable:deselectAll()
-    for i, actor in ipairs(self:getSelectionState():getAllSelectedActors()) do
+    for i, actor in ipairs(self:getSelector():getAllSelectedActors()) do
         actor.Selectable:deselect()
     end
 end
@@ -38,7 +38,7 @@ end
 --
 
 function Selectable:selected()
-    return self:getSelectionState():isActorSelected(self.actor)
+    return self:getSelector():isActorSelected(self.actor)
 end
 
 function Selectable:select(forceGroupSelect)
@@ -47,20 +47,20 @@ function Selectable:select(forceGroupSelect)
         self:deselectAll()
     end
 
-    self:getSelectionState():selectActor(self.actor)
+    self:getSelector():selectActor(self.actor)
 
     self.actor:callForAllComponents("Selectable_onSelect")
 end
 
 function Selectable:deselect()
     if self:selected() then
-        self:getSelectionState():deselectActor(self.actor)
+        self:getSelector():deselectActor(self.actor)
         self.actor:callForAllComponents("Selectable_onDeselect")
     end
 end
 
 function Selectable:getAllSelectedActors()
-    return self:getSelectionState():getAllSelectedActors()
+    return self:getSelector():getAllSelectedActors()
 end
 
 return Selectable

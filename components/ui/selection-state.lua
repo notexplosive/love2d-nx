@@ -1,8 +1,8 @@
-local SelectionState = {}
+local Selector = {}
 
-registerComponent(SelectionState, "SelectionState")
+registerComponent(Selector, "Selector")
 
-function SelectionState:awake()
+function Selector:awake()
     self.selectedActors = {}
 end
 
@@ -10,25 +10,25 @@ end
 -- Public API
 --
 
-function SelectionState:selectActor(actor)
+function Selector:selectActor(actor)
     assert(actor, "Actor cannot be nil")
     if not self:isActorSelected(actor) then
         append(self.selectedActors, actor)
     end
 end
 
-function SelectionState:deselectActor(actor)
+function Selector:deselectActor(actor)
     assert(actor, "Actor cannot be nil")
     deleteFromList(self.selectedActors, actor)
 end
 
-function SelectionState:isActorSelected(actor)
+function Selector:isActorSelected(actor)
     assert(actor, "Actor cannot be nil")
     return indexOf(self.selectedActors, actor) ~= nil
 end
 
-function SelectionState:getAllSelectedActors()
+function Selector:getAllSelectedActors()
     return copyList(self.selectedActors)
 end
 
-return SelectionState
+return Selector
