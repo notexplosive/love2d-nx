@@ -41,9 +41,9 @@ function debugLog(str, ...)
     end
 end
 
+local Test = require('nx/test')
+Test.runComponentTests()
+
 local Scene = require("nx/game/scene")
 uiScene = Scene.fromPath("ui")
 gameScene = Scene.fromPath("game")
-
-local Test = require('nx/test')
-Test.runComponentTests()
