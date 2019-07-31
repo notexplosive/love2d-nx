@@ -94,7 +94,7 @@ function Actor:setLocalPos(v, y)
     self._localPos = v:clone()
 end
 
-function Actor:addComponent(componentClass)
+function Actor:addComponent(componentClass,...)
     assert(componentClass, "Actor:addComponent() was passed nil")
     assert(componentClass.name, "Component needs a name")
     assert(self[componentClass.name] == nil, "Actor already has a " .. componentClass.name .. " component")
@@ -115,6 +115,10 @@ function Actor:addComponent(componentClass)
         component:awake()
     end
 
+    if ... then
+        component:setup(...)
+    end
+
     return component
 end
 
@@ -126,9 +130,9 @@ function Actor:removeComponent(componentClass)
     self[componentClass.name] = nil
 end
 
-function Actor:addComponentSafe(componentClass)
+function Actor:addComponentSafe(componentClass,...)
     if not self[componentClass.name] then
-        return self:addComponent(componentClass)
+        return self:addComponent(componentClass,...)
     end
     return self[componentClass.name]
 end
