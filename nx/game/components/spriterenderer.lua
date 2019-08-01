@@ -43,21 +43,7 @@ end
 
 function SpriteRenderer:draw(x, y)
     if self.sprite then
-        local quad = self.sprite.quads[math.floor(self.currentFrame)]
-        if self.currentAnimation then
-            quad = self.sprite.quads[math.floor(self.currentFrame)]
-        end
-
-        if quad == nil then
-            quad =
-                love.graphics.newQuad(
-                0,
-                0,
-                self.sprite.gridWidth,
-                self.sprite.gridWidth,
-                self.sprite.image:getDimensions()
-            )
-        end
+        local quad = self.sprite:getQuadAt(math.floor(self.currentFrame))
 
         local xFactor, yFactor = 1, 1
         if self.flipX then
@@ -153,10 +139,9 @@ function SpriteRenderer:setFlipY(b)
 end
 
 function SpriteRenderer:getBoundingBox()
-    local quadCount = #self.sprite.quads
-    -- Assumes images are always in one single horizontal strip, which is only sometimes true
-    local w = self.scale * self.scaleX * self.sprite.image:getWidth() / quadCount
-    local h = self.scale * self.scaleY * self.sprite.image:getHeight()
+    local _,_,width,height = self.sprite:getQuadAt(1):getViewport()
+    local w = self.scale * self.scaleX * width
+    local h = self.scale * self.scaleY * height
     local camera = self.actor:scene().camera
     local x = self.actor:pos().x - w / 2 - camera.x
     local y = self.actor:pos().y - h / 2 - camera.y

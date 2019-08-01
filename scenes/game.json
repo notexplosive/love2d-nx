@@ -2,7 +2,7 @@
   "settings": {
     "allParamsMustBeFilled": false
   },
-  "root": [["AnnounceSceneNotifications"]],
+  "root": [["CloseOnEscape"],["AnnounceSceneNotifications"]],
   "actors": [
     {
       "components": [["TextRenderer","LOVE2D-nx",22],["Selector"]]
@@ -17,7 +17,7 @@
       "components": [["StressTest"]]
     },
     {
-      "components": [["FileSystem","components/core"]]
+      "components": [["SpriteRenderer","numbers","all"]],"pos": [200,200]
     }
   ]
 }

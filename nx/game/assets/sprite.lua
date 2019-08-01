@@ -1,36 +1,41 @@
 local Sprite = {}
 
--- Called by templating code, should never be called directly.
 function Sprite.new(filename, gridSizeX, gridSizeY)
     local self = newObject(Sprite)
     self.filename = filename
     self.image = love.graphics.newImage(filename)
     self.image:setFilter("nearest", "nearest")
-    self.quads = {}
     self.animations = {}
-
-    if gridSizeX == nil then
-        gridSizeX = self.image:getWidth()
-        gridSizeY = self.image:getHeight()
-    end
-
-    for y = 0, self.image:getHeight() - gridSizeY, gridSizeY do
-        for x = 0, self.image:getWidth() - gridSizeX, gridSizeX do
-            if x ~= self.image:getWidth() and y ~= self.image:getHeight() then
-                self.quads[#self.quads + 1] =
-                    love.graphics.newQuad(x, y, gridSizeX, gridSizeY, self.image:getDimensions())
-            end
-        end
-    end
-    
     self.gridWidth = gridSizeX
     self.gridHeight = gridSizeY
 
-    self:createAnimation("all", 1, #self.quads)
+    assert(self.image:getWidth() % self.gridWidth == 0,filename..": Image width ".. self.image:getWidth() .. " is not divisible by Quad width " .. self.gridWidth)
+    assert(self.image:getHeight() % self.gridHeight == 0,filename..": Image height ".. self.image:getHeight() .." is not divisible by Quad height " .. self.gridHeight)
+
+    self.quad = love.graphics.newQuad(0, 0, self.gridWidth, self.gridHeight, self.image:getDimensions())
+
+    local rows = self.image:getWidth() / self.gridWidth
+    local cols = self.image:getHeight() / self.gridHeight
+    self.frames = cols * rows
+
+    self:createAnimation("all", 1, self.frames)
     return self
 end
 
--- Called by templating code, should never be called directly.
+function Sprite:getQuadAt(index)
+    assert(index > 0 and index <= self.frames, "Attempted to index quad "..index.. ", expected 0 to " .. self.frames)
+    index = math.floor(index) - 1
+    local fullWidth = self.gridWidth * index
+    local x = fullWidth % self.image:getWidth()
+    local y = 0
+    while fullWidth > self.image:getWidth() - self.gridWidth do
+        y = y + self.gridHeight
+        fullWidth = fullWidth - self.image:getWidth()
+    end
+    self.quad:setViewport(x,y,self.gridWidth,self.gridHeight)
+    return self.quad
+end
+
 function Sprite:createAnimation(animName, startQuad, endQuad)
     self.animations[animName] = {
         first = startQuad,
@@ -48,7 +53,6 @@ function Sprite:getAllAnimations()
     return anims
 end
 
--- Helper function for things that want to draw sprites that aren't spriterenderers
 function Sprite:draw(quadIndex, x, y, offx, offy, angle, scale, color, flipX)
     if not quadIndex or quadIndex < 1 then
         return
@@ -60,14 +64,12 @@ function Sprite:draw(quadIndex, x, y, offx, offy, angle, scale, color, flipX)
         love.graphics.setColor(1, 1, 1, 1)
     end
 
-    assert(self.quads[quadIndex], "No quad at index " .. quadIndex .. " on sprite " .. self.filename)
-
     local xScale = scale or 1
     if flipX then xScale = -xScale end
 
     love.graphics.draw(
         self.image,
-        self.quads[quadIndex],
+        self:getQuadAt(quadIndex),
         x,
         y,
         angle or 0,
@@ -77,5 +79,30 @@ function Sprite:draw(quadIndex, x, y, offx, offy, angle, scale, color, flipX)
         offy or self.gridHeight / 2
     )
 end
+
+local Test = require('nx/test')
+Test.run(
+    "Sprite",
+    function()
+        local subject = Sprite.new("images/numbers.png",8,16)
+
+        Test.assert(subject.frames,20,"Count quads")
+
+        local x,y,width,height = subject:getQuadAt(1):getViewport()
+        Test.assert(8,width,"Get quad width")
+        Test.assert(16,height,"Get quad height")
+
+        Test.assert(0,x,"Get first quad x")
+        Test.assert(0,y,"Get first quad y")
+
+        local x2,y2,width2,height2 = subject:getQuadAt(11):getViewport()
+        Test.assert(0,x2,"Get middle quad x")
+        Test.assert(16,y2,"Get middle quad y")
+
+        local x3,y3,width3,height3 = subject:getQuadAt(12):getViewport()
+        Test.assert(8,x3,"Get middle+1 quad x")
+        Test.assert(16,y3,"Get middle+1 quad y")
+    end
+)
 
 return Sprite
