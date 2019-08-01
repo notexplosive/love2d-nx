@@ -53,7 +53,7 @@ function Sprite:getAllAnimations()
     return anims
 end
 
-function Sprite:draw(quadIndex, x, y, offx, offy, angle, scale, color, flipX)
+function Sprite:draw(quadIndex, x, y, offx, offy, angle, scaleX, scaleY, color)
     if not quadIndex or quadIndex < 1 then
         return
     end
@@ -64,17 +64,14 @@ function Sprite:draw(quadIndex, x, y, offx, offy, angle, scale, color, flipX)
         love.graphics.setColor(1, 1, 1, 1)
     end
 
-    local xScale = scale or 1
-    if flipX then xScale = -xScale end
-
     love.graphics.draw(
         self.image,
         self:getQuadAt(quadIndex),
-        x,
-        y,
+        math.floor(x),
+        math.floor(y),
         angle or 0,
-        xScale,
-        scale or 1,
+        scaleX or 1,
+        scaleY or 1,
         offx or self.gridWidth / 2,
         offy or self.gridHeight / 2
     )

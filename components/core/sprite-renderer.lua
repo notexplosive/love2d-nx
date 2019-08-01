@@ -43,8 +43,6 @@ end
 
 function SpriteRenderer:draw(x, y)
     if self.sprite then
-        local quad = self.sprite:getQuadAt(math.floor(self.currentFrame))
-
         local xFactor, yFactor = 1, 1
         if self.flipX then
             xFactor = -1
@@ -53,21 +51,21 @@ function SpriteRenderer:draw(x, y)
             yFactor = -1
         end
 
-        love.graphics.setColor(self.color)
-
         if self.actor.visible then
-            love.graphics.draw(
-                self.sprite.image,
-                quad,
-                math.floor(x),
-                math.floor(y),
+            self.sprite:draw(
+                math.floor(self.currentFrame),
+                x,
+                y,
+                math.floor(self.sprite.gridWidth / 2) + self.offset.x,
+                math.floor(self.sprite.gridHeight / 2) + self.offset.y,
                 self.actor:angle(),
                 self.scale * xFactor * self.scaleX,
                 self.scale * yFactor * self.scaleY,
-                math.floor(self.sprite.gridWidth / 2) + self.offset.x,
-                math.floor(self.sprite.gridHeight / 2) + self.offset.y
+                self.color
             )
         end
+
+        love.graphics.circle('fill',x,y,5)
     end
 end
 
@@ -139,7 +137,7 @@ function SpriteRenderer:setFlipY(b)
 end
 
 function SpriteRenderer:getBoundingBox()
-    local _,_,width,height = self.sprite:getQuadAt(1):getViewport()
+    local _, _, width, height = self.sprite:getQuadAt(1):getViewport()
     local w = self.scale * self.scaleX * width
     local h = self.scale * self.scaleY * height
     local camera = self.actor:scene().camera
