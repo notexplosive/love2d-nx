@@ -24,7 +24,7 @@ end
 -- API
 --
 
-function FileSystem:getCurrentDirectory()
+function FileSystem:getDirectory()
     return self.currentDirectory
 end
 
@@ -73,17 +73,17 @@ Test.registerComponentTest(
         local subject = actor:addComponent(Components.FileSystem)
 
         subject:setDirectory('components/core')
-        Test.assert(49,#subject:getItems(),"Count files")
+        Test.assert(#love.filesystem.getDirectoryItems(subject:getDirectory()),#subject:getItems(),"Count files")
 
         subject:upOneLevel()
-        Test.assert('components',subject:getCurrentDirectory(),"Up one level")
+        Test.assert('components',subject:getDirectory(),"Up one level")
 
         subject:upOneLevel()
-        Test.assert('',subject:getCurrentDirectory(),"Up one level to root directory")
+        Test.assert('',subject:getDirectory(),"Up one level to root directory")
 
         subject:setDirectoryLocal('nx')
         subject:setDirectoryLocal('game')
-        Test.assert('nx/game',subject:getCurrentDirectory(), "setDirectoryLocal")
+        Test.assert('nx/game',subject:getDirectory(), "setDirectoryLocal")
     end
 )
 
