@@ -3,10 +3,6 @@ local SpriteRenderer = {}
 
 registerComponent(SpriteRenderer, "SpriteRenderer")
 
-function SpriteRenderer.create_object()
-    return newObject(SpriteRenderer)
-end
-
 function SpriteRenderer:setup(spriteName, anim, scale, color, offx, offy)
     assert(spriteName, "Sprite name cannot be nil")
     assert(Assets.images[spriteName], "No sprite named " .. spriteName)
@@ -64,8 +60,6 @@ function SpriteRenderer:draw(x, y)
                 self.color
             )
         end
-
-        love.graphics.circle('fill',x,y,5)
     end
 end
 
