@@ -28,7 +28,7 @@ end
 
 function Scene.fromSceneData(sceneData)
     local scene = Scene.new()
-    
+
     if sceneData.dimensions then
         assert(#sceneData.dimensions == 2, "Dimensions should be two numbers: [x,y]")
         scene:setDimensions(unpack(sceneData.dimensions))
@@ -90,7 +90,7 @@ function Scene:addActor(actor)
     return actor
 end
 
-function Scene:addPrefab(prefabName,...)
+function Scene:addPrefab(prefabName, ...)
     -- Dehydrate the actor to a prefab node
     local nodeData = {
         prefab = prefabName,
@@ -283,11 +283,9 @@ function Scene:draw()
     end
 
     for i, actor in ipairs(self.actors) do
-        if not actor.Layer then
-            if actor.visible then
-                local x, y = actor:pos().x - self.camera.x + shake.x, actor:pos().y - self.camera.y + shake.y
-                actor:draw(x, y)
-            end
+        if actor.visible then
+            local x, y = actor:pos().x - self.camera.x + shake.x, actor:pos().y - self.camera.y + shake.y
+            actor:draw(x, y)
         end
     end
 end
