@@ -21,10 +21,11 @@ function SpriteRenderer:setup(spriteName, anim, scale, color, offx, offy)
 end
 
 function SpriteRenderer:awake()
+    self.actor:addComponentSafe(Components.PlayHead)
+    self.actor:addComponentSafe(Components.AnimationFrameTracker)
+
     self.currentAnimation = nil
-    self.isLooping = true
-    self.currentFrame = 0
-    self.fps = 10
+
     self.scale = 1
     self.scaleX = 1
     self.scaleY = 1
@@ -32,9 +33,6 @@ function SpriteRenderer:awake()
     self.flipY = false
     self.color = {1, 1, 1, 1}
     self.offset = Vector.new()
-
-    self.onAnimationEnd = function()
-    end
 end
 
 function SpriteRenderer:draw(x, y)
@@ -49,7 +47,7 @@ function SpriteRenderer:draw(x, y)
 
         if self.actor.visible then
             self.sprite:draw(
-                math.floor(self.currentFrame),
+                math.floor(self.actor.AnimationFrameTracker:get()),
                 x,
                 y,
                 math.floor(self.sprite.gridWidth / 2) + self.offset.x,
@@ -63,27 +61,6 @@ function SpriteRenderer:draw(x, y)
     end
 end
 
-function SpriteRenderer:update(dt)
-    if self.currentAnimation then
-        self.currentFrame = self.currentFrame + dt * self.fps
-        if self.currentFrame > self.currentAnimation.last + 1 then
-            self.onAnimationEnd()
-            if self.isLooping then
-                self.currentFrame = self.currentAnimation.first
-            else
-                self.currentFrame = self.currentAnimation.last
-                self.onAnimationEnd = function()
-                end
-            end
-        end
-
-        if self.currentAnimation.last == self.currentAnimation.first then
-            self.currentFrame = self.currentAnimation.first
-        end
-    end
-end
-
--- Accessors and Mutators
 function SpriteRenderer:setSprite(sprite)
     assert(sprite, "SpriteRenderer:setSprite was passed a nil")
     assert(sprite:type() == Sprite)
@@ -106,12 +83,13 @@ function SpriteRenderer:setAnimation(animName)
     end
 
     self.currentAnimation = self.sprite.animations[animName]
-    self.currentFrame = self.currentAnimation.first
+
+    self.actor.AnimationFrameTracker:setRange(self.currentAnimation.first, self.currentAnimation.last)
     return self
 end
 
 function SpriteRenderer:setFrame(index)
-    self.currentFrame = self.currentAnimation.first + index - 2
+    self.actor.AnimationFrameTracker:set(index)
 end
 
 function SpriteRenderer:getAnimation()

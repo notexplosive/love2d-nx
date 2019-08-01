@@ -19,6 +19,9 @@
     {
       "components": [["BoundingBox",200,200],["Canvas"],["DrawRandomShit"]],
       "pos": [900,200]
+    },
+    {
+      "components": [["StressTest"]]
     }
   ]
 }

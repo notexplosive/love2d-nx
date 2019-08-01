@@ -14,7 +14,7 @@ function AnimationFrameTracker:setup(firstFrame,lastFrame,fps)
 end
 
 function AnimationFrameTracker:awake()
-    self.fps = 15
+    self.fps = 10
     self.firstFrame = 1
 end
 
@@ -22,16 +22,20 @@ end
 -- Public API
 --
 
+function AnimationFrameTracker:get()
+    local seconds = self.actor.PlayHead:get()
+    return math.floor(self.firstFrame + self.fps * seconds )
+end
+
+function AnimationFrameTracker:set(frame)
+    self.actor.PlayHead:set(self:getLengthOfFrameInSeconds() * frame)
+end
+
 function AnimationFrameTracker:setRange(firstFrame,lastFrame)
     self.firstFrame = math.floor(firstFrame)
 
     local numberOfFrames = math.floor(lastFrame) - self.firstFrame + 1
     self.actor.PlayHead:setup(numberOfFrames * self:getLengthOfFrameInSeconds())
-end
-
-function AnimationFrameTracker:get()
-    local seconds = self.actor.PlayHead:get()
-    return math.floor(self.firstFrame + self.fps * seconds )
 end
 
 function AnimationFrameTracker:getLengthOfFrameInSeconds()
@@ -50,7 +54,7 @@ Test.registerComponentTest(
         local Actor = require('nx/game/actor')
         local actor = Actor.new("testActor")
         actor:addComponent(Components.PlayHead)
-        local subject = actor:addComponent(AnimationFrameTracker,5,10)
+        local subject = actor:addComponent(AnimationFrameTracker,5,10,15)
 
         Test.assert(5,subject:get(),"Get frame at time = 0")
 
