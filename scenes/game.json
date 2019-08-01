@@ -10,14 +10,14 @@
     {
       "prefab": "button",
       "arguments": [500,64,"do-foobar","Foobar"],
-      "components": [["ClickSelectable"]],
+      "components": [["MouseSelectable"]],
       "pos": [100,200]
     },
     {
       "components": [["SpriteRenderer","numbers","all"]],"pos": [200,200]
     },
     {
-      "components": [["BoundingBox",200,200],["Canvas"],["DrawRandomShit"]],
+      "components": [["BoundingBox",200,200],["Canvas"],["DrawRandomShit"],["BoundingBoxEditor"]],
       "pos": [900,200]
     },
     {

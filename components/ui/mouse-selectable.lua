@@ -1,8 +1,8 @@
-local ClickSelectable = {}
+local MouseSelectable = {}
 
-registerComponent(ClickSelectable,'ClickSelectable')
+registerComponent(MouseSelectable,'MouseSelectable')
 
-function ClickSelectable:awake()
+function MouseSelectable:awake()
     self.actor:addComponentSafe(Components.BoundingBox)
     self.actor:addComponentSafe(Components.Hoverable)
     self.actor:addComponentSafe(Components.Clickable)
@@ -10,10 +10,10 @@ function ClickSelectable:awake()
     self.actor:addComponentSafe(Components.Selectable,true)
 end
 
-function ClickSelectable:Clickable_onClickOn(button)
+function MouseSelectable:Clickable_onClickOn(button)
     if button == 1 and not self.actor.Selectable:selected() then
         self.actor.Selectable:select()
     end
 end
 
-return ClickSelectable
+return MouseSelectable
