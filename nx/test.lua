@@ -34,15 +34,8 @@ end
 function Test.assert(expected, actual, message)
     assert(message, "no description supplied for test case")
     message = Test.currentSuiteName .. ": " .. message
-    if type(actual) == "boolean" then
-        actual = booleanToString(actual)
-    end
 
-    if type(expected) == "boolean" then
-        expected = booleanToString(expected)
-    end
-
-    assert(expected == actual, message .. "\nexpected: " .. expected .. "\nactual:" .. actual)
+    assert(expected == actual, message .. "\nexpected: " .. tostring(expected) .. "\nactual:" .. tostring(actual))
 end
 
 return Test

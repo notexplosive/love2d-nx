@@ -94,7 +94,7 @@ function Actor:setLocalPos(v, y)
     self._localPos = v:clone()
 end
 
-function Actor:addComponent(componentClass,...)
+function Actor:addComponent(componentClass, ...)
     assert(componentClass, "Actor:addComponent() was passed nil")
     assert(componentClass.name, "Component needs a name")
     assert(self[componentClass.name] == nil, "Actor already has a " .. componentClass.name .. " component")
@@ -130,9 +130,9 @@ function Actor:removeComponent(componentClass)
     self[componentClass.name] = nil
 end
 
-function Actor:addComponentSafe(componentClass,...)
+function Actor:addComponentSafe(componentClass, ...)
     if not self[componentClass.name] then
-        return self:addComponent(componentClass,...)
+        return self:addComponent(componentClass, ...)
     end
     return self[componentClass.name]
 end
@@ -177,7 +177,10 @@ Actor:createEvent("onMousePress", {"x", "y", "button", "wasRelease", "isClickCon
 function Actor:callForAllComponents(methodName, ...)
     for i, component in ipairs(self.components) do
         if component[methodName] then
-            if (not self:scene().editMode or (self:scene().editMode and not component.disableInEditMode)) then
+            if
+                not self.originalScene or
+                    (not self:scene().editMode or (self:scene().editMode and not component.disableInEditMode))
+             then
                 component[methodName](component, ...)
             end
         end
