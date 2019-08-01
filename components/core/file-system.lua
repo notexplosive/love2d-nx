@@ -81,6 +81,9 @@ Test.registerComponentTest(
         subject:upOneLevel()
         Test.assert('',subject:getDirectory(),"Up one level to root directory")
 
+        subject:upOneLevel()
+        Test.assert('',subject:getDirectory(),"Up one level past root directory")
+
         subject:setDirectoryLocal('nx')
         subject:setDirectoryLocal('game')
         Test.assert('nx/game',subject:getDirectory(), "setDirectoryLocal")
