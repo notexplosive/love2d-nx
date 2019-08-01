@@ -30,7 +30,7 @@ function registerComponent(componentClass, name, deps)
 end
 
 -- Nx components
-SpriteRenderer = require("nx/game/components/spriterenderer")
+--SpriteRenderer = require("nx/game/components/spriterenderer")
 TextRenderer = require("nx/game/components/textrenderer")
 TileMapRenderer = require("nx/game/components/tilemaprenderer")
 TileMap = require("nx/game/components/tilemap")

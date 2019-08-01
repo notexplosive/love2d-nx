@@ -14,10 +14,11 @@
       "pos": [100,200]
     },
     {
-      "components": [["StressTest"]]
+      "components": [["SpriteRenderer","numbers","all"]],"pos": [200,200]
     },
     {
-      "components": [["SpriteRenderer","numbers","all"]],"pos": [200,200]
+      "components": [["BoundingBox",200,200],["Canvas"],["DrawRandomShit"]],
+      "pos": [900,200]
     }
   ]
 }
