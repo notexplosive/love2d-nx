@@ -65,12 +65,12 @@ end
 
 local Test = require("nx/test")
 Test.registerComponentTest(
-    Components.FileSystem,
+    FileSystem,
     function()
         local Actor = require('nx/game/actor')
         local actor = Actor.new("testActor")
 
-        local subject = actor:addComponent(Components.FileSystem)
+        local subject = actor:addComponent(FileSystem)
 
         subject:setDirectory('components/core')
         Test.assert(#love.filesystem.getDirectoryItems(subject:getDirectory()),#subject:getItems(),"Count files")
