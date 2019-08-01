@@ -28,25 +28,6 @@ function BoundingBoxEditor:update(dt)
     }
 end
 
-function BoundingBoxEditor:draw(x, y)
-    love.graphics.setColor(1, 1, 1, 1)
-    for i, rect in ipairs(self.sideGrabHandleRects) do
-        local fill = "line"
-        if self.selectedIndex == i then
-            fill = "fill"
-        end
-        love.graphics.rectangle(fill, rect:xywh())
-    end
-
-    for i, rect in ipairs(self.cornerGrabHandleRects) do
-        local fill = "line"
-        if self.selectedIndex == i + 4 then
-            fill = "fill"
-        end
-        love.graphics.rectangle(fill, rect:xywh())
-    end
-end
-
 function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
     if self.selectedIndex then
         if self.selectedIndex == 1 or self.selectedIndex == 6 or self.selectedIndex == 5 then
