@@ -31,13 +31,16 @@ function BoundingBoxEditor:update(dt)
 end
 
 function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
+    x = x + self.actor:scene().camera.x
+    y = y + self.actor:scene().camera.y
+
     if self.selectedIndex then
         local alongTop = self.selectedIndex == 1 or self.selectedIndex == 6 or self.selectedIndex == 5
         local alongBottom = self.selectedIndex == 2 or self.selectedIndex == 7 or self.selectedIndex == 8
         local alongLeft = self.selectedIndex == 3 or self.selectedIndex == 5 or self.selectedIndex == 8
         local alongRight = self.selectedIndex == 4 or self.selectedIndex == 6 or self.selectedIndex == 7
 
-        if alongTop then
+        if alongTop and (y < self.actor:pos().y or dy > 0) then
             self:moveVerticallyBy(dy)
             self:growVerticallyBy(-dy)
             local overage = self:getVerticalOverage()
@@ -45,13 +48,13 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
             self:moveVerticallyBy(-overage)
         end
 
-        if alongBottom then
+        if alongBottom and (y > self.actor:pos().y + self.actor.BoundingBox:height() or dy < 0) then
             self:growVerticallyBy(dy)
             local overage = self:getVerticalOverage()
             self:growVerticallyBy(overage)
         end
 
-        if alongLeft then
+        if alongLeft and (x < self.actor:pos().x or dx > 0) then
             self:moveHorizontallyBy(dx)
             self:growHorizontallyBy(-dx)
             local overage = self:getHorizontalOverage()
@@ -59,7 +62,7 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
             self:moveHorizontallyBy(-overage)
         end
 
-        if alongRight then
+        if alongRight and (x > self.actor:pos().x + self.actor.BoundingBox:width() or dx < 0) then
             self:growHorizontallyBy(dx)
             local overage = self:getHorizontalOverage()
             self:growHorizontallyBy(overage)
