@@ -15,7 +15,7 @@ function Canvas:reset()
     self.canvas = love.graphics.newCanvas(self.actor.BoundingBox:getDimensions())
 end
 
-function Canvas:BoundingBoxEditor_onResize()
+function Canvas:BoundingBoxEditor_onResizeEnd()
     self:reset()
 end
 

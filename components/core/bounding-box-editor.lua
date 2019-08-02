@@ -8,7 +8,7 @@ function BoundingBoxEditor:awake()
     self.selectedIndex = nil
     self.grabHandleWidth = 10
 
-    self.minimumWidth = Size.new(64,64)
+    self.minimumSize = Size.new(64,64)
 end
 
 function BoundingBoxEditor:update(dt)
@@ -32,22 +32,40 @@ end
 
 function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
     if self.selectedIndex then
-        if self.selectedIndex == 1 or self.selectedIndex == 6 or self.selectedIndex == 5 then
+        local alongTop = self.selectedIndex == 1 or self.selectedIndex == 6 or self.selectedIndex == 5
+        local alongBottom = self.selectedIndex == 2 or self.selectedIndex == 7 or self.selectedIndex == 8
+        local alongLeft = self.selectedIndex == 3 or self.selectedIndex == 5 or self.selectedIndex == 8
+        local alongRight = self.selectedIndex == 4 or self.selectedIndex == 6 or self.selectedIndex == 7
+
+        if alongTop then
             self.actor:setPos(self.actor:pos() + Vector.new(0, dy))
             self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() - dy
-        end
-        if self.selectedIndex == 2 or self.selectedIndex == 7 or self.selectedIndex == 8 then
-            self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() + dy
-        end
-        if self.selectedIndex == 3 or self.selectedIndex == 5 or self.selectedIndex == 8 then
-            self.actor:setPos(self.actor:pos() + Vector.new(dx, 0))
-            self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() - dx
-        end
-        if self.selectedIndex == 4 or self.selectedIndex == 6 or self.selectedIndex == 7 then
-            self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() + dx
+            local overage = math.max(self.minimumSize.height - self.actor.BoundingBox:height(),0)
+            self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() + overage
+            self.actor:setPos(self.actor:pos() + Vector.new(0,-overage))
         end
 
-        self.actor:callForAllComponents("BoundingBoxEditor_onResize")
+        if alongBottom then
+            self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() + dy
+            local overage = math.max(self.minimumSize.height - self.actor.BoundingBox:height(),0)
+            self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() + overage
+        end
+
+        if alongLeft then
+            self.actor:setPos(self.actor:pos() + Vector.new(dx, 0))
+            self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() - dx
+            local overage = math.max(self.minimumSize.width - self.actor.BoundingBox:width(),0)
+            self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() + overage
+            self.actor:setPos(self.actor:pos() + Vector.new(-overage,0))
+        end
+
+        if alongRight then
+            self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() + dx
+            local overage = math.max(self.minimumSize.width - self.actor.BoundingBox:width(),0)
+            self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() + overage
+        end
+
+        self.actor:callForAllComponents("BoundingBoxEditor_onResizeDrag")
     end
 end
 
@@ -57,6 +75,7 @@ function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsume
             for i, rect in ipairs(self.cornerGrabHandleRects) do
                 if rect:isVectorWithin(x, y) then
                     self.selectedIndex = i + 4
+                    self.actor:callForAllComponents("BoundingBoxEditor_onResizeStart")
                     self.actor:scene():consumeClick()
                     return
                 end
@@ -66,12 +85,14 @@ function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsume
         for i, rect in ipairs(self.sideGrabHandleRects) do
             if rect:isVectorWithin(x, y) then
                 self.selectedIndex = i
+                self.actor:callForAllComponents("BoundingBoxEditor_onResizeStart")
                 self.actor:scene():consumeClick()
             end
         end
     end
 
     if button == 1 and wasRelease then
+        self.actor:callForAllComponents("BoundingBoxEditor_onResizeEnd")
         self.selectedIndex = nil
         if self.actor.BoundingBox:getArea() <= 0 then
             self.actor:destroy()
