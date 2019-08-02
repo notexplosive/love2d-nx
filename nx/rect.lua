@@ -23,6 +23,18 @@ function Rect:height()
     return self.size.height
 end
 
+function Rect:setWidth(width)
+    self.size.width = width
+end
+
+function Rect:setHeight(height)
+    self.size.height = height
+end
+
+function Rect:move(v,y)
+    self.pos = self.pos + Vector.new(v,y)
+end
+
 function Rect:x()
     return self.pos.x
 end
@@ -133,6 +145,16 @@ Test.run(
         Test.assert(true, surface:isVectorWithin(pointInside), "Rect:isVectorWithinRect(), pointInside")
         Test.assert(false, surface:isVectorWithin(pointOnBoundary), "Rect:isVectorWithinRect(), pointOnBoundary")
         Test.assert(false, surface:isVectorWithin(pointOutside), "Rect:isVectorWithinRect(), pointOutside")
+
+        local mover = Rect.new(10,10,50,50)
+        mover:move(5,10)
+        Test.assert(15,mover.pos.x, "Move X")
+        Test.assert(20,mover.pos.y, "Move Y")
+        mover:setWidth(25)
+        Test.assert(25,mover:width(),"Width after setWidth()")
+        mover:setHeight(35)
+        Test.assert(35,mover:height(),"Height after setHeight()")
+        
     end
 )
 

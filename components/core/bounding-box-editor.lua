@@ -110,11 +110,11 @@ function BoundingBoxEditor:moveHorizontallyBy(x)
 end
 
 function BoundingBoxEditor:growHorizontallyBy(x)
-    self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() + x
+    self.actor.BoundingBox:setWidth(self.actor.BoundingBox:width() + x)
 end
 
 function BoundingBoxEditor:growVerticallyBy(y)
-    self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() + y
+    self.actor.BoundingBox:setHeight(self.actor.BoundingBox:height() + y)
 end
 
 function BoundingBoxEditor:getHorizontalOverage()
@@ -126,75 +126,73 @@ function BoundingBoxEditor:getVerticalOverage()
 end
 
 -- Corners
-function BoundingBoxEditor:getTopLeftGrabHandleRect()
+function BoundingBoxEditor:getCornerRect(ox,oy)
     local boundingRect = self.actor.BoundingBox:getRect()
-    local x = boundingRect:x() - self.grabHandleWidth
-    local y = boundingRect:y() - self.grabHandleWidth
+    local x = boundingRect:x() - self.grabHandleWidth + ox
+    local y = boundingRect:y() - self.grabHandleWidth + oy
     return Rect.new(x, y, self.grabHandleWidth * 2, self.grabHandleWidth * 2)
+end
+
+function BoundingBoxEditor:getTopLeftGrabHandleRect()
+    return self:getCornerRect(0,0)
 end
 
 function BoundingBoxEditor:getTopRightGrabHandleRect()
     local boundingRect = self.actor.BoundingBox:getRect()
-    local x = boundingRect:x() - self.grabHandleWidth + boundingRect:width()
-    local y = boundingRect:y() - self.grabHandleWidth
-    return Rect.new(x, y, self.grabHandleWidth * 2, self.grabHandleWidth * 2)
+    return self:getCornerRect(boundingRect:width(),0)
 end
 
 function BoundingBoxEditor:getBottomRightGrabHandleRect()
     local boundingRect = self.actor.BoundingBox:getRect()
-    local x = boundingRect:x() - self.grabHandleWidth + boundingRect:width()
-    local y = boundingRect:y() - self.grabHandleWidth + boundingRect:height()
-    return Rect.new(x, y, self.grabHandleWidth * 2, self.grabHandleWidth * 2)
+    return self:getCornerRect(boundingRect:width(),boundingRect:height())
 end
 
 function BoundingBoxEditor:getBottomLeftGrabHandleRect()
     local boundingRect = self.actor.BoundingBox:getRect()
-    local x = boundingRect:x() - self.grabHandleWidth
-    local y = boundingRect:y() - self.grabHandleWidth + boundingRect:height()
-    return Rect.new(x, y, self.grabHandleWidth * 2, self.grabHandleWidth * 2)
+    return self:getCornerRect(0,boundingRect:height())
 end
 
 -- Corners small
 function BoundingBoxEditor:getBottomRightGrabHandleRectSmall()
-    local boundingRect = self.actor.BoundingBox:getRect()
-    local x = boundingRect:x() - self.grabHandleWidth + boundingRect:width()
-    local y = boundingRect:y() - self.grabHandleWidth + boundingRect:height() + self.grabHandleWidth
-    return Rect.new(x, y, self.grabHandleWidth * 2, self.grabHandleWidth)
+    local rect = self:getBottomRightGrabHandleRect()
+    rect:setHeight(rect:height()/2)
+    rect:move(0,rect:height())
+    return rect
 end
 
 function BoundingBoxEditor:getBottomLeftGrabHandleRectSmall()
-    local boundingRect = self.actor.BoundingBox:getRect()
-    local x = boundingRect:x() - self.grabHandleWidth
-    local y = boundingRect:y() - self.grabHandleWidth + boundingRect:height() + self.grabHandleWidth
-    return Rect.new(x, y, self.grabHandleWidth * 2, self.grabHandleWidth)
+    local rect = self:getBottomLeftGrabHandleRect()
+    rect:setHeight(rect:height()/2)
+    rect:move(0,rect:height())
+    return rect
 end
 
 -- Sides
 function BoundingBoxEditor:getLeftGrabHandleRect()
     local rect = self.actor.BoundingBox:getRect()
-    rect.size.width = self.grabHandleWidth
-    rect.pos.x = rect.pos.x - rect.size.width
+    rect:setWidth(self.grabHandleWidth)
+    rect:move(-rect:width(),0)
     return rect
 end
 
 function BoundingBoxEditor:getRightGrabHandleRect()
     local rect = self.actor.BoundingBox:getRect()
-    rect.pos.x = rect.pos.x + rect.size.width
-    rect.size.width = self.grabHandleWidth
+    rect:move(rect:width(),0)
+    rect:setWidth(self.grabHandleWidth)
     return rect
 end
 
 function BoundingBoxEditor:getBottomGrabHandleRect()
     local rect = self.actor.BoundingBox:getRect()
-    rect.pos.y = rect.pos.y + rect.size.height
-    rect.size.height = self.grabHandleWidth
+    rect:move(0,rect:height())
+    rect:setHeight(self.grabHandleWidth)
     return rect
 end
 
 function BoundingBoxEditor:getTopGrabHandleRect()
     local rect = self.actor.BoundingBox:getRect()
-    rect.size.height = self.grabHandleWidth
-    rect.pos.y = rect.pos.y - rect.size.height
+    rect:setHeight(self.grabHandleWidth)
+    rect:move(0,-rect:height())
     return rect
 end
 

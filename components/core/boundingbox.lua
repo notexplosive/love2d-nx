@@ -37,6 +37,14 @@ function BoundingBox:height()
     return self.size.height
 end
 
+function BoundingBox:setWidth(width)
+    self.size.width = width
+end
+
+function BoundingBox:setHeight(height)
+    self.size.height = height
+end
+
 function BoundingBox:getRect()
     local camera = self.actor:scene().camera
     if self.actor.SpriteRenderer and (self.offset.x == 0 or self.offset.y == 0) and not self.forceCustom then
