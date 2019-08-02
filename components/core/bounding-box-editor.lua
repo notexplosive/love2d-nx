@@ -38,11 +38,11 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
         local alongRight = self.selectedIndex == 4 or self.selectedIndex == 6 or self.selectedIndex == 7
 
         if alongTop then
-            self.actor:setPos(self.actor:pos() + Vector.new(0, dy))
+            self:moveVerticallyBy(dy)
             self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() - dy
             local overage = math.max(self.minimumSize.height - self.actor.BoundingBox:height(),0)
             self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() + overage
-            self.actor:setPos(self.actor:pos() + Vector.new(0,-overage))
+            self:moveVerticallyBy(-overage)
         end
 
         if alongBottom then
@@ -52,11 +52,11 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
         end
 
         if alongLeft then
-            self.actor:setPos(self.actor:pos() + Vector.new(dx, 0))
+            self:moveHorizontallyBy(dx)
             self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() - dx
             local overage = math.max(self.minimumSize.width - self.actor.BoundingBox:width(),0)
             self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() + overage
-            self.actor:setPos(self.actor:pos() + Vector.new(-overage,0))
+            self:moveHorizontallyBy(-overage)
         end
 
         if alongRight then
@@ -67,6 +67,14 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
 
         self.actor:callForAllComponents("BoundingBoxEditor_onResizeDrag")
     end
+end
+
+function BoundingBoxEditor:moveVerticallyBy(y)
+    self.actor:setPos(self.actor:pos() + Vector.new(0,y))
+end
+
+function BoundingBoxEditor:moveHorizontallyBy(x)
+    self.actor:setPos(self.actor:pos() + Vector.new(x,0))
 end
 
 function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsumed)
