@@ -8,7 +8,7 @@ function BoundingBoxEditor:awake()
     self.selectedIndex = nil
     self.grabHandleWidth = 10
 
-    self.minimumSize = Size.new(64,64)
+    self.minimumSize = Size.new(64, 64)
 end
 
 function BoundingBoxEditor:update(dt)
@@ -39,42 +39,34 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
 
         if alongTop then
             self:moveVerticallyBy(dy)
-            self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() - dy
-            local overage = math.max(self.minimumSize.height - self.actor.BoundingBox:height(),0)
-            self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() + overage
+            self:growVerticallyBy(-dy)
+            local overage = self:getVerticalOverage()
+            self:growVerticallyBy(overage)
             self:moveVerticallyBy(-overage)
         end
 
         if alongBottom then
-            self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() + dy
-            local overage = math.max(self.minimumSize.height - self.actor.BoundingBox:height(),0)
-            self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() + overage
+            self:growVerticallyBy(dy)
+            local overage = self:getVerticalOverage()
+            self:growVerticallyBy(overage)
         end
 
         if alongLeft then
             self:moveHorizontallyBy(dx)
-            self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() - dx
-            local overage = math.max(self.minimumSize.width - self.actor.BoundingBox:width(),0)
-            self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() + overage
+            self:growHorizontallyBy(-dx)
+            local overage = self:getHorizontalOverage()
+            self:growHorizontallyBy(overage)
             self:moveHorizontallyBy(-overage)
         end
 
         if alongRight then
-            self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() + dx
-            local overage = math.max(self.minimumSize.width - self.actor.BoundingBox:width(),0)
-            self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() + overage
+            self:growHorizontallyBy(dx)
+            local overage = self:getHorizontalOverage()
+            self:growHorizontallyBy(overage)
         end
 
         self.actor:callForAllComponents("BoundingBoxEditor_onResizeDrag")
     end
-end
-
-function BoundingBoxEditor:moveVerticallyBy(y)
-    self.actor:setPos(self.actor:pos() + Vector.new(0,y))
-end
-
-function BoundingBoxEditor:moveHorizontallyBy(x)
-    self.actor:setPos(self.actor:pos() + Vector.new(x,0))
 end
 
 function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsumed)
@@ -106,6 +98,31 @@ function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsume
             self.actor:destroy()
         end
     end
+end
+
+-- Mutators
+function BoundingBoxEditor:moveVerticallyBy(y)
+    self.actor:setPos(self.actor:pos() + Vector.new(0, y))
+end
+
+function BoundingBoxEditor:moveHorizontallyBy(x)
+    self.actor:setPos(self.actor:pos() + Vector.new(x, 0))
+end
+
+function BoundingBoxEditor:growHorizontallyBy(x)
+    self.actor.BoundingBox.size.width = self.actor.BoundingBox:width() + x
+end
+
+function BoundingBoxEditor:growVerticallyBy(y)
+    self.actor.BoundingBox.size.height = self.actor.BoundingBox:height() + y
+end
+
+function BoundingBoxEditor:getHorizontalOverage()
+    return math.max(self.minimumSize.width - self.actor.BoundingBox:width(), 0)
+end
+
+function BoundingBoxEditor:getVerticalOverage()
+    return math.max(self.minimumSize.height - self.actor.BoundingBox:height(), 0)
 end
 
 -- Corners
