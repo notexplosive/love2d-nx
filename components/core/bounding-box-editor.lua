@@ -7,6 +7,8 @@ function BoundingBoxEditor:awake()
     self.cornerGrabHandleRects = {}
     self.selectedIndex = nil
     self.grabHandleWidth = 10
+
+    self.minimumWidth = Size.new(64,64)
 end
 
 function BoundingBoxEditor:update(dt)
@@ -77,6 +79,7 @@ function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsume
     end
 end
 
+-- Corners
 function BoundingBoxEditor:getTopLeftGrabHandleRect()
     local boundingRect = self.actor.BoundingBox:getRect()
     local x = boundingRect:x() - self.grabHandleWidth
@@ -105,6 +108,22 @@ function BoundingBoxEditor:getBottomLeftGrabHandleRect()
     return Rect.new(x, y, self.grabHandleWidth * 2, self.grabHandleWidth * 2)
 end
 
+-- Corners small
+function BoundingBoxEditor:getBottomRightGrabHandleRectSmall()
+    local boundingRect = self.actor.BoundingBox:getRect()
+    local x = boundingRect:x() - self.grabHandleWidth + boundingRect:width()
+    local y = boundingRect:y() - self.grabHandleWidth + boundingRect:height() + self.grabHandleWidth
+    return Rect.new(x, y, self.grabHandleWidth * 2, self.grabHandleWidth)
+end
+
+function BoundingBoxEditor:getBottomLeftGrabHandleRectSmall()
+    local boundingRect = self.actor.BoundingBox:getRect()
+    local x = boundingRect:x() - self.grabHandleWidth
+    local y = boundingRect:y() - self.grabHandleWidth + boundingRect:height() + self.grabHandleWidth
+    return Rect.new(x, y, self.grabHandleWidth * 2, self.grabHandleWidth)
+end
+
+-- Sides
 function BoundingBoxEditor:getLeftGrabHandleRect()
     local rect = self.actor.BoundingBox:getRect()
     rect.size.width = self.grabHandleWidth
