@@ -9,7 +9,7 @@ function NinePatch:setup(spriteName, inflateWidth, inflateHeight)
     -- TODO: support center
     self.noCenter = true
 
-    self.remainderQuad = love.graphics.newQuad(0, 0, 0, 0, self.sprite.image:getDimensions())
+    self.cachedQuad = love.graphics.newQuad(0, 0, 0, 0, self.sprite.image:getDimensions())
 end
 
 function NinePatch:start()
@@ -24,12 +24,8 @@ function NinePatch:draw()
     local x, y, width, height = rect:xywh()
 
     local topLeftQuad = self.sprite:getQuadAt(1)
-    local topMiddleQuad = self.sprite:getQuadAt(2)
     local topRightQuad = self.sprite:getQuadAt(3)
-    local leftMiddleQuad = self.sprite:getQuadAt(7)
-    local rightMiddleQuad = self.sprite:getQuadAt(9)
     local bottomLeftQuad = self.sprite:getQuadAt(13)
-    local bottomMiddleQuad = self.sprite:getQuadAt(14)
     local bottomRightQuad = self.sprite:getQuadAt(15)
 
     local _, _, quadWidth, quadHeight = topLeftQuad:getViewport()
@@ -43,29 +39,19 @@ function NinePatch:draw()
     love.graphics.draw(self.sprite.image, bottomRightQuad, right, bottom)
     love.graphics.draw(self.sprite.image, bottomLeftQuad, left, bottom)
 
-    local ooo = 0
-    for mmm = quadWidth, rect:width() - quadWidth * 2, quadWidth do
-        love.graphics.draw(self.sprite.image, topMiddleQuad, left + mmm, top)
-        ooo = mmm
-    end
+    local topMiddleQuad = self.sprite:getQuadAt(2)
+    local leftMiddleQuad = self.sprite:getQuadAt(7)
+    local rightMiddleQuad = self.sprite:getQuadAt(9)
+    local bottomMiddleQuad = self.sprite:getQuadAt(14)
 
-    for mmm = quadWidth, rect:width() - quadWidth * 2, quadWidth do
-        love.graphics.draw(self.sprite.image, bottomMiddleQuad, left + mmm, bottom)
-    end
-
-    self:bibble(rect, topMiddleQuad, ooo)
-
-    local eee = 0
-    for mmm = quadHeight, rect:height() - quadHeight * 2, quadHeight do
-        love.graphics.draw(self.sprite.image, leftMiddleQuad, left, top + mmm)
-        eee = mmm
-    end
-
-    for mmm = quadHeight, rect:height() - quadHeight * 2, quadHeight do
-        love.graphics.draw(self.sprite.image, rightMiddleQuad, right, top + mmm)
-    end
-
-    self:bobble(rect, leftMiddleQuad, eee)
+    self:fillHorizontal(topMiddleQuad, left, top)
+    self:fillHorizontal(bottomMiddleQuad, left, bottom)
+    self:fillVertical(leftMiddleQuad, left, top)
+    self:fillVertical(rightMiddleQuad, right, top)
+    self:fillHorizontalRemainder(topMiddleQuad, left, top)
+    self:fillHorizontalRemainder(bottomMiddleQuad, left, bottom)
+    self:fillVerticalRemainder(leftMiddleQuad, left, top)
+    self:fillVerticalRemainder(rightMiddleQuad, right, top)
 end
 
 function NinePatch:getRect()
@@ -76,7 +62,7 @@ end
 
 function NinePatch:getQuadDimensions()
     local _, _, quadWidth, quadHeight = self.sprite:getQuadAt(1):getViewport()
-    return quadWidth,quadHeight
+    return quadWidth, quadHeight
 end
 
 function NinePatch:getSides()
@@ -90,38 +76,60 @@ function NinePatch:getSides()
     return top, bottom, left, right
 end
 
-function NinePatch:bibble(rect, quad, ooo, quadWidth, quadHeight)
+function NinePatch:getWidthRemainder()
     local quadWidth, quadHeight = self:getQuadDimensions()
-    local x, y, width, height = rect:xywh()
-    local top, bottom, left, right = self:getSides()
-
-    local quadRect = Rect.new(quad:getViewport())
-    local remainder = rect:width() % quadWidth
-    local xPositionOfBibble = left + ooo + quadWidth
-
-    self.remainderQuad:setViewport(quadRect:x(), quadRect:y(), remainder, quadHeight)
-    love.graphics.draw(self.sprite.image, self.remainderQuad, xPositionOfBibble, top)
-
-    quadRect:move(0, quadHeight * 2)
-    self.remainderQuad:setViewport(quadRect:x(), quadRect:y(), remainder, quadHeight)
-    love.graphics.draw(self.sprite.image, self.remainderQuad, xPositionOfBibble, bottom)
+    return self:getRect():width() % quadWidth
 end
 
-function NinePatch:bobble(rect, quad, ooo, quadWidth, quadHeight)
-    local _, _, quadWidth, quadHeight = self.sprite:getQuadAt(1):getViewport()
-    local x, y, width, height = rect:xywh()
-    local top, bottom, left, right = self:getSides()
+function NinePatch:getHeightRemainder()
+    local quadWidth, quadHeight = self:getQuadDimensions()
+    return self:getRect():height() % quadHeight
+end
 
-    local quadRect = Rect.new(quad:getViewport())
-    local remainder = rect:height() % quadHeight
-    local yPositionOfBobble = top + ooo + quadHeight
+function NinePatch:getWidthUpUntilYouNeedTheRemainder()
+    local quadWidth, quadHeight = self:getQuadDimensions()
+    return math.floor(self:getRect():width() / quadWidth) * quadWidth - quadWidth * 2
+end
 
-    self.remainderQuad:setViewport(quadRect:x(), quadRect:y(), quadWidth, remainder)
-    love.graphics.draw(self.sprite.image, self.remainderQuad, left, yPositionOfBobble)
+function NinePatch:getHeightUpUntilYouNeedTheRemainder()
+    local quadWidth, quadHeight = self:getQuadDimensions()
+    return math.floor(self:getRect():height() / quadHeight) * quadHeight - quadHeight * 2
+end
 
-    quadRect:move(quadWidth * 2, 0)
-    self.remainderQuad:setViewport(quadRect:x(), quadRect:y(), quadWidth, remainder)
-    love.graphics.draw(self.sprite.image, self.remainderQuad, right, yPositionOfBobble)
+function NinePatch:getThisQuadWithTheseDimensions(oldQuad, width, height)
+    local oldQuadRect = Rect.new(oldQuad:getViewport())
+    self.cachedQuad:setViewport(oldQuadRect:x(), oldQuadRect:y(), width, height)
+    return self.cachedQuad
+end
+
+function NinePatch:fillHorizontal(quad, left, y)
+    local quadWidth, quadHeight = self:getQuadDimensions()
+    for dx = quadWidth, self:getRect():width() - quadWidth * 2, quadWidth do
+        love.graphics.draw(self.sprite.image, quad, left + dx, y)
+    end
+end
+
+function NinePatch:fillVertical(quad, x, top)
+    local quadWidth, quadHeight = self:getQuadDimensions()
+    for dy = quadHeight, self:getRect():height() - quadHeight * 2, quadHeight do
+        love.graphics.draw(self.sprite.image, quad, x, top + dy)
+    end
+end
+
+function NinePatch:fillHorizontalRemainder(quad, left, y)
+    local quadWidth, quadHeight = self:getQuadDimensions()
+    local x = left + self:getWidthUpUntilYouNeedTheRemainder() + quadWidth
+
+    local remainderQuad = self:getThisQuadWithTheseDimensions(quad, self:getWidthRemainder(), quadHeight)
+    love.graphics.draw(self.sprite.image, remainderQuad, x, y)
+end
+
+function NinePatch:fillVerticalRemainder(quad, x, top)
+    local quadWidth, quadHeight = self:getQuadDimensions()
+    local y = top + self:getHeightUpUntilYouNeedTheRemainder() + quadHeight
+
+    local remainderQuad = self:getThisQuadWithTheseDimensions(quad, quadWidth, self:getHeightRemainder())
+    love.graphics.draw(self.sprite.image, remainderQuad, x, y)
 end
 
 return NinePatch

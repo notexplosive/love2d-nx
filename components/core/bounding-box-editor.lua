@@ -73,6 +73,7 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
 end
 
 function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsumed)
+    self.selectedIndex = nil
     if button == 1 and not wasRelease and not isClickConsumed then
         if not self.actor.BoundingBox:getRect():isVectorWithin(x, y) then
             for i, rect in ipairs(self.cornerGrabHandleRects) do
@@ -96,7 +97,6 @@ function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsume
 
     if button == 1 and wasRelease then
         self.actor:callForAllComponents("BoundingBoxEditor_onResizeEnd")
-        self.selectedIndex = nil
         if self.actor.BoundingBox:getArea() <= 0 then
             self.actor:destroy()
         end
