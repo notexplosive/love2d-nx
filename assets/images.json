@@ -1,4 +1,5 @@
 {
     "linkin" : ["linkin.png",16,16,{"walk":[7,10]}],
-    "numbers" : ["numbers.png",16,16]
+    "numbers" : ["numbers.png",16,16],
+    "windowchrome": ["window-frame.png",32,32]
 }

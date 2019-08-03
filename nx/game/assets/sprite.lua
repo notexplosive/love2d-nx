@@ -8,6 +8,7 @@ function Sprite.new(filename, gridSizeX, gridSizeY)
     self.animations = {}
     self.gridWidth = gridSizeX
     self.gridHeight = gridSizeY
+    self.quads = {}
 
     assert(self.image:getWidth() % self.gridWidth == 0,filename..": Image width ".. self.image:getWidth() .. " is not divisible by Quad width " .. self.gridWidth)
     assert(self.image:getHeight() % self.gridHeight == 0,filename..": Image height ".. self.image:getHeight() .." is not divisible by Quad height " .. self.gridHeight)
@@ -32,8 +33,12 @@ function Sprite:getQuadAt(index)
         y = y + self.gridHeight
         fullWidth = fullWidth - self.image:getWidth()
     end
-    self.quad:setViewport(x,y,self.gridWidth,self.gridHeight)
-    return self.quad
+
+    if not self.quads[index] then
+        self.quads[index] = love.graphics.newQuad(x,y,self.gridWidth,self.gridHeight,self.image:getDimensions())
+    end
+    
+    return self.quads[index]
 end
 
 function Sprite:createAnimation(animName, startQuad, endQuad)

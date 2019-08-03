@@ -17,7 +17,7 @@
       "components": [["SpriteRenderer","numbers","all"]],"pos": [200,200]
     },
     {
-      "components": [["BoundingBox",200,200],["Canvas"],["DrawRandomShit"],["BoundingBoxEditor"],["BoundingBoxEditorRenderer"]],
+      "components": [["BoundingBox",200,200],["NinePatch", "windowchrome",64,64],["Canvas"],["DrawRandomShit"],["BoundingBoxEditor"]],
       "pos": [900,200]
     },
     {

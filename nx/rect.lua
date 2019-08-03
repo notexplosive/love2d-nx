@@ -33,6 +33,7 @@ end
 
 function Rect:move(v,y)
     self.pos = self.pos + Vector.new(v,y)
+    return self
 end
 
 function Rect:x()
