@@ -59,6 +59,10 @@ function Rect:area()
     return self.size:area()
 end
 
+function Rect:dimensions()
+    return self.size.width,self.size.height
+end
+
 function Rect:getIntersection(other)
     local left = math.max(self:x(), other:x())
     local right = math.min(self:x() + self:width(), other:x() + other:width())

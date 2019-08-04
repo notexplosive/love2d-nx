@@ -2,23 +2,35 @@
   "settings": {
     "allParamsMustBeFilled": false
   },
-  "root": [["CloseOnEscape"],["AnnounceSceneNotifications"]],
+  "root": [
+    ["CloseOnEscape"],
+    ["AnnounceSceneNotifications"],
+    ["MiddleMousePan"]
+  ],
   "actors": [
     {
-      "components": [["TextRenderer","LOVE2D-nx",22],["Selector"]]
+      "components": [["TextRenderer", "LOVE2D-nx", 22], ["Selector"]]
     },
     {
       "prefab": "button",
-      "arguments": [500,64,"do-foobar","Foobar"],
+      "arguments": [500, 64, "do-foobar", "Foobar"],
       "components": [["MouseSelectable"]],
-      "pos": [100,200]
+      "pos": [100, 200]
     },
     {
-      "components": [["SpriteRenderer","numbers","all"]],"pos": [200,200]
+      "components": [["SpriteRenderer", "numbers", "all"]],
+      "pos": [200, 200]
     },
     {
-      "components": [["BoundingBox",200,200],["NinePatch", "windowchrome",64,64],["Canvas"],["DrawRandomShit"],["BoundingBoxEditor"],["BoundingBoxEditorRenderer"]],
-      "pos": [900,200]
+      "components": [
+        ["BoundingBox", 200, 200],
+        ["NinePatch", "windowchrome", 64, 64],
+        ["Canvas"],
+        ["DrawRandomShit"],
+        ["BoundingBoxEditor"],
+        ["BoundingBoxEditorRenderer"]
+      ],
+      "pos": [900, 200]
     },
     {
       "components": [["StressTest"]]

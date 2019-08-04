@@ -18,9 +18,6 @@ end
 
 function NinePatch:draw()
     local rect = self:getRect()
-
-    love.graphics.setColor(1, 1, 0, 0.5)
-    love.graphics.rectangle("fill", rect:xywh())
     local x, y, width, height = rect:xywh()
 
     local topLeftQuad = self.sprite:getQuadAt(1)
