@@ -29,7 +29,6 @@ function Canvas:setDimensions(w, h)
 end
 
 function Canvas:BoundingBoxEditor_onResizeEnd(rect)
-    debugLog("resizeEnd")
     self:setDimensions(rect:dimensions())
 end
 

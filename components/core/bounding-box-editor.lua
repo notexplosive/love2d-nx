@@ -26,8 +26,8 @@ function BoundingBoxEditor:update(dt)
     self.cornerGrabHandleRects = {
         self:getTopLeftGrabHandleRect(),
         self:getTopRightGrabHandleRect(),
-        self:getBottomRightGrabHandleRect(),
-        self:getBottomLeftGrabHandleRect()
+        self:getBottomLeftGrabHandleRect(),
+        self:getBottomRightGrabHandleRect()
     }
 end
 
@@ -37,10 +37,10 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
 
     if self.selectedIndex then
         local something = (Vector.new(x, y) - self.startPoint):xy()
-        local bottomRight = self.selectedIndex == 7
+        local bottomRight = self.selectedIndex == 8
         local topLeft = self.selectedIndex == 5
         local topRight = self.selectedIndex == 6
-        local bottomLeft = self.selectedIndex == 8
+        local bottomLeft = self.selectedIndex == 7
 
         local alongTop = self.selectedIndex == 1 or topRight or topLeft
         local alongBottom = self.selectedIndex == 2 or bottomRight or bottomLeft
