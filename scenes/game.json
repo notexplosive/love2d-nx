@@ -24,11 +24,10 @@
     {
       "components": [
         ["BoundingBox", 200, 200],
-        ["NinePatch", "windowchrome", 64, 64],
-        ["Canvas"],
-        ["DrawRandomShit"],
+        ["NinePatch", "windowchrome", 64,64,0,0],
         ["BoundingBoxEditor"],
-        ["BoundingBoxEditorRenderer"]
+        ["BoundingBoxEditorRenderer"],
+        ["WindowContent"]
       ],
       "pos": [900, 200]
     },

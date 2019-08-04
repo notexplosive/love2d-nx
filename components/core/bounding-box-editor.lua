@@ -202,7 +202,7 @@ end
 function BoundingBoxEditor:getLeftGrabHandleRect()
     local rect = self.actor.BoundingBox:getRect()
     rect:setWidth(self.grabHandleWidth)
-    rect:move(-rect:width(), 0)
+    rect:move(-self.grabHandleWidth, 0)
     return rect
 end
 
@@ -223,7 +223,7 @@ end
 function BoundingBoxEditor:getTopGrabHandleRect()
     local rect = self.actor.BoundingBox:getRect()
     rect:setHeight(self.grabHandleWidth)
-    rect:move(0, -rect:height())
+    rect:move(0, -self.grabHandleWidth)
     return rect
 end
 

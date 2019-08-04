@@ -2,9 +2,10 @@ local NinePatch = {}
 
 registerComponent(NinePatch, "NinePatch", {"BoundingBox"})
 
-function NinePatch:setup(spriteName, inflateWidth, inflateHeight)
+function NinePatch:setup(spriteName, inflateWidth, inflateHeight, offsetX, offsetY)
     self.sprite = Assets.images[spriteName]
     self.inflateSize = Size.new(inflateWidth, inflateHeight)
+    self.offsetVector = Vector.new(offsetX, offsetY)
 
     -- TODO: support center
     self.noCenter = true
@@ -54,6 +55,7 @@ end
 function NinePatch:getRect()
     local rect = self.actor.BoundingBox:getRect()
     rect:inflate(self.inflateSize:wh())
+    rect:move(self.offsetVector)
     return rect
 end
 

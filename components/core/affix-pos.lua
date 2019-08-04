@@ -2,8 +2,15 @@ local AffixPos = {}
 
 registerComponent(AffixPos,'AffixPos')
 
-function AffixPos:setup(name,v,y)
-    self.target = self.actor:scene():getActor(name)
+function AffixPos:setup(nameOrActor,v,y)
+    local name = nil
+    if type(nameOrActor) == 'string' then
+        name = nameOrActor
+        self.target = self.actor:scene():getActor(name)
+    else
+        self.target = nameOrActor
+    end
+
     self.offset = Vector.new(v,y)
     assert(self.target,"AffixPos was given a target that does not exist")
 end
