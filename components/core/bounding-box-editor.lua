@@ -187,18 +187,15 @@ function BoundingBoxEditor:getTopLeftGrabHandleRect()
 end
 
 function BoundingBoxEditor:getTopRightGrabHandleRect()
-    local boundingRect = self.actor.BoundingBox:getRect()
-    return self:getCornerRect(boundingRect:width(), 0)
+    return self:getCornerRect(self.actor.BoundingBox:getRect():width(), 0)
 end
 
 function BoundingBoxEditor:getBottomRightGrabHandleRect()
-    local boundingRect = self.actor.BoundingBox:getRect()
-    return self:getCornerRect(boundingRect:width(), boundingRect:height())
+    return self:getCornerRect(self.actor.BoundingBox:getRect():width(), self.actor.BoundingBox:getRect():height())
 end
 
 function BoundingBoxEditor:getBottomLeftGrabHandleRect()
-    local boundingRect = self.actor.BoundingBox:getRect()
-    return self:getCornerRect(0, boundingRect:height())
+    return self:getCornerRect(0, self.actor.BoundingBox:getRect():height())
 end
 
 -- Sides
