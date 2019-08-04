@@ -2,6 +2,13 @@ local BoundingBoxEditor = {}
 
 registerComponent(BoundingBoxEditor, "BoundingBoxEditor", {"BoundingBox"})
 
+function BoundingBoxEditor:setup(minWidth, minHeight, grabHandleWidth)
+    assert(minWidth)
+    assert(minHeight)
+    self.minimumSize = Size.new(minWidth, minHeight)
+    self.grabHandleWidth = grabHandleWidth or self.grabHandleWidth
+end
+
 function BoundingBoxEditor:awake()
     self.sideGrabHandleRects = {}
     self.cornerGrabHandleRects = {}

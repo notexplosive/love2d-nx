@@ -31,6 +31,22 @@ function Rect:setHeight(height)
     self.size.height = height
 end
 
+function Rect:top()
+    return self.pos.y
+end
+
+function Rect:bottom()
+    return self.pos.y + self:height()
+end
+
+function Rect:left()
+    return self.pos.x
+end
+
+function Rect:right()
+    return self.pos.x + self:width()
+end
+
 function Rect:move(v,y)
     self.pos = self.pos + Vector.new(v,y)
     return self
@@ -160,6 +176,10 @@ Test.run(
         mover:setHeight(35)
         Test.assert(35,mover:height(),"Height after setHeight()")
         
+        Test.assert(mover:top(),20,"top")
+        Test.assert(mover:bottom(),55,"bottom")
+        Test.assert(mover:left(),15,"left")
+        Test.assert(mover:right(),40,"right")
     end
 )
 
