@@ -45,61 +45,40 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
         local topRight = self.selectedIndex == 6
         local bottomLeft = self.selectedIndex == 8
 
-        function moveLeftSide(dx,x,y)
-            if x < self.actor:pos().x or dx > 0 then
-                self:moveHorizontallyBy(dx)
-                self:growHorizontallyBy(-dx)
-                local overage = self:getHorizontalOverage()
-                self:growHorizontallyBy(overage)
-                self:moveHorizontallyBy(-overage)
-            end
-        end
-
-        function moveTopSide(dy,x,y)
-            if y < self.actor:pos().y or dy > 0 then
-                self:moveVerticallyBy(dy)
-                self:growVerticallyBy(-dy)
-                local overage = self:getVerticalOverage()
-                self:growVerticallyBy(overage)
-                self:moveVerticallyBy(-overage)
-            end
-        end
-
-        function moveBottomSide(dy,x,y)
-            if y > self.actor:pos().y + self.actor.BoundingBox:height() or dy < 0 then
-                self:growVerticallyBy(dy)
-                local overage = self:getVerticalOverage()
-                self:growVerticallyBy(overage)
-            end
-        end
-
-        function moveRightSide(dx,x,y)
-            if x > self.actor:pos().x + self.actor.BoundingBox:width() or dx < 0 then
-                self:growHorizontallyBy(dx)
-                local overage = self:getHorizontalOverage()
-                self:growHorizontallyBy(overage)
-            end
-        end
-
         if topLeft then
-            moveLeftSide(dx,x,y)
-            moveTopSide(dy,x,y)
+            self:moveLeftSide(dx,x,y)
+            self:moveTopSide(dy,x,y)
+        end
+
+        if topRight then
+            self:moveRightSide(dx,x,y)
+            self:moveTopSide(dy,x,y)
+        end
+
+        if bottomLeft then
+            self:moveLeftSide(dx,x,y)
+            self:moveBottomSide(dy,x,y)
+        end
+
+        if bottomRight then
+            self:moveRightSide(dx,x,y)
+            self:moveBottomSide(dy,x,y)
         end
 
         if alongTop then
-            moveTopSide(dy,x,y)
+            self:moveTopSide(dy,x,y)
         end
 
         if alongBottom then
-            moveBottomSide(dy,x,y)
+            self:moveBottomSide(dy,x,y)
         end
 
         if alongLeft then
-            moveLeftSide(dx,x,y)
+            self:moveLeftSide(dx,x,y)
         end
 
         if alongRight then
-            moveRightSide(dx,x,y)
+            self:moveRightSide(dx,x,y)
         end
 
         self.actor:callForAllComponents("BoundingBoxEditor_onResizeDrag")
@@ -118,7 +97,6 @@ function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsume
                     y = y + self.actor:scene().camera.y
                     self.startPoint = Vector.new(x, y)
                     self.actor:scene():consumeClick()
-                    debugLog(i)
                     return
                 end
             end
@@ -167,6 +145,42 @@ end
 
 function BoundingBoxEditor:getVerticalOverage()
     return math.max(self.minimumSize.height - self.actor.BoundingBox:height(), 0)
+end
+
+function BoundingBoxEditor:moveLeftSide(dx,x,y)
+    if x < self.actor:pos().x or dx > 0 then
+        self:moveHorizontallyBy(dx)
+        self:growHorizontallyBy(-dx)
+        local overage = self:getHorizontalOverage()
+        self:growHorizontallyBy(overage)
+        self:moveHorizontallyBy(-overage)
+    end
+end
+
+function BoundingBoxEditor:moveTopSide(dy,x,y)
+    if y < self.actor:pos().y or dy > 0 then
+        self:moveVerticallyBy(dy)
+        self:growVerticallyBy(-dy)
+        local overage = self:getVerticalOverage()
+        self:growVerticallyBy(overage)
+        self:moveVerticallyBy(-overage)
+    end
+end
+
+function BoundingBoxEditor:moveBottomSide(dy,x,y)
+    if y > self.actor:pos().y + self.actor.BoundingBox:height() or dy < 0 then
+        self:growVerticallyBy(dy)
+        local overage = self:getVerticalOverage()
+        self:growVerticallyBy(overage)
+    end
+end
+
+function BoundingBoxEditor:moveRightSide(dx,x,y)
+    if x > self.actor:pos().x + self.actor.BoundingBox:width() or dx < 0 then
+        self:growHorizontallyBy(dx)
+        local overage = self:getHorizontalOverage()
+        self:growHorizontallyBy(overage)
+    end
 end
 
 -- Corners
