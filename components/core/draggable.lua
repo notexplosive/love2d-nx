@@ -5,12 +5,13 @@ registerComponent(Draggable, "Draggable")
 
 function Draggable:awake()
     self.dragging = false
+    self.customRect = nil
 end
 
 function Draggable:onMouseMove(x, y, dx, dy)
     self.hover = false
 
-    if self.actor.BoundingBox:getRect():isVectorWithin(x,y) then
+    if self:getRect():isVectorWithin(x,y) then
         self.hover = true
     end
 
@@ -20,7 +21,7 @@ function Draggable:onMouseMove(x, y, dx, dy)
 end
 
 function Draggable:onMousePress(x, y, button, wasRelease, isClickConsumed)
-    if not isClickConsumed then
+    if not isClickConsumed and not self.actor:scene().isClickConsumed then
         if button == 1 and not wasRelease then
             if self.hover then
                 self.actor:callForAllComponents("Draggable_onDragStart",x,y,dx,dy)
@@ -36,6 +37,14 @@ function Draggable:onMousePress(x, y, button, wasRelease, isClickConsumed)
 
     if self.dragging then
         self.actor:scene():consumeClick()
+    end
+end
+
+function Draggable:getRect()
+    if self.customRect then
+        return self.customRect
+    else
+        return self.actor.BoundingBox:getRect()
     end
 end
 

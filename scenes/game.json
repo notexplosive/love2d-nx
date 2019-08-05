@@ -24,12 +24,12 @@
     {
       "components": [
         ["BoundingBox", 200, 200],
-        ["Draggable"],
-        ["MoveOnDrag"],
         ["NinePatch", "windowchrome", 64,48,0,8],
         ["BoundingBoxEditor"],
-        ["BoundingBoxEditorRenderer"],
-        ["WindowContent"]
+        ["WindowContent"],
+        ["Draggable"],
+        ["DraggableRectHeight",32,-16],
+        ["MoveOnDrag"],
       ],
       "pos": [900, 200]
     },
