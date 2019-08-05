@@ -26,10 +26,12 @@
         ["BoundingBox", 200, 200],
         ["NinePatch", "windowchrome", 64,48,0,8],
         ["BoundingBoxEditor"],
+        ["BoundingBoxEditorRenderer"],
         ["WindowContent"],
         ["Draggable"],
         ["DraggableRectHeight",32,-16],
         ["MoveOnDrag"],
+        ["BoundingBoxRenderer"]
       ],
       "pos": [900, 200]
     },
