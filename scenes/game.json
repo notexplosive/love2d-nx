@@ -24,7 +24,9 @@
     {
       "components": [
         ["BoundingBox", 200, 200],
-        ["NinePatch", "windowchrome", 64,64,0,0],
+        ["Draggable"],
+        ["MoveOnDrag"],
+        ["NinePatch", "windowchrome", 64,48,0,8],
         ["BoundingBoxEditor"],
         ["BoundingBoxEditorRenderer"],
         ["WindowContent"]

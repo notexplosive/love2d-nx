@@ -6,7 +6,7 @@ function WindowContent:awake()
     local child = self.actor:scene():addActor("Resizer")
     child:addComponent(Components.BoundingBox)
     child:addComponent(Components.AffixPos,self.actor)
-    child:addComponent(Components.Canvas)
+    child:addComponent(Components.Canvas,0,16,0,-16)
     child:addComponent(Components.DrawRandomShit)
     self.child = child
 
