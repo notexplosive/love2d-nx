@@ -11,7 +11,8 @@ function Clickable:onMousePress(x, y, button, wasRelease, isClickConsumed)
         return
     end
 
-    if not isClickConsumed then
+    -- fenestra hack: Gets click consume directly to ensure it doesn't conflict
+    if not self.actor:scene().isClickConsumed then
         if self.actor.Hoverable:getHoverConsume() then
             if not wasRelease then
                 self.currentPressedButton = button

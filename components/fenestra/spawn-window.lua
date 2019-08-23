@@ -8,7 +8,7 @@ function SpawnWindow:awake()
     local canvas = scene:addActor("Canvas")
 
     container:addComponent(Components.BoundingBox, 500, 500)
-    --container:addComponent(Components.BoundingBoxEditor)
+    container:addComponent(Components.BoundingBoxEditor)
 
     canvas:addComponent(Components.BoundingBox)
     canvas:addComponent(Components.Hoverable)

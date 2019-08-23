@@ -2,6 +2,11 @@ local BoundingBoxEditor = {}
 
 registerComponent(BoundingBoxEditor, "BoundingBoxEditor", {"BoundingBox"})
 
+
+local topBuffer = 8
+
+
+
 function BoundingBoxEditor:setup(minWidth, minHeight, grabHandleWidth)
     assert(minWidth)
     assert(minHeight)
@@ -236,11 +241,11 @@ function BoundingBoxEditor:getCornerRect(dx, dy)
 end
 
 function BoundingBoxEditor:getTopLeftGrabHandleRect()
-    return self:getCornerRect(0, 0)
+    return self:getCornerRect(0, 0):move(0,topBuffer)
 end
 
 function BoundingBoxEditor:getTopRightGrabHandleRect()
-    return self:getCornerRect(self.actor.BoundingBox:getRect():width(), 0)
+    return self:getCornerRect(self.actor.BoundingBox:getRect():width(), 0):move(0,topBuffer)
 end
 
 function BoundingBoxEditor:getBottomRightGrabHandleRect()
@@ -276,7 +281,7 @@ end
 function BoundingBoxEditor:getTopGrabHandleRect()
     local rect = self.actor.BoundingBox:getRect()
     rect:setHeight(self.grabHandleWidth)
-    rect:move(0, -self.grabHandleWidth)
+    rect:move(0, -self.grabHandleWidth + topBuffer)
     return rect
 end
 

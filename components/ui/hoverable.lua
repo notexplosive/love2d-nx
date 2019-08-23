@@ -14,6 +14,7 @@ function Hoverable:onMouseMove(x, y, dx, dy, isConsumed)
             self.actor:callForAllComponents("Hoverable_onHoverEnd")
             self.wasHovered = false
         end
+
         return
     end
 
