@@ -30,7 +30,7 @@ function BoundingBoxEditor:update(dt)
     local height = self.actor.BoundingBox:height()
 
     self.sideGrabHandleRects = {
-        self:getTopGrabHandleRect_Alt(),
+        self:getTopGrabHandleRect(),
         self:getBottomGrabHandleRect(),
         self:getLeftGrabHandleRect(),
         self:getRightGrabHandleRect()
@@ -236,11 +236,11 @@ function BoundingBoxEditor:getCornerRect(dx, dy)
 end
 
 function BoundingBoxEditor:getTopLeftGrabHandleRect()
-    return self:getCornerRect(0, 0):move(0, -8)
+    return self:getCornerRect(0, 0)
 end
 
 function BoundingBoxEditor:getTopRightGrabHandleRect()
-    return self:getCornerRect(self.actor.BoundingBox:getRect():width(), 0):move(0, -8)
+    return self:getCornerRect(self.actor.BoundingBox:getRect():width(), 0)
 end
 
 function BoundingBoxEditor:getBottomRightGrabHandleRect()

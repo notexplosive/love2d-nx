@@ -3,7 +3,7 @@ local HoverableRenderer = {}
 registerComponent(HoverableRenderer,'HoverableRenderer')
 
 function HoverableRenderer:draw(x,y)
-    if self.actor.Hoverable:getHover() then
+    if self.actor.Hoverable:getHoverIgnoreConsume() then
         local rect = self.actor.BoundingBox:getRect():inflate(-5,-5)
         love.graphics.setColor(0,0,1)
         love.graphics.rectangle('line',rect:xywh())

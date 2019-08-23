@@ -18,7 +18,7 @@ function ButtonRenderer:draw(x, y)
         pressed = self.actor.Clickable.currentPressedButton == 1
     end
 
-    local hover = self.actor.Hoverable:getHover()
+    local hover = self.actor.Hoverable:getHoverIgnoreConsume()
 
     love.graphics.setColor(0.5, 0, 0)
     if hover then

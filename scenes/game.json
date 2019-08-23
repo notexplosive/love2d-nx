@@ -60,6 +60,32 @@
         ["HoverableRenderer"]
       ],
       "pos": [256, 256]
-    }
+    },
+    {
+      "components": [
+        ["BoundingBox", 500, 500],
+        ["Hoverable"],
+        ["Clickable"],
+        ["Draggable"],
+        ["MoveOnDrag"],
+        ["BoundingBoxRenderer"],
+        ["NinePatch", "windowchrome", 64, 64, 0, 0]
+      ],
+      "pos": [500, 256]
+    },
+    {
+      "components": [
+        ["BoundingBox", 600, 600],
+        ["Hoverable"],
+        ["Clickable"],
+        ["Draggable"],
+        ["MoveOnDrag"],
+        ["BoundingBoxRenderer"],
+        ["BoundingBoxEditor"],
+        ["BoundingBoxEditorRenderer"]
+      ],
+      "pos": [500, 256]
+    },
+    {"components":[["SpawnWindow"]]}
   ]
 }
