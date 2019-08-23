@@ -19,7 +19,9 @@
         ["Draggable"],
         ["MoveOnDrag"],
         ["BoundingBoxRenderer"],
-        ["HoverableRenderer"]
+        ["HoverableRenderer"],
+        ["Selectable"],
+        ["BringToFrontOnSelect"]
       ],
       "pos": [200, 200]
     },
@@ -31,7 +33,9 @@
         ["Draggable"],
         ["MoveOnDrag"],
         ["BoundingBoxRenderer"],
-        ["HoverableRenderer"]
+        ["HoverableRenderer"],
+        ["Selectable"],
+        ["BringToFrontOnSelect"]
       ],
       "pos": [256, 256]
     }
