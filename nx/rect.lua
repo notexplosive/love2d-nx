@@ -9,6 +9,14 @@ function Rect.new(x, y, width, height)
     assert(x)
     assert(y)
 
+    if type(x) == 'table' then
+        if x:type() == Vector and y:type() == Size then
+            local vec = x
+            local size = y
+            return Rect.new(vec.x,vec.y,size.width,size.height)
+        end
+    end
+
     self.pos = Vector.new(x, y)
     self.size = Size.new(width or 0, height or 0)
 
@@ -69,6 +77,12 @@ function Rect:inflate(dx, dy)
     assert(dy, "Rect:inflate() needs a 2 arguments")
     self.pos = self.pos - Vector.new(dx, dy) / 2
     self.size:grow(dx, dy)
+    return self
+end
+
+function Rect:grow(dx,dy)
+    self.size:grow(dx,dy)
+    return self
 end
 
 function Rect:area()
@@ -134,12 +148,12 @@ Test.run(
         Test.assert(100, testRect2:width(), "Rect:width() of a different rect")
 
         -- Test inflate
-        testRect2:inflate(100, 100)
-        Test.assert(200, testRect2:width(), "Width after Rect:inflate")
-        Test.assert(132, testRect2:height(), "Height after Rect:inflate")
-
-        Test.assert(-50, testRect2:x(), "Height after Rect:inflate")
-        Test.assert(-40, testRect2:y(), "Height after Rect:inflate")
+        local inflateRect = Rect.new(0,0,10,10)
+        inflateRect:inflate(100, 100)
+        Test.assert(110, inflateRect:width(), "Width after Rect:inflate")
+        Test.assert(110, inflateRect:height(), "Height after Rect:inflate")
+        Test.assert(-50, inflateRect:x(), "x after Rect:inflate")
+        Test.assert(-50, inflateRect:y(), "y after Rect:inflate")
 
         -- Test intersection
         local leftRect = Rect.new(0, 0, 100, 100)
@@ -180,6 +194,13 @@ Test.run(
         Test.assert(mover:bottom(),55,"bottom")
         Test.assert(mover:left(),15,"left")
         Test.assert(mover:right(),40,"right")
+
+        -- Alternate constructor
+        local vecSizeRect = Rect.new(Vector.new(100,200), Size.new(400,500))
+        Test.assert(100, vecSizeRect:x(), "Rect:x()")
+        Test.assert(200, vecSizeRect:y(), "Rect:y()")
+        Test.assert(400, vecSizeRect:width(), "Rect:width()")
+        Test.assert(500, vecSizeRect:height(), "Rect:height()")
     end
 )
 

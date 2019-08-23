@@ -19,7 +19,7 @@ function registerComponent(componentClass, name, deps)
         end
         if self.actor then
             if self.onDestroy then
-                self:onDestroy()
+                --self:onDestroy()
             end
             self.actor:removeComponent(componentClass)
         end
@@ -33,7 +33,6 @@ end
 TextRenderer = require("nx/game/components/textrenderer")
 TileMapRenderer = require("nx/game/components/tilemaprenderer")
 TileMap = require("nx/game/components/tilemap")
-SceneRenderer = require("nx/game/components/scenerenderer")
 
 -- Userdata components
 function requireComponents(path)

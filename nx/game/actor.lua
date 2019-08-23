@@ -47,10 +47,7 @@ end
 -- Deletes actor from scene without calling onDestroy
 function Actor:removeFromScene()
     if self:scene() then
-        local index = self:scene():getActorIndex(self)
-        for i = index, #self:scene().actors do
-            self:scene().actors[i] = self:scene().actors[i + 1]
-        end
+        deleteFromList(self:scene().actors, self)
     end
 end
 
@@ -102,7 +99,10 @@ function Actor:addComponent(componentClass, ...)
     local component = componentClass.create_object()
 
     for i, dep in ipairs(componentClass.dependencies) do
-        assert(self[dep], componentClass.name .. " depends on " .. dep .. ", must :addComponent(" .. dep .. ")")
+        assert(
+            self[dep],
+            self.name .. " " .. componentClass.name .. " depends on " .. dep .. ", must :addComponent(" .. dep .. ")"
+        )
     end
 
     component.actor = self
@@ -115,7 +115,7 @@ function Actor:addComponent(componentClass, ...)
         component:awake()
     end
 
-    if ... then
+    if ... ~= nil then
         component:setup(...)
     end
 
@@ -125,14 +125,25 @@ end
 function Actor:removeComponent(componentClass)
     assert(componentClass, "Actor:removeComponent() was passed nil")
     assert(componentClass.name, "Component needs a name")
-    assert(self[componentClass.name], "Actor does not have a " .. componentClass.name .. " component")
-    deleteFromList(self.components, self[componentClass.name])
+    local component = self[componentClass.name]
+    assert(component, "Actor does not have a " .. componentClass.name .. " component")
+    if component.onDestroy then
+        component:onDestroy()
+    end
+
+    deleteFromList(self.components, component)
     self[componentClass.name] = nil
+
+    return componentClass
 end
 
 function Actor:addComponentSafe(componentClass, ...)
     if not self[componentClass.name] then
         return self:addComponent(componentClass, ...)
+    else
+        if self[componentClass.name].setup and ... then
+            self[componentClass.name]:setup(...)
+        end
     end
     return self[componentClass.name]
 end
@@ -140,7 +151,10 @@ end
 function Actor:removeComponentSafe(componentClass)
     if self[componentClass.name] then
         self:removeComponent(componentClass)
+        return componentClass
     end
+
+    return nil
 end
 
 -- Takes vector or (x,y)
@@ -172,6 +186,7 @@ Actor:createEvent("draw", {"x", "y"})
 Actor:createEvent("start")
 Actor:createEvent("onDestroy")
 Actor:createEvent("onMousePress", {"x", "y", "button", "wasRelease", "isClickConsumed"})
+Actor:createEvent("onMouseMove", {"x", "y", "dx", "dy", "isHoverConsumed"})
 
 -- Calls method on all components that have this method
 function Actor:callForAllComponents(methodName, ...)

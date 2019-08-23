@@ -230,3 +230,14 @@ function isWithinRect(mx, my, x, y, width, height)
     assert(height, "Not enough arguments")
     return mx > x and mx < x + width and my > y and my < y + height
 end
+
+function angleCompare(angle1, angle2)
+    assert(angle1)
+    assert(angle2)
+    local delta = math.abs(angle2 - angle1) % (math.pi*2)
+    if delta > math.pi then
+        return math.pi*2 - delta
+    else
+        return delta
+    end
+end

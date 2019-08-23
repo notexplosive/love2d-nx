@@ -26,7 +26,7 @@ function TextRenderer:setup(text, fontSize, maxWidth, alignMode, scale, color, o
     self.maxWidth = maxWidth or self.maxWidth
     self.alignMode = alignMode or self.alignMode
     self.scale = scale or self.scale
-    self.font = fontCache:get(fontSize)
+    self.font = fontCache:get(fontSize or 10)
     self.offset = Vector.new(offsetx, offsety)
     self.shadow = false
 end
@@ -86,6 +86,10 @@ function TextRenderer:draw()
 end
 
 function TextRenderer:update(dt)
+end
+
+function TextRenderer:setFontSize(size)
+    self.font = fontCache:get(size)
 end
 
 function TextRenderer:getWrap()

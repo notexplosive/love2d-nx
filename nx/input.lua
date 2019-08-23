@@ -1,43 +1,64 @@
 function love.mousepressed(x, y, button)
-    uiScene:onMousePress(x, y, button, false)
-    if not uiScene.isClickConsumed then
-        gameScene:onMousePress(x, y, button, false)
+    love.mousemoved(x,y,0,0)
+    local isConsumed = false
+    for _,scene in eachSceneReverseDrawOrder() do
+        scene.isClickConsumed = isConsumed
+        scene:onMousePress(x, y, button, false)
+        if scene.isClickConsumed then
+            isConsumed = true
+        end
     end
 end
 
 function love.mousereleased(x, y, button)
-    uiScene:onMousePress(x, y, button, true)
-    if not uiScene.isClickConsumed then
-        gameScene:onMousePress(x, y, button, true)
+    love.mousemoved(x,y,0,0)
+    local isConsumed = false
+    for _,scene in eachSceneReverseDrawOrder() do
+        scene.isClickConsumed = isConsumed
+        scene:onMousePress(x, y, button, true)
+        if scene.isClickConsumed then
+            isConsumed = true
+        end
     end
 end
 
 function love.mousemoved(x, y, dx, dy)
-    uiScene:onMouseMove(x, y, dx, dy)
-    gameScene:onMouseMove(x, y, dx, dy)
+    local isConsumed = false
+    for _,scene in eachSceneReverseDrawOrder() do
+        scene.isHoverConsumed = isConsumed
+        scene:onMouseMove(x, y, dx, dy)
+        if scene.isHoverConsumed then
+            isConsumed = true
+        end
+    end
 end
 
 function love.keypressed(key, scancode)
-    uiScene:onKeyPress(key, scancode, false)
-    gameScene:onKeyPress(key, scancode, false)
+    for _,scene in eachSceneReverseDrawOrder() do
+        scene:onKeyPress(key, scancode, false)
+    end
 end
 
 function love.keyreleased(key, scancode)
-    uiScene:onKeyPress(key, scancode, true)
-    gameScene:onKeyPress(key, scancode, true)
+    for _,scene in eachSceneReverseDrawOrder() do
+        scene:onKeyPress(key, scancode, true)
+    end
 end
 
 function love.wheelmoved(x, y)
-    uiScene:onScroll(x, y)
-    gameScene:onScroll(x, y)
+    for _,scene in eachSceneReverseDrawOrder() do
+        scene:onScroll(x, y)
+    end
 end
 
 function love.textinput(text)
-    uiScene:onTextInput(text)
-    gameScene:onTextInput(text)
+    for _,scene in eachSceneReverseDrawOrder() do
+        scene:onTextInput(text)
+    end
 end
 
 function love.mousefocus(focus)
-    uiScene:onMouseFocus(focus)
-    gameScene:onMouseFocus(focus)
+    for _,scene in eachSceneReverseDrawOrder() do
+        scene:onMouseFocus(focus)
+    end
 end

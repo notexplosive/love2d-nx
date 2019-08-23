@@ -12,6 +12,7 @@ function Scene.new(width, height)
     self.camera = Vector.new(0, 0)
     self.world = love.physics.newWorld(0, 9.8, true)
     self.isClickConsumed = false
+    self.isHoverConsumed = false
 
     -- Scene Shake
     self.shakeFrames = 0
@@ -83,7 +84,9 @@ function Scene:addActor(actor)
     assert(actor:type() == Actor, "Can't add a non-actor to a scene")
 
     actor.originalScene = self
-    actor._justAddedToScene = true
+    if not actor._justAddedToScene then -- fenestra hack
+        actor._justAddedToScene = true
+    end -- /fenestra hack
 
     append(self.actors, actor)
 
@@ -130,6 +133,13 @@ function Scene:destroyAllActors()
     local actors = self:getAllActors()
     for i, v in ipairs(actors) do
         v:destroy()
+    end
+end
+
+function Scene:removeAllActors()
+    local actors = self:getAllActors()
+    for i, v in ipairs(actors) do
+        v:removeFromScene()
     end
 end
 
@@ -180,6 +190,10 @@ function Scene:eachActorWith(componentClass)
     return ipairs(self:getAllActorsWith(componentClass))
 end
 
+function Scene:eachActorWithReversed(componentClass)
+    return ipairs(copyReversed(self:getAllActorsWith(componentClass)))
+end
+
 -- aliases, eventually "Behavior" will become "Component"
 Scene.getFirstComponent = Scene.getfirstBehavior
 Scene.getFirstActorWith = Scene.getFirstActorWithBehavior
@@ -187,6 +201,7 @@ Scene.getAllActorsWith = Scene.getAllActorsWithBehavior
 
 -- Ordering functions
 function Scene:sendToBack(actor)
+    assert(actor, "sendToBack needs one argument")
     local movedActor = deleteFromList(self.actors, actor)
     if movedActor then
         local actors = copyList(self.actors)
@@ -196,6 +211,18 @@ function Scene:sendToBack(actor)
             self.actors[i + 1] = actors[i]
         end
     end
+
+    actor:callForAllComponents("onSendToBack")
+end
+
+function Scene:bringToFront(actor)
+    assert(actor, "bringToFront needs one argument")
+    local movedActor = deleteFromList(self.actors, actor)
+    if movedActor then
+        append(self.actors, movedActor)
+    end
+
+    actor:callForAllComponents("onBringToFront")
 end
 
 function Scene:getBounds()
@@ -235,7 +262,6 @@ end
 
 -- Input Events
 Scene:createEvent("onKeyPress", {"key", "scancode", "wasRelease"})
-Scene:createEvent("onMouseMove", {"x", "y", "dx", "dy"})
 Scene:createEvent("onScroll", {"x", "y"})
 Scene:createEvent("onTextInput", {"text"})
 Scene:createEvent("onMouseFocus", {"focus"})
@@ -243,18 +269,29 @@ Scene:createEvent("onMouseFocus", {"focus"})
 -- Custom events
 Scene:createEvent("onNotify", {"msg"})
 
--- MousePress handles click consuming so it needs to be implemented directly
 -- MousePress is handled in REVERSE order because we want them in order with drawing
 function Scene:onMousePress(x, y, button, wasRelease)
-    self.isClickConsumed = false
+    --self.isClickConsumed = false
     for i, actor in ipairs(copyReversed(self.actors)) do
         actor:onMousePress(x, y, button, wasRelease, self.isClickConsumed)
+    end
+end
+
+-- MousePress is handled in REVERSE order because we want them in order with drawing
+function Scene:onMouseMove(x, y, dx, dy)
+    --self.isHoverConsumed = false
+    for i, actor in ipairs(copyReversed(self.actors)) do
+        actor:onMouseMove(x, y, dx, dy, self.isHoverConsumed)
     end
 end
 
 -- called by components in their onMousePress methods
 function Scene:consumeClick()
     self.isClickConsumed = true
+end
+
+function Scene:consumeHover()
+    self.isHoverConsumed = true
 end
 
 -- Game Events: These are special events that don't work like regular events
