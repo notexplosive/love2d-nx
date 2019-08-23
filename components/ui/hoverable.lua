@@ -11,19 +11,22 @@ function Hoverable:onMouseMove(x, y, dx, dy, isConsumed)
 
     if isConsumed then
         if self.wasHovered then
-            self.actor:callForAllComponents("Hoverable_onUnhover")
+            self.actor:callForAllComponents("Hoverable_onHoverEnd")
             self.wasHovered = false
         end
         return
     end
 
     if self:getHoverIgnoreConsume() then
+        if not self.wasHovered then
+            self.actor:callForAllComponents("Hoverable_onHoverStart")
+        end
         self.actor:callForAllComponents("Hoverable_onHover")
         self.actor:scene():consumeHover()
         self.wasHovered = true
     else
         if self.wasHovered then
-            self.actor:callForAllComponents("Hoverable_onUnhover")
+            self.actor:callForAllComponents("Hoverable_onHoverEnd")
             self.wasHovered = false
         end
     end
@@ -46,7 +49,7 @@ function Hoverable:Hoverable_onHover()
     self._hover = true
 end
 
-function Hoverable:Hoverable_onUnhover()
+function Hoverable:Hoverable_onHoverEnd()
     self._hover = false
 end
 

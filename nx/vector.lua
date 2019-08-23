@@ -1,7 +1,7 @@
 local Vector = {}
 
 function Vector.new(x, y)
-    if type(x) == 'table' then
+    if type(x) == "table" then
         return x:clone()
     end
 
@@ -11,27 +11,27 @@ function Vector.new(x, y)
     return vector
 end
 
-function Vector.newPolar(distance,angle)
-    return Vector.new(distance,0):setAngle(angle)
+function Vector.newPolar(distance, angle)
+    return Vector.new(distance, 0):setAngle(angle)
 end
 
 function Vector.__eq(lhs, rhs)
     return lhs.x == rhs.x and lhs.y == rhs.y
-  end
+end
 
 function Vector.__add(left, right)
-    assert(right,"attempted to add a nil vector (right side)")
-    assert(left,"attempted to add to a nil vector (left side)")
-    assert(right:type() == Vector,"attempted to add a nonvector (right side)")
-    assert(left:type() == Vector,"attempted to add to a nonvector (left side)")
+    assert(right, "attempted to add a nil vector (right side)")
+    assert(left, "attempted to add to a nil vector (left side)")
+    assert(right:type() == Vector, "attempted to add a nonvector (right side)")
+    assert(left:type() == Vector, "attempted to add to a nonvector (left side)")
     return Vector.new(left.x + right.x, left.y + right.y)
 end
 
 function Vector.__sub(left, right)
-    assert(right,"attempted to subtract a nil vector (right side)")
-    assert(left,"attempted to subtract from a nil vector (left side)")
-    assert(right:type() == Vector,"attempted to subtract a nonvector (right side)")
-    assert(left:type() == Vector,"attempted to subtract from a nonvector (left side)")
+    assert(right, "attempted to subtract a nil vector (right side)")
+    assert(left, "attempted to subtract from a nil vector (left side)")
+    assert(right:type() == Vector, "attempted to subtract a nonvector (right side)")
+    assert(left:type() == Vector, "attempted to subtract from a nonvector (left side)")
     return Vector.new(left.x - right.x, left.y - right.y)
 end
 

@@ -20,7 +20,7 @@ function HoverableRenderer:Hoverable_onHover()
     self.hover = true
 end
 
-function HoverableRenderer:Hoverable_onUnhover()
+function HoverableRenderer:Hoverable_onHoverEnd()
     self.hover = false
 end
 

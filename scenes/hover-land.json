@@ -1,0 +1,39 @@
+{
+  "settings": {
+    "allParamsMustBeFilled": false
+  },
+  "root": [
+    ["CloseOnEscape"],
+    ["AnnounceSceneNotifications"],
+    ["MiddleMousePan"]
+  ],
+  "actors": [
+    {
+      "components": [["TextRenderer", "LOVE2D-nx", 22], ["Selector"]]
+    },
+    {
+      "components": [
+        ["BoundingBox"],
+        ["Hoverable"],
+        ["Clickable"],
+        ["Draggable"],
+        ["MoveOnDrag"],
+        ["BoundingBoxRenderer"],
+        ["HoverableRenderer"]
+      ],
+      "pos": [200, 200]
+    },
+    {
+      "components": [
+        ["BoundingBox"],
+        ["Hoverable"],
+        ["Clickable"],
+        ["Draggable"],
+        ["MoveOnDrag"],
+        ["BoundingBoxRenderer"],
+        ["HoverableRenderer"]
+      ],
+      "pos": [256, 256]
+    }
+  ]
+}

@@ -13,7 +13,7 @@ function OutlineOnHover:Hoverable_onHover()
     self.isHovering = true
 end
 
-function OutlineOnHover:Hoverable_onUnhover()
+function OutlineOnHover:Hoverable_onHoverEnd()
     self.isHovering = false
 end
 

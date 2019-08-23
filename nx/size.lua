@@ -7,6 +7,14 @@ function Size.new(width,height)
     return self
 end
 
+function Size:clone()
+    return Size.new(self.width,self.height)
+end
+
+function Size.__eq(lhs, rhs)
+    return lhs.width == rhs.width and lhs.height == rhs.height
+end
+
 function Size:grow(dx,dy)
     self.width = self.width + dx
     self.height = self.height + dy
