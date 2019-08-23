@@ -1,4 +1,3 @@
-local Test = require("nx/test")
 local Vector = require("nx/vector")
 local Size = require("nx/size")
 local Rect = {}
@@ -131,6 +130,7 @@ end
 
 ----
 
+local Test = require("nx/test")
 Test.run(
     "Rect",
     function()

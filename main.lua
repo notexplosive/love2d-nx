@@ -3,13 +3,14 @@ DEBUG = true
 
 require("nx/util")
 require("nx/input")
-require("nx/componentregistry")
 
 -- Global classes, for better performance these should be require'd in each file as needed
 Assets = require("nx/game/assets")
 Vector = require("nx/vector")
 Size = require("nx/size")
 Rect = require("nx/rect")
+
+require("nx/componentregistry")
 
 local elapsedTime = 0
 function love.update(dt)
