@@ -24,21 +24,42 @@
     {
       "components": [
         ["BoundingBox", 200, 200],
-        ["NinePatch", "windowchrome", 64,48,0,8],
+        ["NinePatch", "windowchrome", 64, 48, 0, 8],
         ["BoundingBoxEditor"],
         ["BoundingBoxEditorRenderer"],
         ["WindowContent"],
         ["Hoverable"],
         ["Clickable"],
         ["Draggable"],
-        ["DraggableRectHeight",32,-16],
+        ["DraggableRectHeight", 32, -16],
         ["MoveOnDrag"],
         ["BoundingBoxRenderer"]
       ],
       "pos": [900, 200]
     },
     {
-      "components": [["StressTest"]]
+      "components": [
+        ["BoundingBox"],
+        ["Hoverable"],
+        ["Clickable"],
+        ["Draggable"],
+        ["MoveOnDrag"],
+        ["BoundingBoxRenderer"],
+        ["HoverableRenderer"]
+      ],
+      "pos": [200, 200]
+    },
+    {
+      "components": [
+        ["BoundingBox"],
+        ["Hoverable"],
+        ["Clickable"],
+        ["Draggable"],
+        ["MoveOnDrag"],
+        ["BoundingBoxRenderer"],
+        ["HoverableRenderer"]
+      ],
+      "pos": [256, 256]
     }
   ]
 }
