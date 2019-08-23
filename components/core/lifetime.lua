@@ -8,7 +8,7 @@ function Lifetime:setup(time)
 end
 
 function Lifetime:update(dt)
-    self.time = self.time - dt * getTimeScale()
+    self.time = self.time - dt
 
     if self.time < 0 then
         self.actor:destroy()

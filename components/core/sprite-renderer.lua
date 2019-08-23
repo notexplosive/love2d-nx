@@ -18,6 +18,11 @@ function SpriteRenderer:setup(spriteName, anim, scale, color, offx, offy)
     end
     self.scale = scale or self.scale
     self.color = color or self.color
+
+    if self.actor.BoundingBox then
+        local x,y,w,h = self:getBoundingBox():xywh()
+        self.actor.BoundingBox:setup(w,h,-x,-y)
+    end
 end
 
 function SpriteRenderer:awake()
@@ -45,9 +50,10 @@ function SpriteRenderer:draw(x, y)
             yFactor = -1
         end
 
+        local frameNumber = math.floor(self.actor.AnimationFrameTracker:get())
         if self.actor.visible then
             self.sprite:draw(
-                math.floor(self.actor.AnimationFrameTracker:get()),
+                frameNumber,
                 x,
                 y,
                 math.floor(self.sprite.gridWidth / 2) + self.offset.x,
@@ -106,6 +112,10 @@ end
 
 function SpriteRenderer:setFlipY(b)
     self.flipY = b
+end
+
+function SpriteRenderer:pause()
+    self.actor.PlayHead:pause()
 end
 
 function SpriteRenderer:getBoundingBox()

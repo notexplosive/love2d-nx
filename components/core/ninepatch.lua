@@ -4,8 +4,8 @@ registerComponent(NinePatch, "NinePatch", {"BoundingBox"})
 
 function NinePatch:setup(spriteName, inflateWidth, inflateHeight, offsetX, offsetY)
     self.sprite = Assets.images[spriteName]
-    self.inflateSize = Size.new(inflateWidth, inflateHeight)
-    self.offsetVector = Vector.new(offsetX, offsetY)
+    self.inflateSize = Size.new(inflateWidth or 0, inflateHeight or 0)
+    self.offsetVector = Vector.new(offsetX or 0, offsetY or 0)
 
     -- TODO: support center
     self.noCenter = true
@@ -23,8 +23,8 @@ function NinePatch:draw()
 
     local topLeftQuad = self.sprite:getQuadAt(1)
     local topRightQuad = self.sprite:getQuadAt(3)
-    local bottomLeftQuad = self.sprite:getQuadAt(13)
-    local bottomRightQuad = self.sprite:getQuadAt(15)
+    local bottomLeftQuad = self.sprite:getQuadAt(7)
+    local bottomRightQuad = self.sprite:getQuadAt(9)
 
     local _, _, quadWidth, quadHeight = topLeftQuad:getViewport()
     local right = x + width - quadWidth
@@ -38,9 +38,9 @@ function NinePatch:draw()
     love.graphics.draw(self.sprite.image, bottomLeftQuad, left, bottom)
 
     local topMiddleQuad = self.sprite:getQuadAt(2)
-    local leftMiddleQuad = self.sprite:getQuadAt(7)
-    local rightMiddleQuad = self.sprite:getQuadAt(9)
-    local bottomMiddleQuad = self.sprite:getQuadAt(14)
+    local leftMiddleQuad = self.sprite:getQuadAt(4)
+    local rightMiddleQuad = self.sprite:getQuadAt(6)
+    local bottomMiddleQuad = self.sprite:getQuadAt(8)
 
     self:fillHorizontal(topMiddleQuad, left, top)
     self:fillHorizontal(bottomMiddleQuad, left, bottom)

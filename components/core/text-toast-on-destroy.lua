@@ -11,7 +11,7 @@ function TextToastOnDestroy:awake(text)
 end
 
 function TextToastOnDestroy:onDestroy()
-    local toast = gameScene:addActor("Toast")
+    local toast = desktopScene:addActor("Toast")
     toast:setPos(Vector.new(love.graphics.getDimensions())/2)
     toast:addComponent(Components.TextToast):setup(self.text)
 end

@@ -9,12 +9,18 @@ function BoundingBoxEditor:setup(minWidth, minHeight, grabHandleWidth)
     self.grabHandleWidth = grabHandleWidth or self.grabHandleWidth
 end
 
+function BoundingBoxEditor:reverseSetup()
+    local w, h = self.minimumSize.width, self.minimumSize.height
+    return w, h, self.grabHandleWidth
+end
+
 function BoundingBoxEditor:awake()
     self.sideGrabHandleRects = {}
     self.cornerGrabHandleRects = {}
     self.selectedIndex = nil
-    self.grabHandleWidth = 16
+    self.grabHandleWidth = 8
     self.resizeStarted = false
+    self.hoverIndex = nil
 
     self.minimumSize = Size.new(64, 64)
 end
@@ -24,7 +30,7 @@ function BoundingBoxEditor:update(dt)
     local height = self.actor.BoundingBox:height()
 
     self.sideGrabHandleRects = {
-        self:getTopGrabHandleRect(),
+        self:getTopGrabHandleRect_Alt(),
         self:getBottomGrabHandleRect(),
         self:getLeftGrabHandleRect(),
         self:getRightGrabHandleRect()
@@ -38,12 +44,45 @@ function BoundingBoxEditor:update(dt)
     }
 end
 
-function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
+function BoundingBoxEditor:onMouseMove(x, y, dx, dy, isHoverConsumed)
+    self.hoverIndex = nil
+    if not self.actor.visible then
+        return
+    end
+
+    if self.actor.SpawnPopup then
+        return
+    end
+
     x = x + self.actor:scene().camera.x
     y = y + self.actor:scene().camera.y
 
+    if not self.selectedIndex then
+        if not isHoverConsumed then
+            for i, rect in ipairs(self.sideGrabHandleRects) do
+                if rect:isVectorWithin(x, y) then
+                    self.hoverIndex = i
+                end
+            end
+
+            if not self.actor.BoundingBox:getRect():isVectorWithin(x, y) then
+                for i, rect in ipairs(self.cornerGrabHandleRects) do
+                    if rect:isVectorWithin(x, y) then
+                        self.hoverIndex = i + 4
+                    end
+                end
+            end
+
+            if self.hoverIndex then
+                self.actor:scene():consumeHover()
+            end
+        end
+    else
+        self.hoverIndex = self.selectedIndex
+    end
+
     if self.selectedIndex then
-        local something = (Vector.new(x, y) - self.startPoint):xy()
+        self.actor:scene():consumeHover()
         local bottomRight = self.selectedIndex == 8
         local topLeft = self.selectedIndex == 5
         local topRight = self.selectedIndex == 6
@@ -75,6 +114,16 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy)
 end
 
 function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsumed)
+    if not self.actor.visible then
+        return
+    end
+
+    if isClickConsumed then
+        self.selectedIndex = nil
+        self.hoverIndex = nil
+        return
+    end
+
     self.selectedIndex = nil
     if button == 1 and not wasRelease and not isClickConsumed then
         if not self.actor.BoundingBox:getRect():isVectorWithin(x, y) then
@@ -111,6 +160,10 @@ function BoundingBoxEditor:startResize(x, y)
     self.startPoint = Vector.new(x, y)
     self.actor:scene():consumeClick()
     self.resizeStarted = true
+end
+
+function BoundingBoxEditor:isDragging()
+    return self.selectedIndex ~= nil
 end
 
 -- Mutators
@@ -183,11 +236,11 @@ function BoundingBoxEditor:getCornerRect(dx, dy)
 end
 
 function BoundingBoxEditor:getTopLeftGrabHandleRect()
-    return self:getCornerRect(0, 0)
+    return self:getCornerRect(0, 0):move(0, -8)
 end
 
 function BoundingBoxEditor:getTopRightGrabHandleRect()
-    return self:getCornerRect(self.actor.BoundingBox:getRect():width(), 0)
+    return self:getCornerRect(self.actor.BoundingBox:getRect():width(), 0):move(0, -8)
 end
 
 function BoundingBoxEditor:getBottomRightGrabHandleRect()
@@ -224,6 +277,13 @@ function BoundingBoxEditor:getTopGrabHandleRect()
     local rect = self.actor.BoundingBox:getRect()
     rect:setHeight(self.grabHandleWidth)
     rect:move(0, -self.grabHandleWidth)
+    return rect
+end
+
+function BoundingBoxEditor:getTopGrabHandleRect_Alt()
+    local rect = self.actor.BoundingBox:getRect()
+    rect:setHeight(self.grabHandleWidth)
+    rect:move(0, -self.grabHandleWidth * 2)
     return rect
 end
 

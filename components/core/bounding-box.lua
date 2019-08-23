@@ -48,7 +48,7 @@ end
 function BoundingBox:getRect()
     local camera = self.actor:scene().camera
     if self.actor.SpriteRenderer and (self.offset.x == 0 or self.offset.y == 0) and not self.forceCustom then
-        return self.actor.SpriteRenderer:getBoundingBox()
+        --return self.actor.SpriteRenderer:getBoundingBox()
     end
 
     return Rect.new(self.actor:pos().x - self.offset.x - camera.x, self.actor:pos().y - self.offset.y - camera.y, self.size.width, self.size.height)
@@ -63,8 +63,18 @@ function BoundingBox:getDimensions()
     return self.size:wh()
 end
 
+function BoundingBox:getSize()
+    return Size.new(self.size:wh())
+end
+
 function BoundingBox:isWithinBoundingBox(x, y)
     return self:getRect():isVectorWithin(Vector.new(x,y))
+end
+
+function BoundingBox:getCollide(v,y)
+    assert(v,"getCollide must be passed something")
+    local point = Vector.new(v,y)
+    return self:getRect():isVectorWithin(Vector.new(v,y))
 end
 
 function BoundingBox:getSideCollidedOn(pos, velocity)

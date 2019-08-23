@@ -28,6 +28,8 @@
         ["BoundingBoxEditor"],
         ["BoundingBoxEditorRenderer"],
         ["WindowContent"],
+        ["Hoverable"],
+        ["Clickable"],
         ["Draggable"],
         ["DraggableRectHeight",32,-16],
         ["MoveOnDrag"],

@@ -16,12 +16,20 @@ function Canvas:awake()
 end
 
 function Canvas:draw(x, y)
+    self:drawAndClear(x,y)
+end
+
+function Canvas:drawAndClear(x,y)
+    self:drawWithoutClear(x,y)
+    self.drawList = {}
+end
+
+function Canvas:drawWithoutClear(x,y)
     local canvas = love.graphics.getCanvas()
     love.graphics.setCanvas(self.canvas)
     for i,fn in ipairs(self.drawList) do
         fn(self.actor.BoundingBox:getDimensions())
     end
-    self.drawList = {}
     love.graphics.setCanvas(canvas)
 
     love.graphics.setColor(1, 1, 1, 1)
@@ -32,7 +40,21 @@ function Canvas:setDimensions(w, h)
     self.canvas = love.graphics.newCanvas(w + self.growBy.width, h + self.growBy.height)
 end
 
+function Canvas:getRect()
+    local camera = self.actor:scene().camera
+    local width,height = self:getDimensions()
+    return Rect.new(self.actor:pos().x + self.offset.x - camera.x, self.actor:pos().y + self.offset.y - camera.y, width, height)
+end
+
+function Canvas:getDimensions()
+    return self.canvas:getDimensions()
+end
+
 function Canvas:BoundingBoxEditor_onResizeEnd(rect)
+    self:setDimensions(rect:dimensions())
+end
+
+function Canvas:BoundingBoxEditor_onResizeDrag(rect)
     self:setDimensions(rect:dimensions())
 end
 

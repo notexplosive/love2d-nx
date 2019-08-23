@@ -1,6 +1,6 @@
 local MoveOnDrag = {}
 
-registerComponent(MoveOnDrag, "MoveOnDrag", {"Draggable"})
+registerComponent(MoveOnDrag, "MoveOnDrag")
 
 function MoveOnDrag:Draggable_onDrag(x, y, dx, dy)
     self:moveBy(dx, dy)
