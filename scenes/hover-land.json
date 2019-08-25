@@ -21,7 +21,8 @@
         ["BoundingBoxRenderer"],
         ["HoverableRenderer"],
         ["Selectable"],
-        ["BringToFrontOnSelect"]
+        ["BringToFrontOnSelect"],
+        ["LensRect"]
       ],
       "pos": [200, 200]
     },
@@ -35,9 +36,18 @@
         ["BoundingBoxRenderer"],
         ["HoverableRenderer"],
         ["Selectable"],
-        ["BringToFrontOnSelect"]
+        ["BringToFrontOnSelect"],
+        ["LensRect"]
       ],
       "pos": [256, 256]
+    },
+    {
+      "components": [
+        ["BoundingBox",20,20],
+        ["BoundingBoxRenderer"],
+        ["Oscillate"],
+        ["Lensable"]
+      ]
     }
   ]
 }

@@ -67,6 +67,10 @@ function BoundingBox:getSize()
     return Size.new(self.size:wh())
 end
 
+function BoundingBox:area()
+    return self.size:area()
+end
+
 function BoundingBox:isWithinBoundingBox(x, y)
     return self:getRect():isVectorWithin(Vector.new(x,y))
 end
