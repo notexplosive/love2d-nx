@@ -21,7 +21,7 @@ function SpriteRenderer:setup(spriteName, anim, scale, color, offx, offy)
 
     if self.actor.BoundingBox then
         local x,y,w,h = self:getBoundingBox():xywh()
-        self.actor.BoundingBox:setup(w,h,-x,-y)
+        self.actor.BoundingBox:setup(w,h,self.sprite.gridWidth*self:getScaleX()/2,self.sprite.gridHeight*self:getScaleY()/2)
     end
 end
 
@@ -112,6 +112,14 @@ end
 
 function SpriteRenderer:setFlipY(b)
     self.flipY = b
+end
+
+function SpriteRenderer:getScaleX()
+    return self.scale * self.scaleX
+end
+
+function SpriteRenderer:getScaleY()
+    return self.scale * self.scaleY
 end
 
 function SpriteRenderer:pause()
