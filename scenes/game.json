@@ -14,8 +14,9 @@
     {
       "components": [
         ["BoundingBox"],
-        ["SpriteRenderer", "linkin", "walk", 3],
-        ["BoundingBoxRenderer"]
+        ["NinePatch", "platform"],
+        ["BoundingBoxEditor"],
+        ["BoundingBoxEditorRenderer"]
       ],
       "pos": [200, 200]
     }

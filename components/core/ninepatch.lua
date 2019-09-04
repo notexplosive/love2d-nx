@@ -25,6 +25,7 @@ function NinePatch:draw()
     local topRightQuad = self.sprite:getQuadAt(3)
     local bottomLeftQuad = self.sprite:getQuadAt(7)
     local bottomRightQuad = self.sprite:getQuadAt(9)
+    local middleQuad = self.sprite:getQuadAt(5)
 
     local _, _, quadWidth, quadHeight = topLeftQuad:getViewport()
     local right = x + width - quadWidth
@@ -50,6 +51,16 @@ function NinePatch:draw()
     self:fillHorizontalRemainder(bottomMiddleQuad, left, bottom)
     self:fillVerticalRemainder(leftMiddleQuad, left, top)
     self:fillVerticalRemainder(rightMiddleQuad, right, top)
+    self:fillMiddleRemainder(middleQuad, left, top)
+    self:fillMiddle(middleQuad, left, top)
+
+    for i = 1, (bottom - top) / quadHeight - 1 do
+        self:fillHorizontalRemainder(middleQuad, left, top + quadHeight * i)
+    end
+
+    for i = 1, (right - left) / quadWidth - 1 do
+        self:fillVerticalRemainder(middleQuad, left + quadWidth * i, top)
+    end
 end
 
 function NinePatch:getRect()
@@ -129,6 +140,24 @@ function NinePatch:fillVerticalRemainder(quad, x, top)
 
     local remainderQuad = self:getThisQuadWithTheseDimensions(quad, quadWidth, self:getHeightRemainder())
     love.graphics.draw(self.sprite.image, remainderQuad, x, y)
+end
+
+function NinePatch:fillMiddleRemainder(quad, left, top)
+    local quadWidth, quadHeight = self:getQuadDimensions()
+    local x = left + self:getWidthUpUntilYouNeedTheRemainder() + quadWidth
+    local y = top + self:getHeightUpUntilYouNeedTheRemainder() + quadHeight
+
+    local remainderQuad = self:getThisQuadWithTheseDimensions(quad, self:getWidthRemainder(), self:getHeightRemainder())
+    love.graphics.draw(self.sprite.image, remainderQuad, x, y)
+end
+
+function NinePatch:fillMiddle(quad, left, top)
+    local quadWidth, quadHeight = self:getQuadDimensions()
+    for dx = quadWidth, self:getRect():width() - quadWidth * 2, quadWidth do
+        for dy = quadHeight, self:getRect():height() - quadHeight * 2, quadHeight do
+            love.graphics.draw(self.sprite.image, quad, left + dx, top + dy)
+        end
+    end
 end
 
 return NinePatch
