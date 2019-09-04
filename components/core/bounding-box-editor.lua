@@ -3,7 +3,7 @@ local BoundingBoxEditor = {}
 registerComponent(BoundingBoxEditor, "BoundingBoxEditor", {"BoundingBox"})
 
 
-local topBuffer = 8
+local topBuffer = 0--8
 
 
 
@@ -282,13 +282,6 @@ function BoundingBoxEditor:getTopGrabHandleRect()
     local rect = self.actor.BoundingBox:getRect()
     rect:setHeight(self.grabHandleWidth)
     rect:move(0, -self.grabHandleWidth + topBuffer)
-    return rect
-end
-
-function BoundingBoxEditor:getTopGrabHandleRect_Alt()
-    local rect = self.actor.BoundingBox:getRect()
-    rect:setHeight(self.grabHandleWidth)
-    rect:move(0, -self.grabHandleWidth * 2)
     return rect
 end
 
