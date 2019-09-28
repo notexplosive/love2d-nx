@@ -12,7 +12,35 @@ function Vector.new(x, y)
 end
 
 function Vector.newPolar(distance, angle)
+    assert(type(angle) == "number", "angle is not a number")
     return Vector.new(distance, 0):setAngle(angle)
+end
+
+function Vector.newCardinal(name, magnitude)
+    assert(name, "Vector.newCardinal was passed a nil")
+    assert(type(name) == "string", "Vector.newCardinal takes a string, given " .. type(name))
+    magnitude = magnitude or 1
+    if name == "north" or name == "up" then
+        return Vector.new(0, -1) * magnitude
+    end
+
+    if name == "south" or name == "down" then
+        return Vector.new(0, 1) * magnitude
+    end
+
+    if name == "right" or name == "east" then
+        return Vector.new(1, 0) * magnitude
+    end
+
+    if name == "left" or name == "west" then
+        return Vector.new(-1, 0) * magnitude
+    end
+
+    assert(false, "No cardinal direction called " .. name)
+end
+
+function Vector:toString()
+    return "(" .. self.x .. "," .. self.y .. ")"
 end
 
 function Vector.__eq(lhs, rhs)
@@ -65,6 +93,28 @@ end
 
 function Vector:toString()
     return self.x .. ", " .. self.y
+end
+
+function Vector:getCardinalName()
+    if self.y == 0 then
+        if self.x > 0 then
+            return "right"
+        end
+        if self.x < 0 then
+            return "left"
+        end
+    end
+
+    if self.x == 0 then
+        if self.y > 0 then
+            return "down"
+        end
+        if self.y < 0 then
+            return "up"
+        end
+    end
+
+    return nil
 end
 
 function Vector:xy()
@@ -137,15 +187,20 @@ function Vector:angle()
     return a
 end
 
--- aggregate functions
-function Vector.allContents(list)
-    local output = {}
-    for i, v in ipairs(list) do
-        local x, y = v:content()
-        output[#output + 1] = x
-        output[#output + 1] = y
+local Test = require("nx/test")
+Test.run(
+    "Vector",
+    function()
+        local down = Vector.new(0, 1)
+        local left = Vector.new(-1, 0)
+        local right = Vector.new(1, 0)
+        local up = Vector.new(0, -1)
+
+        Test.assert("down", down:getCardinalName(), "Cardinal name down")
+        Test.assert("left", left:getCardinalName(), "Cardinal name left")
+        Test.assert("right", right:getCardinalName(), "Cardinal name right")
+        Test.assert("up", up:getCardinalName(), "Cardinal name up")
     end
-    return output
-end
+)
 
 return Vector

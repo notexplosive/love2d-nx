@@ -20,6 +20,10 @@ function Children:remove(actor)
     deleteFromList(self.list, actor)
 end
 
+function Children:count()
+    return #self.list
+end
+
 function Children:get()
     return copyList(self.list)
 end

@@ -1,3 +1,36 @@
+--
+--
+-- Deprecated.
+--
+--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 local Movement = {}
 
 registerComponent(Movement, "Movement")
@@ -15,7 +48,7 @@ end
 
 function Movement:update()
     if not self.isFrozen then
-        self.displacement = self.velocity * (self:getTimeScale() + 0.00035)
+        self.displacement = self.velocity * self:getTimeScale()
         self.actor:setPos(self.actor:pos() + self.displacement)
     end
 end

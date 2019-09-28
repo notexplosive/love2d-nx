@@ -97,6 +97,7 @@ end
 
 function DataLoader.loadActorData(scene, actorData, prefabName, prefabArguments, prefabTemplatedVars)
     local actor = scene:addActor(actorData.name or "ACTOR" .. love.math.random(899) + 100)
+    actor:addComponent(Components.Serializable)
 
     if prefabName then
         actor.Serializable:setPrefabInfo(prefabName, prefabArguments, prefabTemplatedVars)

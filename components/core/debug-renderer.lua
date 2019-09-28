@@ -31,6 +31,8 @@ function DebugRenderer:draw(x,y)
     end
 
     self.actor:setPos(0,self.actor:scene().height/2 - fontHeight)
+
+    love.graphics.setColor(1,1,1,1)
 end
 
 function DebugRenderer:update(dt)

@@ -6,6 +6,10 @@ function Draggable:setup(button)
     self.button = button
 end
 
+function Draggable:reverseSetup()
+    return self.button
+end
+
 function Draggable:awake()
     self.button = 1
     self.startDragPoint = nil
@@ -13,7 +17,8 @@ end
 
 function Draggable:onMouseMove(x, y, dx, dy)
     if self.dragging and Vector.new(dx, dy):length() > 0 then
-        self.actor:callForAllComponents("Draggable_onDrag", x, y, (Vector.new(x, y) - self.startDragPoint):xy())
+        local newX, newY = (Vector.new(x, y) - self.startDragPoint):xy()
+        self.actor:callForAllComponents("Draggable_onDrag", x, y, newX, newY, dx, dy)
     end
 end
 

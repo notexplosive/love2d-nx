@@ -12,10 +12,14 @@ function newObject(obj_t)
         return obj_t
     end
 
+    if not object.toString then
+        function object:toString()
+            return "<object does not implement toString()>"
+        end
+    end
+
     return object
 end
-
-local Vector = require("nx/vector")
 
 -- math
 function clamp(num, low, high)
@@ -234,9 +238,9 @@ end
 function angleCompare(angle1, angle2)
     assert(angle1)
     assert(angle2)
-    local delta = math.abs(angle2 - angle1) % (math.pi*2)
+    local delta = math.abs(angle2 - angle1) % (math.pi * 2)
     if delta > math.pi then
-        return math.pi*2 - delta
+        return math.pi * 2 - delta
     else
         return delta
     end

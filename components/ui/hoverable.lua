@@ -42,6 +42,7 @@ function Hoverable:getHoverIgnoreConsume()
     return self:getHoverOfPoint(self.cachedMousePos)
 end
 
+-- better name? this is the "real" hover, that accounts for consumeHover
 function Hoverable:getHoverConsume()
     return self._hover
 end
@@ -55,8 +56,8 @@ function Hoverable:Hoverable_onHoverEnd()
 end
 
 local Test = require("nx/test")
-Test.run(
-    "Hoverable",
+Test.registerComponentTest(
+    Hoverable,
     function()
         local Actor = require("nx/game/actor")
         local scene = require("nx/game/scene").new()

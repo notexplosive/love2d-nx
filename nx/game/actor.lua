@@ -5,7 +5,11 @@ local DataLoader = require("nx/template-loader/data-loader")
 local Actor = {}
 
 function Actor.new(name)
-    assert(name ~= nil, "Must provide a name for actor")
+    if not name then
+        name = "<nameless actor>"
+    end
+    assert(name ~= Actor, "Do not use Actor:new(), use Actor.new()")
+    assert(type(name) == "string", "name must be a string")
     local self = newObject(Actor)
     self.name = name
     self.components = {}
@@ -22,10 +26,6 @@ function Actor.new(name)
     end
 
     self.originalScene = nil
-
-    -- TODO: remove "Components.", just "Serializable"
-    -- Serializable needs to be moved to nx/game/components
-    self:addComponent(Components.Serializable)
 
     return self
 end
@@ -111,11 +111,16 @@ function Actor:addComponent(componentClass, ...)
 
     append(self.components, component)
 
+    if component.start then
+        component._justAddedToScene = true
+    end
+
     if component.awake then
         component:awake()
     end
 
     if ... ~= nil then
+        assert(component.setup, component.name .. " has no setup()")
         component:setup(...)
     end
 
@@ -183,7 +188,6 @@ end
 -- Called by Scene
 Actor:createEvent("update", {"dt"})
 Actor:createEvent("draw", {"x", "y"})
-Actor:createEvent("start")
 Actor:createEvent("onDestroy")
 Actor:createEvent("onMousePress", {"x", "y", "button", "wasRelease", "isClickConsumed"})
 Actor:createEvent("onMouseMove", {"x", "y", "dx", "dy", "isHoverConsumed"})
@@ -192,23 +196,31 @@ Actor:createEvent("onMouseMove", {"x", "y", "dx", "dy", "isHoverConsumed"})
 function Actor:callForAllComponents(methodName, ...)
     for i, component in ipairs(self.components) do
         if component[methodName] then
-            if
-                not self.originalScene or
-                    (not self:scene().editMode or (self:scene().editMode and not component.disableInEditMode))
-             then
-                component[methodName](component, ...)
-            end
+            component[methodName](component, ...)
         end
     end
 end
 
-function Actor:duplicate()
-    assert(self.Serializable, "cannot duplicate an actor with no Serializable component")
-    if self.Serializable:isPrefab() then
-        return self:loadActorData(self:scene(), self.Serializable:createActorNode(), self.Serializable:getPrefabData())
+function Actor:clone()
+    local clone = nil
+    if self:scene() then
+        clone = self:scene():addActor()
     else
-        return self:loadActorData(self:scene(), self.Serializable:createActorNode())
+        clone = Actor.new()
     end
+
+    clone:setPos(self:pos())
+    clone:setAngle(self:angle())
+
+    clone.name = self.name .. ' clone'
+
+    for i, component in ipairs(self.components) do
+        local componentClass = Components[component.name]
+        assert(componentClass, component.name .. " class does not exist")
+        clone:addComponentSafe(componentClass, component:reverseSetupSafe())
+    end
+
+    return clone
 end
 
 return Actor

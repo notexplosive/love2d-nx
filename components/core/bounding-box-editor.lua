@@ -2,10 +2,8 @@ local BoundingBoxEditor = {}
 
 registerComponent(BoundingBoxEditor, "BoundingBoxEditor", {"BoundingBox"})
 
-
-local topBuffer = 0--8
-
-
+local topBuffer = 0
+ --8
 
 function BoundingBoxEditor:setup(minWidth, minHeight, grabHandleWidth)
     assert(minWidth)
@@ -58,9 +56,6 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy, isHoverConsumed)
     if self.actor.SpawnPopup then
         return
     end
-
-    x = x + self.actor:scene().camera.x
-    y = y + self.actor:scene().camera.y
 
     if not self.selectedIndex then
         if not isHoverConsumed then
@@ -241,11 +236,11 @@ function BoundingBoxEditor:getCornerRect(dx, dy)
 end
 
 function BoundingBoxEditor:getTopLeftGrabHandleRect()
-    return self:getCornerRect(0, 0):move(0,topBuffer)
+    return self:getCornerRect(0, 0):move(0, topBuffer)
 end
 
 function BoundingBoxEditor:getTopRightGrabHandleRect()
-    return self:getCornerRect(self.actor.BoundingBox:getRect():width(), 0):move(0,topBuffer)
+    return self:getCornerRect(self.actor.BoundingBox:getRect():width(), 0):move(0, topBuffer)
 end
 
 function BoundingBoxEditor:getBottomRightGrabHandleRect()

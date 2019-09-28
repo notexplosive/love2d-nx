@@ -2,7 +2,17 @@
   "root": [],
   "actors": [
     {
-      "components": [["DebugRenderer"]]
+      "components": [
+        ["DebugRenderer"],
+        ["ToggleFrameFreezeMode"],
+        ["ToggleEditMode"]
+      ]
+    },
+    {
+      "components": [["FramerateCounter"]]
+    },
+    {
+      "components": [["FileSystem", "maps"],["MapFile"], ["Keybind"], ["SaveMap"], ["CheckUnsavedChanges"], ["AlwaysOnTop"]]
     }
   ]
 }

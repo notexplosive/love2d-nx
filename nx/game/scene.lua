@@ -22,8 +22,6 @@ function Scene.new(width, height)
         self:setDimensions(love.graphics.getDimensions())
     end
 
-    self.editMode = false
-
     return self
 end
 
@@ -39,6 +37,7 @@ function Scene.fromSceneData(sceneData)
     -- Root will be at 0,0 and can technically be reassigned although probably shouldn't.
     if sceneData.root then
         local actor = scene:addActor("root")
+        actor:addComponent(Components.Serializable) -- code smell!
         DataLoader.loadComponentListData(actor, sceneData.root)
     end
 
@@ -294,18 +293,21 @@ function Scene:consumeHover()
     self.isHoverConsumed = true
 end
 
--- Game Events: These are special events that don't work like regular events
+-- Game Events: Run on each actor but with some specialized behavior (not just a passthrough)
 function Scene:update(dt)
-    -- Run any applicable start functions
-    for i, actor in ipairs(self.actors) do
-        if actor._justAddedToScene then
-            actor._justAddedToScene = nil
-            actor:start()
+    if not self.freeze then
+        -- Start runs right before the next update loop
+        for i, actor in ipairs(self.actors) do
+            for j, component in ipairs(actor.components) do
+                if component._justAddedToScene then
+                    component._justAddedToScene = nil
+                    component:start()
+                end
+            end
         end
-    end
 
-    for i, actor in ipairs(self.actors) do
-        if not self.freeze then
+        -- Update Loop
+        for i, actor in ipairs(self.actors) do
             actor:update(dt)
         end
     end

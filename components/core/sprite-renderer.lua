@@ -4,25 +4,27 @@ local SpriteRenderer = {}
 registerComponent(SpriteRenderer, "SpriteRenderer")
 
 function SpriteRenderer:setup(spriteName, anim, scale, color, offx, offy)
-    assert(spriteName, "Sprite name cannot be nil")
-    assert(Assets.images[spriteName], "No sprite named " .. spriteName)
-
-    self:setSprite(Assets.images[spriteName])
+    self:setSprite(spriteName)
 
     if anim then
         self:setAnimation(anim)
     end
 
+    self.offset = Vector.new()
     if offx and offy then
         self.offset = Vector.new(offx, offy)
     end
+
     self.scale = scale or self.scale
     self.color = color or self.color
 
     if self.actor.BoundingBox then
-        local x,y,w,h = self:getBoundingBox():xywh()
-        self.actor.BoundingBox:setup(w,h,self.sprite.gridWidth*self:getScaleX()/2,self.sprite.gridHeight*self:getScaleY()/2)
+        self:setupBoundingBox()
     end
+end
+
+function SpriteRenderer:reverseSetup()
+    return self.spriteName, self:getAnimation(), self.scale, self.color, self.offset.x, self.offset.y
 end
 
 function SpriteRenderer:awake()
@@ -67,7 +69,11 @@ function SpriteRenderer:draw(x, y)
     end
 end
 
-function SpriteRenderer:setSprite(sprite)
+function SpriteRenderer:setSprite(spriteName)
+    assert(spriteName, "Sprite name cannot be nil")
+    assert(Assets.images[spriteName], "No sprite named " .. spriteName)
+
+    local sprite = Assets.images[spriteName]
     assert(sprite, "SpriteRenderer:setSprite was passed a nil")
     assert(sprite:type() == Sprite)
 
@@ -75,6 +81,7 @@ function SpriteRenderer:setSprite(sprite)
         return
     end
 
+    self.spriteName = spriteName
     self.sprite = sprite
     self.currentAnimation = nil
     return self
@@ -100,7 +107,7 @@ end
 
 function SpriteRenderer:getAnimation()
     if self.currentAnimation == nil then
-        return "nil"
+        return nil
     end
 
     return self.currentAnimation.name
@@ -122,6 +129,20 @@ function SpriteRenderer:getScaleY()
     return self.scale * self.scaleY
 end
 
+function SpriteRenderer:setScale(s)
+    self.scale = s
+end
+
+function SpriteRenderer:setColor(r, g, b, a)
+    local color = {r, g, b, a}
+    assert(#color == 3 or #color == 4, "Color is a list of 3 or 4 values")
+    self.color = color
+end
+
+function SpriteRenderer:setOffset(dx, dy)
+    self.offset = Vector.new(dx, dy)
+end
+
 function SpriteRenderer:pause()
     self.actor.PlayHead:pause()
 end
@@ -136,8 +157,45 @@ function SpriteRenderer:getBoundingBox()
     return Rect.new(x, y, w, h)
 end
 
+function SpriteRenderer:setupBoundingBox()
+    local x, y, w, h = self:getBoundingBox():xywh()
+    self.actor.BoundingBox:setup(
+        w,
+        h,
+        self.sprite.gridWidth * self:getScaleX() / 2,
+        self.sprite.gridHeight * self:getScaleY() / 2
+    )
+end
+
 function SpriteRenderer:hasAnimation(animName)
     return self.sprite and self.sprite.animations[animName]
 end
+
+local Test = require("nx/test")
+Test.registerComponentTest(
+    SpriteRenderer,
+    function()
+        local Actor = require("nx/game/actor")
+        local setupInput = {"linkin", "walk", 5, {1, 0, 1}, 10, -20}
+        local sp = Actor.new("TestActor"):addComponent(Components.SpriteRenderer, unpack(setupInput))
+
+        -- Reverse Setup
+        Test.assert(setupInput, {sp:reverseSetup()}, "ReverseSetup reflects setup")
+
+        -- Setters followed by reverseSetup
+        sp:setSprite("numbers")
+        sp:setAnimation("all")
+        sp:setScale(3)
+        sp:setColor(1, 1, 0)
+        sp:setOffset(40, -20)
+        local newReverseSetupOutput = {sp:reverseSetup()}
+        Test.assert("numbers", newReverseSetupOutput[1], "ReverseSetup gets SpriteName")
+        Test.assert("all", newReverseSetupOutput[2], "ReverseSetup gets Animation")
+        Test.assert(3, newReverseSetupOutput[3], "ReverseSetup gets Scale")
+        Test.assert({1, 1, 0}, newReverseSetupOutput[4], "ReverseSetup gets Color")
+        Test.assert(40, newReverseSetupOutput[5], "ReverseSetup gets OffX")
+        Test.assert(-20, newReverseSetupOutput[6], "ReverseSetup gets OffY")
+    end
+)
 
 return SpriteRenderer

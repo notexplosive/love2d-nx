@@ -57,7 +57,7 @@ function TextRenderer:draw()
     if self.shadow then
         love.graphics.setColor(0, 0, 0)
         love.graphics.printf(
-            self.text,
+            tostring(self.text),
             math.floor(self.actor:pos().x + 1),
             math.floor(self.actor:pos().y + 1),
             self.maxWidth,
@@ -72,7 +72,7 @@ function TextRenderer:draw()
 
     love.graphics.setColor(self.color)
     love.graphics.printf(
-        self.text,
+        tostring(self.text),
         math.floor(self.actor:pos().x),
         math.floor(self.actor:pos().y),
         self.maxWidth,

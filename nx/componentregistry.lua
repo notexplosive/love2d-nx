@@ -13,6 +13,18 @@ function registerComponent(componentClass, name, deps)
         return newObject(componentClass)
     end
 
+    function componentClass.reverseSetupSafe(self)
+        if not self.setup then
+            return nil
+        end
+
+        if self.reverseSetup then
+            return self:reverseSetup()
+        end
+
+        assert(false, self.name .. " has setup but no reverseSetup")
+    end
+
     function componentClass.destroy(self)
         if self._componentDestroyed then
             return
