@@ -7,7 +7,7 @@ function CheckUnsavedChanges:awake()
 end
 
 function CheckUnsavedChanges:draw(x, y)
-    if self.isUnsaved then
+    if self.isUnsaved and DEBUG then
         local rect = Rect.new(0, 0, love.graphics.getDimensions())
         rect:inflate(-10, -10)
         love.graphics.setColor(1, 1, 0)
