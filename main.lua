@@ -1,4 +1,3 @@
---- DEBUG
 DEBUG = true
 
 require("nx/util")
@@ -33,7 +32,7 @@ function love.draw()
 end
 
 function takeSnapshot()
-    love.graphics.setColor(1,1,1,1)
+    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setFont(love.graphics.newFont(24))
     love.graphics.print(os.date("%c"))
     local screenshot = love.graphics.captureScreenshot(os.time() .. ".png")
@@ -42,19 +41,18 @@ function takeSnapshot()
 end
 
 function debugLog(str, ...)
-    --if DEBUG then
     str = tostring(str)
     for i, v in ipairs({...}) do
         str = str .. "\t" .. tostring(v)
     end
-    local debugRenderer = uiScene:getFirstBehavior(Components.DebugRenderer)
-    if debugRenderer then
-        debugRenderer:append(str)
-        print(...)
+    
+    if uiScene then
+        local debugRenderer = uiScene:getFirstBehavior(Components.DebugRenderer)
+        if debugRenderer then
+            debugRenderer:append(str)
+            print(...)
+        end
     end
-    --else
-    --print(str, ...)
-    --end
 end
 
 local Test = require("nx/test")
