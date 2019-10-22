@@ -3,6 +3,7 @@
   "actors": [
     {
       "components": [
+        ["TakeSnapshot", 15],
         ["DebugRenderer"],
         ["ToggleFrameFreezeMode"],
         ["ToggleEditMode"]
@@ -12,7 +13,14 @@
       "components": [["FramerateCounter"]]
     },
     {
-      "components": [["FileSystem", "maps"],["MapFile"], ["Keybind"], ["SaveMap"], ["CheckUnsavedChanges"], ["AlwaysOnTop"]]
+      "components": [
+        ["FileSystem", "maps"],
+        ["MapFile"],
+        ["Keybind"],
+        ["SaveMap"],
+        ["CheckUnsavedChanges"],
+        ["AlwaysOnTop"]
+      ]
     }
   ]
 }

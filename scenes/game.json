@@ -13,7 +13,7 @@
     },
     {
       "components": [
-        ["BoundingBox",200,200],
+        ["BoundingBox", 200, 200],
         ["NinePatch", "platform"],
         ["BoundingBoxEditor"]
       ],

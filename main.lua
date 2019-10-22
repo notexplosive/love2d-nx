@@ -11,33 +11,17 @@ Rect = require("nx/rect")
 
 require("nx/componentregistry")
 
-local elapsedTime = 0
 function love.update(dt)
     for _, scene in eachSceneReverseDrawOrder() do
         scene:update(dt, true)
     end
-    elapsedTime = elapsedTime + dt
 end
 
-local screenshotTaken = true
 -- reverse from update
 function love.draw()
     for _, scene in eachSceneDrawOrder() do
         scene:draw()
     end
-
-    if screenshotTaken and elapsedTime > 15 then
-        takeSnapshot()
-    end
-end
-
-function takeSnapshot()
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.setFont(love.graphics.newFont(24))
-    love.graphics.print(os.date("%c"))
-    local screenshot = love.graphics.captureScreenshot(os.time() .. ".png")
-    screenshotTaken = false
-    debugLog("screenshot taken")
 end
 
 function debugLog(str, ...)
@@ -45,7 +29,7 @@ function debugLog(str, ...)
     for i, v in ipairs({...}) do
         str = str .. "\t" .. tostring(v)
     end
-    
+
     if uiScene then
         local debugRenderer = uiScene:getFirstBehavior(Components.DebugRenderer)
         if debugRenderer then
