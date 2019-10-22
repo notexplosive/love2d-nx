@@ -2,6 +2,8 @@ local CheckUnsavedChanges = {}
 
 registerComponent(CheckUnsavedChanges, "CheckUnsavedChanges", {"FileSystem", "MapFile"})
 
+local font = love.graphics.newFont(12)
+
 function CheckUnsavedChanges:awake()
     self.isUnsaved = false
 end
@@ -12,7 +14,8 @@ function CheckUnsavedChanges:draw(x, y)
         rect:inflate(-10, -10)
         love.graphics.setColor(1, 1, 0)
         love.graphics.rectangle("line", rect:xywh())
-        love.graphics.printf('Changes are not saved', 0, 10, love.graphics.getWidth() - 15, 'right')
+        love.graphics.setFont(font)
+        love.graphics.printf("Changes are not saved", 0, 10, love.graphics.getWidth() - 15, "right")
     end
 end
 
