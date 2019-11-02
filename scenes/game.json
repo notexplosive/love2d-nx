@@ -11,13 +11,6 @@
     {
       "components": [["TextRenderer", "LOVE2D-nx", 22], ["Selector"]]
     },
-    {
-      "components": [
-        ["BoundingBox", 200, 200],
-        ["NinePatch", "platform"],
-        ["BoundingBoxEditor"]
-      ],
-      "pos": [200, 200]
-    }
+    {}
   ]
 }

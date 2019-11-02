@@ -13,14 +13,7 @@
       "components": [["FramerateCounter"]]
     },
     {
-      "components": [
-        ["FileSystem", "maps"],
-        ["MapFile"],
-        ["Keybind"],
-        ["SaveMap"],
-        ["CheckUnsavedChanges"],
-        ["AlwaysOnTop"]
-      ]
+      "components": [["EnableSaveMap"]]
     }
   ]
 }
