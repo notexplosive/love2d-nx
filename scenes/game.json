@@ -11,6 +11,17 @@
     {
       "components": [["TextRenderer", "LOVE2D-nx", 22], ["Selector"]]
     },
-    {}
+    {
+      "components": [["TriangleRenderer", 20]],
+      "pos": [200, 200]
+    },
+    {
+      "components": [["CircleRenderer", 20]],
+      "pos": [300, 200]
+    },
+    {
+      "components": [["RectRenderer", 20, 20]],
+      "pos": [400, 200]
+    }
   ]
 }
