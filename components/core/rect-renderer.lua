@@ -11,10 +11,10 @@ end
 function RectRenderer:draw(x, y)
     love.graphics.setColor(self.color or {1, 1, 1, 1})
 
-    local left = -self.width
-    local top = -self.height
-    local right = self.width
-    local bottom = self.height
+    local left = -self.width / 2
+    local top = -self.height / 2
+    local right = self.width / 2
+    local bottom = self.height / 2
 
     local vectors = {
         Vector.new(x, y) + Vector.new(left, top):rotate(self.actor:angle()),
