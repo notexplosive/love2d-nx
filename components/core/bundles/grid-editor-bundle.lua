@@ -20,10 +20,4 @@ function GridEditorBundle:setup(cellWidth, cellHeight, numberOfCols, numberOfRow
     cursor2:addComponent(Components.RectRenderer, cellWidth, cellHeight, {1, 1, 1, 1}, -cellWidth / 2, -cellHeight / 2)
 end
 
-function GridEditorBundle:draw(x, y)
-end
-
-function GridEditorBundle:update(dt)
-end
-
 return GridEditorBundle

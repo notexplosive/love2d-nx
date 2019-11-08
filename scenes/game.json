@@ -22,10 +22,6 @@
     {
       "components": [["RectRenderer", 40, 40]],
       "pos": [400, 200]
-    },
-    {
-      "components": [["GridEditorBundle", 40, 40, 30, 60]],
-      "pos": [120, 110]
     }
   ]
 }
