@@ -22,6 +22,10 @@
     {
       "components": [["RectRenderer", 40, 40]],
       "pos": [400, 200]
+    },
+    {
+      "components": [["Grid", 40, 40], ["GridRenderer", 10, 20]],
+      "pos": [100, 100]
     }
   ]
 }
