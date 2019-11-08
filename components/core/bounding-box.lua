@@ -68,6 +68,22 @@ function BoundingBox:getDimensions()
     return self.size:wh()
 end
 
+function BoundingBox:becomeValid()
+    local x, y, w, h = self:getRect():xywh()
+    if w < 0 then
+        x = x + w
+        w = -w
+    end
+
+    if h < 0 then
+        y = y + h
+        h = -h
+    end
+
+    self.actor:setPos(x, y)
+    self:setDimensions(w, h)
+end
+
 function BoundingBox:getSize()
     return Size.new(self.size:wh())
 end

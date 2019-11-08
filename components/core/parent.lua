@@ -1,12 +1,14 @@
 local Parent = {}
 
-registerComponent(Parent,'Parent')
+registerComponent(Parent, "Parent")
 
 -- This is the parent pointer held by the CHILD
 
 function Parent:setup(actor)
     self.parentActor = actor
     self.parentActor:addComponentSafe(Components.Children, self.actor)
+
+    self.actor:callForAllComponents("Parent_onSetup")
 end
 
 function Parent:update(dt)
@@ -19,9 +21,13 @@ function Parent:get()
     return self.parentActor
 end
 
+function Parent:__call()
+    return self:get()
+end
+
 function Parent:getRoot()
     local actor = self.actor
-    while(actor.Parent) do
+    while (actor.Parent) do
         actor = actor.Parent:get()
     end
 
