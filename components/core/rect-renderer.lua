@@ -3,6 +3,8 @@ local RectRenderer = {}
 registerComponent(RectRenderer, "RectRenderer")
 
 function RectRenderer:setup(width, height, color)
+    assert(width)
+    assert(height)
     self.width = width
     self.height = height
     self.color = color

@@ -24,8 +24,8 @@
       "pos": [400, 200]
     },
     {
-      "components": [["Grid", 40, 40], ["GridRenderer", 10, 20]],
-      "pos": [100, 100]
+      "components": [["GridEditorBundle", 40, 40, 30, 60]],
+      "pos": [120, 110]
     }
   ]
 }
