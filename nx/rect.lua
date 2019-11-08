@@ -8,11 +8,11 @@ function Rect.new(x, y, width, height)
     assert(x)
     assert(y)
 
-    if type(x) == 'table' then
+    if type(x) == "table" then
         if x:type() == Vector and y:type() == Size then
             local vec = x
             local size = y
-            return Rect.new(vec.x,vec.y,size.width,size.height)
+            return Rect.new(vec.x, vec.y, size.width, size.height)
         end
     end
 
@@ -54,8 +54,8 @@ function Rect:right()
     return self.pos.x + self:width()
 end
 
-function Rect:move(v,y)
-    self.pos = self.pos + Vector.new(v,y)
+function Rect:move(v, y)
+    self.pos = self.pos + Vector.new(v, y)
     return self
 end
 
@@ -79,8 +79,8 @@ function Rect:inflate(dx, dy)
     return self
 end
 
-function Rect:grow(dx,dy)
-    self.size:grow(dx,dy)
+function Rect:grow(dx, dy)
+    self.size:grow(dx, dy)
     return self
 end
 
@@ -89,7 +89,24 @@ function Rect:area()
 end
 
 function Rect:dimensions()
-    return self.size.width,self.size.height
+    return self.size.width, self.size.height
+end
+
+function Rect:becomeValid()
+    local x, y, w, h = self:xywh()
+    if w < 0 then
+        x = x + w
+        w = -w
+    end
+
+    if h < 0 then
+        y = y + h
+        h = -h
+    end
+
+    self.pos = Vector.new(x, y)
+    self.size = Size.new(w, h)
+    return self
 end
 
 function Rect:getIntersection(other)
@@ -117,9 +134,9 @@ function Rect:asTwoVectors()
     return self.pos:clone(), self.pos:clone() + Vector.new(self.size.width, self.size.height)
 end
 
-function Rect:isVectorWithin(v,y)
-    assert(v,"isVectorWithin needs an argument")
-    local vector = Vector.new(v,y)
+function Rect:isVectorWithin(v, y)
+    assert(v, "isVectorWithin needs an argument")
+    local vector = Vector.new(v, y)
     local cond1 = vector.x > self:x()
     local cond2 = vector.x < self:x() + self:width()
     local cond3 = vector.y > self:y()
@@ -148,7 +165,7 @@ Test.run(
         Test.assert(100, testRect2:width(), "Rect:width() of a different rect")
 
         -- Test inflate
-        local inflateRect = Rect.new(0,0,10,10)
+        local inflateRect = Rect.new(0, 0, 10, 10)
         inflateRect:inflate(100, 100)
         Test.assert(110, inflateRect:width(), "Width after Rect:inflate")
         Test.assert(110, inflateRect:height(), "Height after Rect:inflate")
@@ -181,22 +198,22 @@ Test.run(
         Test.assert(false, surface:isVectorWithin(pointOnBoundary), "Rect:isVectorWithinRect(), pointOnBoundary")
         Test.assert(false, surface:isVectorWithin(pointOutside), "Rect:isVectorWithinRect(), pointOutside")
 
-        local mover = Rect.new(10,10,50,50)
-        mover:move(5,10)
-        Test.assert(15,mover.pos.x, "Move X")
-        Test.assert(20,mover.pos.y, "Move Y")
+        local mover = Rect.new(10, 10, 50, 50)
+        mover:move(5, 10)
+        Test.assert(15, mover.pos.x, "Move X")
+        Test.assert(20, mover.pos.y, "Move Y")
         mover:setWidth(25)
-        Test.assert(25,mover:width(),"Width after setWidth()")
+        Test.assert(25, mover:width(), "Width after setWidth()")
         mover:setHeight(35)
-        Test.assert(35,mover:height(),"Height after setHeight()")
-        
-        Test.assert(mover:top(),20,"top")
-        Test.assert(mover:bottom(),55,"bottom")
-        Test.assert(mover:left(),15,"left")
-        Test.assert(mover:right(),40,"right")
+        Test.assert(35, mover:height(), "Height after setHeight()")
+
+        Test.assert(mover:top(), 20, "top")
+        Test.assert(mover:bottom(), 55, "bottom")
+        Test.assert(mover:left(), 15, "left")
+        Test.assert(mover:right(), 40, "right")
 
         -- Alternate constructor
-        local vecSizeRect = Rect.new(Vector.new(100,200), Size.new(400,500))
+        local vecSizeRect = Rect.new(Vector.new(100, 200), Size.new(400, 500))
         Test.assert(100, vecSizeRect:x(), "Rect:x()")
         Test.assert(200, vecSizeRect:y(), "Rect:y()")
         Test.assert(400, vecSizeRect:width(), "Rect:width()")

@@ -13,6 +13,7 @@ end
 
 function Vector.newPolar(distance, angle)
     assert(type(angle) == "number", "angle is not a number")
+    assert(distance, "distance is nil")
     return Vector.new(distance, 0):setAngle(angle)
 end
 
@@ -89,6 +90,10 @@ end
 
 function Vector:clone()
     return Vector.new(self.x, self.y)
+end
+
+function Vector:distanceTo(v)
+    return (self - v):length()
 end
 
 function Vector:toString()

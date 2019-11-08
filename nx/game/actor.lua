@@ -194,8 +194,9 @@ Actor:createEvent("onMouseMove", {"x", "y", "dx", "dy", "isHoverConsumed"})
 
 -- Calls method on all components that have this method
 function Actor:callForAllComponents(methodName, ...)
-    for i, component in ipairs(self.components) do
-        if component[methodName] then
+    local components = copyList(self.components)
+    for i, component in ipairs(components) do
+        if component[methodName] and not components._isDestroyed then
             component[methodName](component, ...)
         end
     end
@@ -212,7 +213,7 @@ function Actor:clone()
     clone:setPos(self:pos())
     clone:setAngle(self:angle())
 
-    clone.name = self.name .. ' clone'
+    clone.name = self.name .. " clone"
 
     for i, component in ipairs(self.components) do
         local componentClass = Components[component.name]
