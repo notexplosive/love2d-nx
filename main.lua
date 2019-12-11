@@ -20,7 +20,6 @@ function love.update(dt)
     end
 end
 
--- reverse from update
 function love.draw()
     for _, scene in sceneLayers:eachInDrawOrder() do
         scene:draw()
