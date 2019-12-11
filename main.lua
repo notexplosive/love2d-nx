@@ -10,17 +10,19 @@ Vector = require("nx/vector")
 Size = require("nx/size")
 Rect = require("nx/rect")
 
+local sceneLayers = require("nx/scene-layers")
+
 require("nx/component-registry")
 
 function love.update(dt)
-    for _, scene in eachSceneReverseDrawOrder() do
+    for _, scene in sceneLayers:eachInReverseDrawOrder() do
         scene:update(dt, true)
     end
 end
 
 -- reverse from update
 function love.draw()
-    for _, scene in eachSceneDrawOrder() do
+    for _, scene in sceneLayers:eachInDrawOrder() do
         scene:draw()
     end
 end
@@ -32,17 +34,7 @@ local Scene = require("nx/game/scene")
 uiScene = Scene.fromPath("ui")
 gameScene = Scene.fromPath("game")
 
-local sceneLayers = {}
-append(sceneLayers, gameScene)
-append(sceneLayers, uiScene)
-
-function eachSceneDrawOrder()
-    return ipairs(sceneLayers)
-end
-
-local reversedSceneLayers = copyReversed(sceneLayers)
-function eachSceneReverseDrawOrder()
-    return ipairs(reversedSceneLayers)
-end
+sceneLayers:add(gameScene)
+sceneLayers:add(uiScene)
 
 love.graphics.setBackgroundColor(15 / 255, 127 / 255, 127 / 255)
