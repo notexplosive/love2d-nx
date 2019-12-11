@@ -1,18 +1,8 @@
 {
-  "settings": {
-    "allParamsMustBeFilled": false
-  },
-  "root": [
-    ["CloseOnEscape"],
-    ["AnnounceSceneNotifications"],
-    ["MiddleMousePan"]
-  ],
+  "root": [["CloseOnEscape"]],
   "actors": [
     {
-      "components": [["TextRenderer", "LOVE2D-nx", 22], ["Selector"]]
-    },
-    {
-      "components": [["TriangleRenderer", 20]],
+      "components": [["TriangleRenderer", 20], ["RotateTowardsMouse"]],
       "pos": [200, 200]
     },
     {
@@ -20,7 +10,7 @@
       "pos": [300, 200]
     },
     {
-      "components": [["RectRenderer", 40, 40]],
+      "components": [["RectRenderer", 40, 40], ["RandomRotate"]],
       "pos": [400, 200]
     }
   ]
