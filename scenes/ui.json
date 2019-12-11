@@ -5,7 +5,8 @@
       "components": [
         ["DebugRenderer"],
         ["TakeSnapshot", 15],
-        ["ToggleFrameFreezeMode"]
+        ["ToggleFrameFreezeMode"],
+        ["EnableDebug"]
       ]
     },
     {

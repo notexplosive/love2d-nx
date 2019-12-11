@@ -1,4 +1,4 @@
-DEBUG = true
+DEBUG = false
 
 require("nx/util")
 require("nx/input")
@@ -45,10 +45,6 @@ Test.runComponentTests()
 local Scene = require("nx/game/scene")
 uiScene = Scene.fromPath("ui")
 gameScene = Scene.fromPath("game")
-
-taskbarIconFont = love.graphics.newFont(12)
-iconFont = love.graphics.newFont(12)
-windowTitleFont = love.graphics.newFont(16)
 
 local sceneLayers = {}
 append(sceneLayers, gameScene)
