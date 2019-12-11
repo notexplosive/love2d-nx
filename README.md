@@ -170,6 +170,8 @@ actor:addComponent(Components.MyComponent, some, args, to, initialize) -- runs a
 
 The json file needs to live `/scenes` or some subdirectory therein. You'll then need to load it with `Scene.fromPath` as seen above
 
+The following will run `awake()` and then `setup("someString", {argTable = 420}, 69, nil)`
+
 ```json
 {
   "root": [],
@@ -177,7 +179,6 @@ The json file needs to live `/scenes` or some subdirectory therein. You'll then 
     {
       "components": [
         ["MyComponent", "someString", { "argTable": 420 }, 69, null]
-        // runs awake() and then setup("someString", {argTable = 420}, 69, nil)
       ],
       "pos": [200, 200]
     }
