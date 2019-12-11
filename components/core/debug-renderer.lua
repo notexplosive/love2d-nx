@@ -18,8 +18,8 @@ end
 
 function DebugRenderer:start()
     if DEBUG then
-        debugLog(love.window.getTitle())
         debugLog("DebugMode is enabled")
+        debugLog(love.window.getTitle())
     end
 end
 
