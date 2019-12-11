@@ -1,36 +1,3 @@
---
---
--- Deprecated.
---
---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 local Movement = {}
 
 registerComponent(Movement, "Movement")
@@ -42,14 +9,12 @@ end
 
 function Movement:awake()
     self.velocity = Vector.new()
-    self.displacement = Vector.new()
     self.ignoreTimescale = false
 end
 
-function Movement:update()
+function Movement:update(dt)
     if not self.isFrozen then
-        self.displacement = self.velocity * self:getTimeScale()
-        self.actor:setPos(self.actor:pos() + self.displacement)
+        self.actor:setPos(self.actor:pos() + self.velocity * dt * 60)
     end
 end
 
@@ -70,11 +35,6 @@ function Movement:applyForce(force)
     if not self.isFrozen then
         self.velocity = self.velocity + force * self:getTimeScale()
     end
-end
-
--- How much did the object move this frame?
-function Movement:getDisplacement()
-    return self.displacement:clone()
 end
 
 function Movement:getTimeScale()

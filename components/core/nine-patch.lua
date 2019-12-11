@@ -5,7 +5,7 @@ registerComponent(NinePatch, "NinePatch", {"BoundingBox"})
 function NinePatch:setup(spriteName, inflateWidth, inflateHeight, offsetX, offsetY)
     self.spriteName = spriteName
     self.sprite = Assets.images[spriteName]
-    assert(self.sprite, "no sprite at " .. spriteName)
+    assert(self.sprite, "no sprite with name " .. spriteName)
     self.inflateSize = Size.new(inflateWidth or 0, inflateHeight or 0)
     self.offsetVector = Vector.new(offsetX or 0, offsetY or 0)
 
@@ -23,7 +23,7 @@ function NinePatch:start()
     assert(self.sprite, "setup not run")
 end
 
-function NinePatch:draw(x,y)
+function NinePatch:draw(x, y)
     local rect = self:getRect()
     local _, _, width, height = rect:xywh()
 
@@ -34,10 +34,10 @@ function NinePatch:draw(x,y)
     local middleQuad = self.sprite:getQuadAt(5)
 
     local _, _, quadWidth, quadHeight = topLeftQuad:getViewport()
-    local right = x + width - quadWidth
-    local left = x
-    local top = y
-    local bottom = y + height - quadHeight
+    local right = x + width - quadWidth - self.offsetVector.x
+    local left = x - self.offsetVector.x
+    local top = y - self.offsetVector.y
+    local bottom = y + height - quadHeight - self.offsetVector.y
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(self.sprite.image, topLeftQuad, left, top)
     love.graphics.draw(self.sprite.image, topRightQuad, right, top)
@@ -170,9 +170,9 @@ local Test = require("nx/test")
 Test.registerComponentTest(
     NinePatch,
     function()
-        local Actor = require('nx/game/actor')
+        local Actor = require("nx/game/actor")
         local actor = Actor.new()
-        local setupArgs = {'grass', 20, 30, 40, 50}
+        local setupArgs = {"window-frame", 20, 30, 40, 50}
         actor:addComponent(Components.BoundingBox)
         local subject = actor:addComponent(NinePatch, unpack(setupArgs))
         Test.assert(setupArgs, {subject:reverseSetup()}, "reverseSetup can be fed to setup")

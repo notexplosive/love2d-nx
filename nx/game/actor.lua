@@ -41,7 +41,6 @@ function Actor:destroy()
     end
     self.isDestroyed = true
     self:onDestroy()
-    self:removeFromScene()
 end
 
 -- Deletes actor from scene without calling onDestroy
@@ -112,7 +111,7 @@ function Actor:addComponent(componentClass, ...)
     append(self.components, component)
 
     if component.start then
-        component._justAddedToScene = true
+        component._hasNotRunStart = true
     end
 
     if component.awake then
@@ -187,6 +186,7 @@ end
 
 -- Called by Scene
 Actor:createEvent("update", {"dt"})
+Actor:createEvent("start")
 Actor:createEvent("draw", {"x", "y"})
 Actor:createEvent("onDestroy")
 Actor:createEvent("onMousePress", {"x", "y", "button", "wasRelease", "isClickConsumed"})

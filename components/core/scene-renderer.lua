@@ -2,7 +2,7 @@ local Scene = require("nx/game/scene")
 local DataLoader = require("nx/template-loader/data-loader")
 local SceneRenderer = {}
 
-registerComponent(SceneRenderer, "SceneRenderer", {"BoundingBox", "Canvas"})
+registerComponent(SceneRenderer, "SceneRenderer", {"Canvas"})
 
 -- equivalent to loadScene
 function SceneRenderer:setup(pathOrScene, args)
@@ -21,9 +21,8 @@ function SceneRenderer:setup(pathOrScene, args)
 end
 
 function SceneRenderer:awake()
-    if self.actor.BoundingBox then
-        self.scene = Scene.new(self.actor.BoundingBox:getDimensions())
-    end
+    self.scene = Scene.new(self.actor.Canvas:getDimensions())
+    self.backgroundColor = {200 / 255, 200 / 255, 180 / 255, 1}
 end
 
 function SceneRenderer:draw(x, y)
@@ -31,7 +30,7 @@ function SceneRenderer:draw(x, y)
         self.actor.Canvas:canvasDraw(
             function()
                 love.graphics.clear()
-                love.graphics.setColor(200 / 255, 200 / 255, 180 / 255, 1)
+                love.graphics.setColor(self.backgroundColor)
                 love.graphics.rectangle("fill", 0, 0, self.actor.Canvas:getDimensions())
                 love.graphics.setColor(1, 1, 1, 1)
                 self.scene:draw()
@@ -47,15 +46,10 @@ function SceneRenderer:update(dt)
     -- /fenestra hack
     end
 
-    self.scene:setDimensions(self.actor.Canvas:getDimensions())
-    if self.actor.Parent then
-        local parent = self.actor.Parent:get()
-        local editor = parent.BoundingBoxEditor
-        if editor and editor:isDragging() or (parent.WindowDraggable and parent.WindowDraggable.dragging) then
-            -- freeze update when dragging
-            return
-        end
-    end
+    -- fenestra hack, kind of?
+    --self.scene:setDimensions(self.actor.Canvas:getDimensions())
+    -- /fenestra hack
+
     if self.scene then
         self.scene:update(dt)
     end
@@ -70,12 +64,15 @@ function SceneRenderer:onMouseMove(x, y, dx, dy, isHoverConsumed)
 
     x = x - self.actor:pos().x
     y = y - self.actor:pos().y
-    if self.scene and not isHoverConsumed and hoveredOnScene then
-        self.scene.isHoverConsumed = false
-        self.actor:scene():consumeHover()
+    if self.scene then
+        if hoveredOnScene and not isHoverConsumed then
+            self.actor:scene():consumeHover()
+            self.scene.isHoverConsumed = false
+        else
+            self.scene.isHoverConsumed = true
+        end
+        self.scene:onMouseMove(x + self.scene.camera.x, y + self.scene.camera.y, dx, dy)
     end
-
-    self.scene:onMouseMove(x, y, dx, dy)
 end
 
 function SceneRenderer:onMousePress(x, y, button, wasRelease, isClickConsumed)
@@ -99,7 +96,7 @@ function SceneRenderer:onMousePress(x, y, button, wasRelease, isClickConsumed)
     end
 
     if wasRelease then
-        self.scene:onMousePress(x, y, button, wasRelease)
+        self.scene:onMousePress(x + self.scene.camera.x, y + self.scene.camera.y, button, wasRelease)
     end
 end
 
@@ -114,7 +111,7 @@ function SceneRenderer:onScroll(x, y)
 end
 
 function SceneRenderer:onKeyPress(key, scancode, wasRelease)
-    if not self.actor.visible then
+    if not self.actor.visible or not self:isInFocus() then
         return
     end
 
@@ -124,7 +121,7 @@ function SceneRenderer:onKeyPress(key, scancode, wasRelease)
 end
 
 function SceneRenderer:onTextInput(text)
-    if not self.actor.visible then
+    if not self.actor.visible or not self:isInFocus() then
         return
     end
 
@@ -137,10 +134,21 @@ function SceneRenderer:onDestroy()
     self.scene:removeAllActors()
 end
 
-
-Scene:createEvent("onMinimize",{})
-function SceneRenderer:onMinimize()
-    self.scene:onMinimize()
+function SceneRenderer:appendFromPath(path)
+    Scene.appendFromPath(path, self.scene)
 end
+
+-- fenestra hack
+Scene:createEvent("onMinimize", {"becameVisible"})
+function SceneRenderer:onMinimize(becameVisible)
+    self.scene:onMinimize(becameVisible)
+end
+-- /fenestra hack
+
+-- fenestra hack, as well as its usages
+function SceneRenderer:isInFocus()
+    return self.actor.WindowExternal:isInFocus()
+end
+-- /fenestra hack
 
 return SceneRenderer

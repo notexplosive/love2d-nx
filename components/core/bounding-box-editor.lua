@@ -2,8 +2,7 @@ local BoundingBoxEditor = {}
 
 registerComponent(BoundingBoxEditor, "BoundingBoxEditor", {"BoundingBox"})
 
-local topBuffer = 0
- --8
+local topBuffer = 8
 
 function BoundingBoxEditor:setup(minWidth, minHeight, grabHandleWidth)
     assert(minWidth)
@@ -56,6 +55,9 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy, isHoverConsumed)
     if self.actor.SpawnPopup then
         return
     end
+
+    x = x + self.actor:scene().camera.x
+    y = y + self.actor:scene().camera.y
 
     if not self.selectedIndex then
         if not isHoverConsumed then
@@ -121,6 +123,7 @@ function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsume
     if isClickConsumed then
         self.selectedIndex = nil
         self.hoverIndex = nil
+        self:endResizeIfApplicable()
         return
     end
 
@@ -145,11 +148,17 @@ function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsume
     end
 
     if button == 1 and wasRelease and self.resizeStarted then
-        self.resizeStarted = false
-        self.actor:callForAllComponents("BoundingBoxEditor_onResizeEnd", self.actor.BoundingBox:getRect())
+        self:endResizeIfApplicable()
         if self.actor.BoundingBox:getArea() <= 0 then
             self.actor:destroy()
         end
+    end
+end
+
+function BoundingBoxEditor:endResizeIfApplicable()
+    if self.resizeStarted then
+        self.resizeStarted = false
+        self.actor:callForAllComponents("BoundingBoxEditor_onResizeEnd", self.actor.BoundingBox:getRect())
     end
 end
 
@@ -277,6 +286,13 @@ function BoundingBoxEditor:getTopGrabHandleRect()
     local rect = self.actor.BoundingBox:getRect()
     rect:setHeight(self.grabHandleWidth)
     rect:move(0, -self.grabHandleWidth + topBuffer)
+    return rect
+end
+
+function BoundingBoxEditor:getTopGrabHandleRect_Alt()
+    local rect = self.actor.BoundingBox:getRect()
+    rect:setHeight(self.grabHandleWidth)
+    rect:move(0, -self.grabHandleWidth * 2)
     return rect
 end
 

@@ -3,7 +3,7 @@ local AnimationFrameTracker = {}
 registerComponent(AnimationFrameTracker, "AnimationFrameTracker", {"PlayHead"})
 
 function AnimationFrameTracker:setup(firstFrame, lastFrame, fps)
-    assert(firstFrame and lastFrame, "AnimationFrameTracker:setup requires 2 arguments, given: " .. tostring(firstFrame) .. ', ' .. tostring(lastFrame)  )
+    assert(firstFrame and lastFrame, "AnimationFrameTracker:setup requires 2 arguments")
     assert(lastFrame >= firstFrame, "firstFrame needs to come before lastFrame")
 
     if fps then
@@ -13,14 +13,9 @@ function AnimationFrameTracker:setup(firstFrame, lastFrame, fps)
     self:setRange(firstFrame, lastFrame)
 end
 
-function AnimationFrameTracker:reverseSetup()
-    return self.firstFrame, self.lastFrame, self.fps
-end
-
 function AnimationFrameTracker:awake()
     self.fps = 10
     self.firstFrame = 1
-    self.lastFrame = 1
 end
 
 --
@@ -38,7 +33,6 @@ end
 
 function AnimationFrameTracker:setRange(firstFrame, lastFrame)
     self.firstFrame = math.floor(firstFrame)
-    self.lastFrame = lastFrame
 
     local numberOfFrames = math.floor(lastFrame) - self.firstFrame + 1
     self.actor.PlayHead:setup(numberOfFrames * self:getLengthOfFrameInSeconds())
@@ -59,10 +53,7 @@ Test.registerComponentTest(
         local Actor = require("nx/game/actor")
         local actor = Actor.new("testActor")
         actor:addComponent(Components.PlayHead)
-        local setupArgs = {5, 10, 15}
-        local subject = actor:addComponent(AnimationFrameTracker, unpack(setupArgs))
-
-        Test.assert(setupArgs, {subject:reverseSetup()}, "reverseSetup can be fed to setup")
+        local subject = actor:addComponent(AnimationFrameTracker, 5, 10, 15)
 
         Test.assert(5, subject:get(), "Get frame at time = 0")
 

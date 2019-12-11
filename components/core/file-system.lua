@@ -3,10 +3,6 @@ local FileSystem = {}
 registerComponent(FileSystem, "FileSystem")
 
 function FileSystem:setup(directory)
-    if not self:directoryExists(directory) then
-        self:createDirectory(directory)
-    end
-
     self:setDirectory(directory)
 end
 
@@ -36,17 +32,18 @@ function FileSystem:getItems()
     return copyList(self.directoryItems)
 end
 
-function FileSystem:createDirectory(directory)
-    love.filesystem.createDirectory(directory)
+function FileSystem:read(item)
+    local fullFileName = self:getDirectory() .. "/" .. item
+    assert(
+        love.filesystem.getInfo(fullFileName).type == "file",
+        "FileSystem:read() expects file, got " .. love.filesystem.getInfo(fullFileName).type
+    )
+    return love.filesystem.read(fullFileName)
 end
 
-function FileSystem:directoryExists(directory)
-    if directory == "/" then
-        directory = ""
-    end
-
-    local info = love.filesystem.getInfo(directory)
-    return info ~= nil
+function FileSystem:getInfo(item)
+    local fullFileName = self:getDirectory() .. "/" .. item
+    return love.filesystem.getInfo(fullFileName)
 end
 
 function FileSystem:setDirectory(directory)
@@ -78,21 +75,6 @@ function FileSystem:upOneLevel()
     local newDirectory = string.join(splitDirectory, "/")
     self:setDirectory(newDirectory)
     return newDirectory
-end
-
-function FileSystem:write(fileName, data)
-    local path = self:getPath(fileName)
-    love.filesystem.write(path, data)
-end
-
-function FileSystem:read(fileName)
-    assert(fileName,"no fileName supplied")
-    local path = self:getPath(fileName)
-    return love.filesystem.read(path)
-end
-
-function FileSystem:getPath(fileName)
-    return self.currentDirectory .. "/" .. fileName
 end
 
 local Test = require("nx/test")

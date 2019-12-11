@@ -46,10 +46,16 @@ function BoundingBox:setHeight(height)
 end
 
 function BoundingBox:getRect()
+    return Rect.new(
+        self.actor:pos().x - self.offset.x,
+        self.actor:pos().y - self.offset.y,
+        self.size.width,
+        self.size.height
+    )
+end
+
+function BoundingBox:getDrawableRect()
     local camera = self.actor:scene().camera
-    if self.actor.SpriteRenderer and (self.offset.x == 0 or self.offset.y == 0) and not self.forceCustom then
-    --return self.actor.SpriteRenderer:getBoundingBox()
-    end
 
     return Rect.new(
         self.actor:pos().x - self.offset.x - camera.x,
@@ -68,22 +74,6 @@ function BoundingBox:getDimensions()
     return self.size:wh()
 end
 
-function BoundingBox:becomeValid()
-    local x, y, w, h = self:getRect():xywh()
-    if w < 0 then
-        x = x + w
-        w = -w
-    end
-
-    if h < 0 then
-        y = y + h
-        h = -h
-    end
-
-    self.actor:setPos(x, y)
-    self:setDimensions(w, h)
-end
-
 function BoundingBox:getSize()
     return Size.new(self.size:wh())
 end
@@ -94,10 +84,6 @@ end
 
 function BoundingBox:isWithinBoundingBox(x, y)
     return self:getRect():isVectorWithin(Vector.new(x, y))
-end
-
-function BoundingBox:isVectorWithin(v, y)
-    return self:getRect():isVectorWithin(Vector.new(v, y))
 end
 
 function BoundingBox:getCollide(v, y)

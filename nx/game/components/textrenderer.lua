@@ -5,7 +5,7 @@ registerComponent(TextRenderer, "TextRenderer")
 -- love.graphics.newFont is slow, so we cache all the fonts we create
 local fontCache = {
     data = {},
-    get = function(self,fontSize)
+    get = function(self, fontSize)
         fontSize = math.floor(fontSize)
         if self.data[fontSize] then
             return self.data[fontSize]
@@ -41,11 +41,11 @@ function TextRenderer:awake()
     self.offset = Vector.new()
 end
 
-function TextRenderer:draw()
+function TextRenderer:draw(x, y)
     love.graphics.setFont(self.font)
 
     if not self.maxWidth then
-        self.maxWidth = self.actor:scene().width - self.actor:pos().x
+        self.maxWidth = self.actor:scene().width - x
     end
 
     -- Gross corner case for centering
@@ -58,8 +58,8 @@ function TextRenderer:draw()
         love.graphics.setColor(0, 0, 0)
         love.graphics.printf(
             tostring(self.text),
-            math.floor(self.actor:pos().x + 1),
-            math.floor(self.actor:pos().y + 1),
+            math.floor(x + 1),
+            math.floor(y + 1),
             self.maxWidth,
             self.alignMode,
             self.actor:angle(),
@@ -73,8 +73,8 @@ function TextRenderer:draw()
     love.graphics.setColor(self.color)
     love.graphics.printf(
         tostring(self.text),
-        math.floor(self.actor:pos().x),
-        math.floor(self.actor:pos().y),
+        math.floor(x),
+        math.floor(y),
         self.maxWidth,
         self.alignMode,
         self.actor:angle(),
@@ -93,12 +93,22 @@ function TextRenderer:setFontSize(size)
 end
 
 function TextRenderer:getWrap()
+    if not self.maxWidth then
+        local width = self.font:getWidth(self.text)
+        return width, self.text, width
+    end
+
     local width, lines = self.font:getWrap(self.text, self.maxWidth or 0)
     local widthLastLine = width
     if lines[1] then
         widthLastLine = self.font:getWrap(lines[#lines], self.maxWidth or 0)
     end
     return width, lines, widthLastLine
+end
+
+function TextRenderer:getWidth()
+    local width = self:getWrap()
+    return width
 end
 
 function TextRenderer:getFont()

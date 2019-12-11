@@ -6,14 +6,11 @@ function PlayHead:setup(maxTime)
     self.maxTime = maxTime
 end
 
-function PlayHead:reverseSetup()
-    return self.maxTime
-end
-
 function PlayHead:awake()
     self.time = 0
     self.maxTime = 0
     self.isPlaying = true
+    self.isLooping = true
 end
 
 function PlayHead:update(dt)
@@ -31,13 +28,25 @@ function PlayHead:get()
 end
 
 function PlayHead:set(time)
-    if time > self.maxTime then
-        self.actor:callForAllComponents("PlayHead_onLoop")
-    end
+    if self.isLooping then
+        if time > self.maxTime then
+            self.actor:callForAllComponents("PlayHead_onLoop")
+        end
 
-    if self.maxTime ~= 0 then
-        self.time = time % self.maxTime
+        if self.maxTime ~= 0 then
+            self.time = time % self.maxTime
+        end
+    else
+        if time > self.maxTime then
+            self:stop()
+        else
+            self.time = time
+        end
     end
+end
+
+function PlayHead:setLoop(b)
+    self.isLooping = b
 end
 
 function PlayHead:playing()
@@ -68,11 +77,7 @@ Test.registerComponentTest(
         local Actor = require("nx/game/actor")
         local actor = Actor.new("testActor")
 
-        local setupArgs = {5}
-        local subject = actor:addComponent(PlayHead, unpack(setupArgs))
-
-        Test.assert(setupArgs, {subject:reverseSetup()}, "reverseSetup can be fed to setup")
-
+        local subject = actor:addComponent(PlayHead, 5)
         Test.assert(0, subject:get(), "Playhead starts at time 0")
 
         subject:update(1)

@@ -7,11 +7,6 @@ function Lifetime:setup(time)
     self.totalTime = time
 end
 
-function Lifetime:reverseSetup()
-    -- note: returns self.time, not self.totalTime
-    return self.time
-end
-
 function Lifetime:update(dt)
     self.time = self.time - dt
 

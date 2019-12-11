@@ -25,8 +25,8 @@ function Scene.new(width, height)
     return self
 end
 
-function Scene.fromSceneData(sceneData)
-    local scene = Scene.new()
+function Scene.fromSceneData(sceneData, sceneToAppendTo)
+    local scene = sceneToAppendTo or Scene.new()
 
     if sceneData.dimensions then
         assert(#sceneData.dimensions == 2, "Dimensions should be two numbers: [x,y]")
@@ -57,10 +57,14 @@ end
 function Scene.fromPath(path, ...)
     local args = {...}
     local sceneData = DataLoader.loadTemplateFile("scenes/" .. path .. ".json", args)
-
     local scene = Scene.fromSceneData(sceneData)
-
     return scene
+end
+
+function Scene.appendFromPath(path, sceneToAppendTo)
+    assert(sceneToAppendTo, "Must supply scene to append to")
+    local sceneData = DataLoader.loadTemplateFile("scenes/" .. path .. ".json", args)
+    local scene = Scene.fromSceneData(sceneData, sceneToAppendTo)
 end
 
 function Scene:setDimensions(width, height)
@@ -83,8 +87,8 @@ function Scene:addActor(actor)
     assert(actor:type() == Actor, "Can't add a non-actor to a scene")
 
     actor.originalScene = self
-    if not actor._justAddedToScene then -- fenestra hack
-        actor._justAddedToScene = true
+    if not actor._hasNotRunStart then -- fenestra hack
+        actor._hasNotRunStart = true
     end -- /fenestra hack
 
     append(self.actors, actor)
@@ -147,6 +151,7 @@ function Scene:getAllActors()
 end
 
 function Scene:getAllActorsWithBehavior(behavior)
+    assert(behavior, "null component")
     local result = {}
     local i = 1
 
@@ -161,6 +166,7 @@ function Scene:getAllActorsWithBehavior(behavior)
 end
 
 function Scene:getFirstActorWithBehavior(behavior)
+    assert(behavior, "null component")
     local result = {}
 
     for j, actor in ipairs(self.actors) do
@@ -173,6 +179,7 @@ function Scene:getFirstActorWithBehavior(behavior)
 end
 
 function Scene:getFirstBehavior(behavior)
+    assert(behavior, "null component")
     for j, actor in ipairs(self.actors) do
         if actor[behavior.name] then
             return actor[behavior.name]
@@ -182,7 +189,7 @@ end
 
 -- for i,actor in self.actor:scene():eachActorWith(Components.foo) do
 function Scene:eachActor()
-    return ipairs(self.actors)
+    return ipairs(copyList(self.actors))
 end
 
 function Scene:eachActorWith(componentClass)
@@ -222,6 +229,12 @@ function Scene:bringToFront(actor)
     end
 
     actor:callForAllComponents("onBringToFront")
+
+    if actor.Children then
+        for i, child in ipairs(actor.Children:get()) do
+            self:bringToFront(child)
+        end
+    end
 end
 
 function Scene:getBounds()
@@ -230,6 +243,10 @@ end
 
 function Scene:getDimensions()
     return self.width, self.height
+end
+
+function Scene:getRect()
+    return Rect.new(0, 0, self.width, self.height)
 end
 
 -- TODO: move this out
@@ -293,21 +310,24 @@ function Scene:consumeHover()
     self.isHoverConsumed = true
 end
 
--- Game Events: Run on each actor but with some specialized behavior (not just a passthrough)
+-- Game Events: These are special events that don't work like regular events
 function Scene:update(dt)
-    if not self.freeze then
-        -- Start runs right before the next update loop
-        for i, actor in ipairs(self.actors) do
-            for j, component in ipairs(actor.components) do
-                if component._justAddedToScene then
-                    component._justAddedToScene = nil
-                    component:start()
-                end
-            end
+    for i, actor in ipairs(copyList(self.actors)) do
+        if actor.isDestroyed then
+            actor:removeFromScene()
         end
+    end
 
-        -- Update Loop
-        for i, actor in ipairs(self.actors) do
+    -- Run any applicable start functions
+    for i, actor in ipairs(self.actors) do
+        if actor._hasNotRunStart then
+            actor._hasNotRunStart = nil
+            actor:start()
+        end
+    end
+
+    for i, actor in ipairs(self.actors) do
+        if not self.freeze then
             actor:update(dt)
         end
     end
@@ -328,5 +348,12 @@ function Scene:draw()
         end
     end
 end
+
+-- fenestra hack
+function Scene:window()
+    local ref = self:getFirstBehavior(Components.WindowInternal)
+    return ref
+end
+--
 
 return Scene

@@ -5,8 +5,8 @@ local Rect = {}
 function Rect.new(x, y, width, height)
     local self = newObject(Rect)
 
-    assert(x)
-    assert(y)
+    x = x or 0
+    y = y or 0
 
     if type(x) == "table" then
         if x:type() == Vector and y:type() == Size then
@@ -20,6 +20,10 @@ function Rect.new(x, y, width, height)
     self.size = Size.new(width or 0, height or 0)
 
     return self
+end
+
+function Rect:clone()
+    return Rect.new(self:xywh())
 end
 
 function Rect:width()
@@ -36,6 +40,11 @@ end
 
 function Rect:setHeight(height)
     self.size.height = height
+end
+
+function Rect:setDimensions(width, height)
+    self:setWidth(width)
+    self:setHeight(height)
 end
 
 function Rect:top()
@@ -143,6 +152,11 @@ function Rect:isVectorWithin(v, y)
     local cond4 = vector.y < self:y() + self:height()
 
     return cond1 and cond2 and cond3 and cond4
+end
+
+function Rect:center()
+    local x, y, w, h = self:xywh()
+    return Vector.new(x + w / 2, y + h / 2)
 end
 
 ----

@@ -10,9 +10,10 @@ function MiddleMousePan:onDestroy()
     self.actor:scene().camera = Vector.new()
 end
 
-function MiddleMousePan:onMousePress(x, y, button, wasRelease)
-    if button == 3 then
+function MiddleMousePan:onMousePress(x, y, button, wasRelease, isClickConsumed)
+    if button == 3 and not isClickConsumed then
         self.dragging = not wasRelease
+        self.actor:scene():consumeClick()
     end
 end
 

@@ -1,6 +1,6 @@
 local Children = {}
 
-registerComponent(Children,'Children')
+registerComponent(Children, "Children")
 
 -- This is the list of children owned by the PARENT
 
@@ -13,19 +13,30 @@ function Children:awake()
 end
 
 function Children:add(childActor)
-    append(self.list,childActor)
+    append(self.list, childActor)
 end
 
 function Children:remove(actor)
     deleteFromList(self.list, actor)
 end
 
-function Children:count()
-    return #self.list
-end
-
 function Children:get()
     return copyList(self.list)
+end
+
+function Children:each()
+    return ipairs(self:get())
+end
+
+function Children:eachWith(componentClass)
+    local componentName = componentClass.name
+    local list = {}
+    for i, child in self:each() do
+        if child[componentName] then
+            append(list, child)
+        end
+    end
+    return ipairs(list)
 end
 
 function Children:onDestroy()

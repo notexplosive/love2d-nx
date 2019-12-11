@@ -1,6 +1,6 @@
 local DebugRenderer = {}
 
-registerComponent(DebugRenderer,'DebugRenderer')
+registerComponent(DebugRenderer, "DebugRenderer")
 
 local fontHeight = 20
 local font = love.graphics.newFont(fontHeight)
@@ -23,16 +23,17 @@ function DebugRenderer:start()
     end
 end
 
-function DebugRenderer:draw(x,y)
+function DebugRenderer:draw(x, y)
     love.graphics.setFont(font)
-    love.graphics.setColor(1,1,1,self.opacity)
-    for i,str in ipairs(copyReversed(self.content)) do
-        love.graphics.print(str,x,y - (i-1) * fontHeight)
+
+    for i, str in ipairs(copyReversed(self.content)) do
+        love.graphics.setColor(0.1, 0.1, 0.1, self.opacity)
+        love.graphics.print(str, x + 1, y - (i - 1) * fontHeight + 1)
+        love.graphics.setColor(1, 1, 1, self.opacity)
+        love.graphics.print(str, x, y - (i - 1) * fontHeight)
     end
 
-    self.actor:setPos(0,self.actor:scene().height/2 - fontHeight)
-
-    love.graphics.setColor(1,1,1,1)
+    self.actor:setPos(0, self.actor:scene().height / 2 - fontHeight)
 end
 
 function DebugRenderer:update(dt)

@@ -3,11 +3,10 @@
 Components = {}
 function registerComponent(componentClass, name, deps)
     if deps then
-        assert(type(deps) == "table","Dependencies need to be in a table (" ..name..")")
+        assert(type(deps) == "table", "Dependencies need to be in a table (" .. name .. ")")
     end
     componentClass.name = componentClass.name or name
     componentClass.dependencies = deps or {}
-    print("REGISTERED: " .. componentClass.name)
 
     function componentClass.create_object()
         return newObject(componentClass)
@@ -31,7 +30,7 @@ function registerComponent(componentClass, name, deps)
         end
         if self.actor then
             if self.onDestroy then
-                --self:onDestroy()
+            --self:onDestroy()
             end
             self.actor:removeComponent(componentClass)
         end

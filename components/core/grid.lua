@@ -3,33 +3,36 @@ local Grid = {}
 registerComponent(Grid, "Grid")
 
 function Grid:setup(cellWidth, cellHeight)
-    self.cellSize = Size.new(cellWidth, cellHeight)
+    self.cellWidth = cellWidth
+    self.cellHeight = cellHeight
 end
 
-function Grid:snapActor(actor)
-    actor:setPos(self:snapVector(actor:pos()))
+function Grid:snap(actor)
+    local p = actor:pos()
+    
+    p.x = self:roundToNearest(p.x,self.cellWidth)
+    p.y = self:roundToNearest(p.y,self.cellHeight)
+
+    actor:setPos(p)
 end
 
-function Grid:snapVector(v, y)
-    local v = Vector.new(v, y)
-    local l = self.actor:pos().x % self.cellSize.width
-    local ll = self.actor:pos().y % self.cellSize.height
+function Grid:snapXY(x,y)
+    px = self:roundToNearest(x,self.cellWidth)
+    py = self:roundToNearest(y,self.cellHeight)
 
-    return Vector.new(
-        self:roundToNearestNumber(v.x - l, self.cellSize.width) + l,
-        self:roundToNearestNumber(v.y - ll, self.cellSize.height) + ll
-    )
+    return px,py
 end
 
-function Grid:roundToNearestNumber(number, increment)
-    if number % increment > increment / 2 then
+function Grid:roundToNearest(v,cellSize)
+    local roundUp = false
+    if v % cellSize > cellSize/2 then
         roundUp = true
     end
 
     if roundUp then
-        return number - number % increment
+        return v - v % cellSize + cellSize
     else
-        return number - number % increment - increment
+        return v - v % cellSize
     end
 end
 
