@@ -3,17 +3,13 @@
   "actors": [
     {
       "components": [
-        ["TakeSnapshot", 15],
         ["DebugRenderer"],
-        ["ToggleFrameFreezeMode"],
-        ["ToggleEditMode"]
+        ["TakeSnapshot", 15],
+        ["ToggleFrameFreezeMode"]
       ]
     },
     {
       "components": [["FramerateCounter"]]
-    },
-    {
-      "components": [["EnableSaveMap"]]
     }
   ]
 }

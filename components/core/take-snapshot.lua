@@ -10,6 +10,10 @@ function TakeSnapshot:awake()
     self.timer = 1
 end
 
+function TakeSnapshot:start()
+    debugLog("SNAPSHOT enabled")
+end
+
 function TakeSnapshot:update(dt)
     self.timer = self.timer - dt
 end
@@ -26,7 +30,7 @@ function TakeSnapshot:takeSnapshot()
     love.graphics.setFont(love.graphics.newFont(24))
     love.graphics.print(os.date("%c"))
     local screenshot = love.graphics.captureScreenshot(os.time() .. ".png")
-    debugLog("screenshot taken")
+    debugLog("snapshot taken")
 end
 
 return TakeSnapshot
