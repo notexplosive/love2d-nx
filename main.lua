@@ -9,7 +9,7 @@ Vector = require("nx/vector")
 Size = require("nx/size")
 Rect = require("nx/rect")
 
-require("nx/componentregistry")
+require("nx/component-registry")
 
 function love.update(dt)
     for _, scene in eachSceneReverseDrawOrder() do
