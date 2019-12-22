@@ -8,7 +8,7 @@ function debugLog(str, ...)
         local debugRenderer = uiScene:getFirstBehavior(Components.DebugRenderer)
         if debugRenderer then
             debugRenderer:append(str)
-            print(...)
+            print(str)
         end
     end
 end
