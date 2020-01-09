@@ -289,7 +289,7 @@ Scene:createEvent("onNotify", {"msg"})
 function Scene:onMousePress(x, y, button, wasRelease)
     --self.isClickConsumed = false
     for i, actor in ipairs(copyReversed(self.actors)) do
-        actor:onMousePress(x, y, button, wasRelease, self.isClickConsumed)
+        actor:onMousePress(x + self.camera.x, y + self.camera.y, button, wasRelease, self.isClickConsumed)
     end
 end
 
@@ -297,7 +297,7 @@ end
 function Scene:onMouseMove(x, y, dx, dy)
     --self.isHoverConsumed = false
     for i, actor in ipairs(copyReversed(self.actors)) do
-        actor:onMouseMove(x, y, dx, dy, self.isHoverConsumed)
+        actor:onMouseMove(x + self.camera.x, y + self.camera.y, dx, dy, self.isHoverConsumed)
     end
 end
 

@@ -5,7 +5,7 @@ function love.mousepressed(x, y, button)
     local isConsumed = false
     for _, scene in sceneLayers:eachInReverseDrawOrder() do
         scene.isClickConsumed = isConsumed
-        scene:onMousePress(x - scene.camera.x, y - scene.camera.y, button, false)
+        scene:onMousePress(x, y, button, false)
         if scene.isClickConsumed then
             isConsumed = true
         end
@@ -17,7 +17,7 @@ function love.mousereleased(x, y, button)
     local isConsumed = false
     for _, scene in sceneLayers:eachInReverseDrawOrder() do
         scene.isClickConsumed = isConsumed
-        scene:onMousePress(x - scene.camera.x, y - scene.camera.y, button, true)
+        scene:onMousePress(x, y, button, true)
         if scene.isClickConsumed then
             isConsumed = true
         end
@@ -28,7 +28,7 @@ function love.mousemoved(x, y, dx, dy)
     local isConsumed = false
     for _, scene in sceneLayers:eachInReverseDrawOrder() do
         scene.isHoverConsumed = isConsumed
-        scene:onMouseMove(x - scene.camera.x, y - scene.camera.y, dx, dy)
+        scene:onMouseMove(x, y, dx, dy)
         if scene.isHoverConsumed then
             isConsumed = true
         end

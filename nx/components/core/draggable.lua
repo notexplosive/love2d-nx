@@ -30,14 +30,14 @@ function Draggable:onMouseMove(x, y, dx, dy)
         if self.dragging then
             local d = newPos - self.startDragPoint
             self.actor:scene():consumeHover()
-            self.actor:callForAllComponents("Draggable_onDrag", x, y, newPos.x, newPos.y, d.x, d.y)
+            self.actor:callForAllComponents("Draggable_onDrag", x, y, newPos.x, newPos.y, dx, dy)
         end
     end
 end
 
 function Draggable:getDraggedPos(currentX, currentY)
     if self.startDragPoint then
-        return Vector.new(currentX, currentY) - self.offset - self.actor:scene().camera
+        return Vector.new(currentX, currentY) - self.offset
     end
 
     return nil

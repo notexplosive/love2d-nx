@@ -14,6 +14,12 @@ function BoundingBoxRenderer:draw(x, y)
     love.graphics.rectangle("fill", math.floor(x), math.floor(y), math.floor(w), math.floor(h))
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("line", math.floor(x), math.floor(y), math.floor(w), math.floor(h))
+
+    love.graphics.setColor(self.backgroundColor or {1, 0, 1})
+    local w, h = self.actor.BoundingBox:getRect():wh()
+    love.graphics.rectangle("fill", math.floor(x), math.floor(y), math.floor(w), math.floor(h))
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.rectangle("line", math.floor(x), math.floor(y), math.floor(w), math.floor(h))
 end
 
 return BoundingBoxRenderer

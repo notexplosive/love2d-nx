@@ -2,7 +2,7 @@ local Selectable = {}
 
 registerComponent(Selectable, "Selectable", {"BoundingBox"})
 
-function Selectable:setup(suppressWarning,selected)
+function Selectable:setup(suppressWarning, selected)
     if DEBUG then
         if not suppressWarning then
             debugLog("WARNING: Selectable shouldn't be used directly, call setup(true) if you know what you're doing")
@@ -21,7 +21,7 @@ end
 function Selectable:draw(x, y)
     love.graphics.setColor(1, 0.5, 0)
     if self:selected() then
-        local rect = self.actor.BoundingBox:getRect()
+        local rect = self.actor.BoundingBox:getDrawableRect()
         rect:inflate(8, 8)
         love.graphics.rectangle("line", rect:xywh())
     end

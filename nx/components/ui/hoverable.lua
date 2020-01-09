@@ -34,8 +34,8 @@ function Hoverable:onMouseMove(x, y, dx, dy, isConsumed)
 end
 
 function Hoverable:getHoverOfPoint(v, y)
-    local x, y = Vector.new(v, y):xy()
-    return self.actor.BoundingBox:getRect():isVectorWithin(x, y)
+    local vec = Vector.new(v, y)
+    return self.actor.BoundingBox:getRect():isVectorWithin(vec)
 end
 
 function Hoverable:getHoverIgnoreConsume()

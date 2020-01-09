@@ -1,6 +1,7 @@
 local Vector = {}
 
 function Vector.new(x, y)
+    assert(x ~= Vector, "Use Vector.new not Vector:new")
     if type(x) == "table" then
         return x:clone()
     end
