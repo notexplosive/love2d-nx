@@ -172,7 +172,7 @@ Test.registerComponentTest(
     function()
         local Actor = require("nx/game/actor")
         local actor = Actor.new()
-        local setupArgs = {"window-frame", 20, 30, 40, 50}
+        local setupArgs = {"windowchrome", 20, 30, 40, 50}
         actor:addComponent(Components.BoundingBox)
         local subject = actor:addComponent(NinePatch, unpack(setupArgs))
         Test.assert(setupArgs, {subject:reverseSetup()}, "reverseSetup can be fed to setup")

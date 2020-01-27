@@ -3,9 +3,9 @@ local Test = {}
 local componentTests = {}
 
 function Test.run(name, testFunction)
-    if DEBUG then
+    if ALLOW_DEBUG then
         assert(name)
-        assert(type(name) == "string")
+        assert(type(name) == "string", "Name is " .. type(name) .. " expected string")
         assert(testFunction, "no test function supplied for " .. name)
         assert(
             type(testFunction) == "function",
@@ -19,8 +19,8 @@ function Test.run(name, testFunction)
 end
 
 function Test.registerComponentTest(componentClass, testFunction)
-    if DEBUG then
-        assert(componentClass.name)
+    if ALLOW_DEBUG then
+        assert(componentClass.name, "Component has no name")
         componentTests[componentClass.name] = testFunction
     end
 end
@@ -35,7 +35,11 @@ function Test.assert(expected, actual, message)
     assert(message, "no description supplied for test case")
     message = Test.currentSuiteName .. ": " .. message
 
-    Test.assertEqualValues(Test.getType(expected), Test.getType(actual), "Types of expected and actual are not comparable")
+    Test.assertEqualValues(
+        Test.getType(expected),
+        Test.getType(actual),
+        message .. "\n" .. "Types of expected and actual are not comparable"
+    )
 
     if not Test.isTable(expected) then
         Test.assertEqualValues(expected, actual, message)
@@ -95,7 +99,7 @@ end
 
 function Test.getType(thing)
     if Test.isNxObject(data) then
-        return 'nxObject'
+        return "nxObject"
     end
 
     if Test.isTable(thing) then
@@ -103,9 +107,9 @@ function Test.getType(thing)
     end
 
     if Test.isList(thing) then
-        return 'list'
+        return "list"
     end
-    
+
     return type(thing)
 end
 
@@ -130,7 +134,7 @@ Test.run(
 
         Test.assertEqualLists({}, {}, "Empty lists are equal lists")
 
-        Test.assertEqualLists({{1,3},{2}}, {{1,3},{2}}, "Nested lists are equal lists")
+        Test.assertEqualLists({{1, 3}, {2}}, {{1, 3}, {2}}, "Nested lists are equal lists")
     end
 )
 

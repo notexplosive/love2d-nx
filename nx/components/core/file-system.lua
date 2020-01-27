@@ -86,12 +86,13 @@ Test.registerComponentTest(
 
         local subject = actor:addComponent(FileSystem)
 
-        subject:setDirectory("components/core")
+        subject:setDirectory("nx/components/core")
         Test.assert(#love.filesystem.getDirectoryItems(subject:getDirectory()), #subject:getItems(), "Count files")
 
         subject:upOneLevel()
-        Test.assert("components", subject:getDirectory(), "Up one level")
+        Test.assert("nx/components", subject:getDirectory(), "Up one level")
 
+        subject:upOneLevel()
         subject:upOneLevel()
         Test.assert("", subject:getDirectory(), "Up one level to root directory")
 

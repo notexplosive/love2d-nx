@@ -12,6 +12,7 @@ end
 
 function TakeSnapshot:start()
     debugLog("SNAPSHOT enabled")
+    self:takeSnapshot()
 end
 
 function TakeSnapshot:update(dt)
