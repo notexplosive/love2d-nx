@@ -9,10 +9,10 @@ function Scene.new(width, height)
     self.actors = {}
     self:setDimensions(width, height)
     self.freeze = false
-    self.camera = Vector.new(0, 0)
     self.world = love.physics.newWorld(0, 9.8, true)
     self.isClickConsumed = false
     self.isHoverConsumed = false
+    self.viewport = nil
 
     -- Scene Shake
     self.shakeFrames = 0
@@ -70,6 +70,22 @@ end
 function Scene:setDimensions(width, height)
     self.width = width
     self.height = height
+end
+
+function Scene:setViewport(viewportComponent)
+    self.viewport = viewportComponent
+end
+
+function Scene:getViewport(viewportComponent)
+    return self.viewport
+end
+
+function Scene:getViewportPosition()
+    if self.viewport then
+        return self.viewport.actor:pos()
+    else
+        return Vector.new()
+    end
 end
 
 -- Add actor to list
@@ -237,6 +253,14 @@ function Scene:bringToFront(actor)
     end
 end
 
+function Scene:getScale()
+    if self.viewport then
+        return self.viewport:getScale()
+    else
+        return 1
+    end
+end
+
 function Scene:getBounds()
     return 0, 0, self.width, self.height
 end
@@ -289,7 +313,7 @@ Scene:createEvent("onNotify", {"msg"})
 function Scene:onMousePress(x, y, button, wasRelease)
     --self.isClickConsumed = false
     for i, actor in ipairs(copyReversed(self.actors)) do
-        actor:onMousePress(x + self.camera.x, y + self.camera.y, button, wasRelease, self.isClickConsumed)
+        actor:onMousePress(x, y, button, wasRelease, self.isClickConsumed)
     end
 end
 
@@ -297,7 +321,7 @@ end
 function Scene:onMouseMove(x, y, dx, dy)
     --self.isHoverConsumed = false
     for i, actor in ipairs(copyReversed(self.actors)) do
-        actor:onMouseMove(x + self.camera.x, y + self.camera.y, dx, dy, self.isHoverConsumed)
+        actor:onMouseMove(x, y, dx, dy, self.isHoverConsumed)
     end
 end
 
@@ -334,6 +358,14 @@ function Scene:update(dt)
 end
 
 function Scene:draw()
+    if self.viewport then
+        self.viewport:sceneDraw()
+    else
+        self:draw_impl()
+    end
+end
+
+function Scene:draw_impl()
     local shake = Vector.new()
     if self.shakeFrames > 0 then
         shake.x = love.math.random(-self.shakeVariance, self.shakeVariance)
@@ -343,7 +375,7 @@ function Scene:draw()
 
     for i, actor in ipairs(self.actors) do
         if actor.visible then
-            local x, y = actor:pos().x - self.camera.x + shake.x, actor:pos().y - self.camera.y + shake.y
+            local x, y = actor:pos().x + shake.x, actor:pos().y + shake.y
             actor:draw(x, y)
         end
     end

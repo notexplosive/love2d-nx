@@ -56,9 +56,6 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy, isHoverConsumed)
         return
     end
 
-    x = x + self.actor:scene().camera.x
-    y = y + self.actor:scene().camera.y
-
     if not self.selectedIndex then
         if not isHoverConsumed then
             for i, rect in ipairs(self.sideGrabHandleRects) do
@@ -164,8 +161,6 @@ end
 
 function BoundingBoxEditor:startResize(x, y)
     self.actor:callForAllComponents("BoundingBoxEditor_onResizeStart")
-    x = x + self.actor:scene().camera.x
-    y = y + self.actor:scene().camera.y
     self.startPoint = Vector.new(x, y)
     self.actor:scene():consumeClick()
     self.resizeStarted = true

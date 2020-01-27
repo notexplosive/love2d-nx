@@ -55,11 +55,9 @@ function BoundingBox:getRect()
 end
 
 function BoundingBox:getDrawableRect()
-    local camera = self.actor:scene().camera
-
     return Rect.new(
-        self.actor:pos().x - self.offset.x - camera.x,
-        self.actor:pos().y - self.offset.y - camera.y,
+        self.actor:pos().x - self.offset.x,
+        self.actor:pos().y - self.offset.y,
         self.size.width,
         self.size.height
     )

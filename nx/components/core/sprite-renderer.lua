@@ -145,7 +145,7 @@ function SpriteRenderer:getBoundingBox()
     local _, _, width, height = self.sprite:getQuadAt(1):getViewport()
     local w = self.scale * self.scaleX * width
     local h = self.scale * self.scaleY * height
-    local camera = self.actor:scene().camera
+    local camera = self.actor:scene():getViewportPosition()
     local x = self.actor:pos().x - w / 2 - camera.x
     local y = self.actor:pos().y - h / 2 - camera.y
     return Rect.new(x, y, w, h)

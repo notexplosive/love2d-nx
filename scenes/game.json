@@ -2,6 +2,9 @@
   "root": [["CloseOnEscape"]],
   "actors": [
     {
+      "components": [["Viewport", 2]]
+    },
+    {
       "components": [["TriangleRenderer", 20], ["RotateTowardsMouse"]],
       "pos": [200, 200]
     },

@@ -6,7 +6,8 @@
         ["DebugRenderer"],
         ["TakeSnapshot", 15],
         ["ToggleFrameFreezeMode"],
-        ["EnableDebug"]
+        ["EnableDebug"],
+        ["ToggleEditMode"]
       ]
     },
     {

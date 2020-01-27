@@ -1,3 +1,4 @@
+ALLOW_DEBUG = true
 DEBUG = false
 
 require("nx/util")
@@ -36,4 +37,4 @@ gameScene = Scene.fromPath("game")
 sceneLayers:add(gameScene)
 sceneLayers:add(uiScene)
 
-love.graphics.setBackgroundColor(15 / 255, 127 / 255, 127 / 255)
+love.graphics.setBackgroundColor(0 / 255, 127 / 255, 255 / 255)

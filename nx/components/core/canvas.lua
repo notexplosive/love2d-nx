@@ -41,7 +41,7 @@ function Canvas:setDimensions(w, h)
 end
 
 function Canvas:getRect()
-    local camera = self.actor:scene().camera
+    local camera = self.actor:scene():getViewportPosition()
     local width, height = self:getDimensions()
     return Rect.new(
         self.actor:pos().x + self.offset.x - camera.x,

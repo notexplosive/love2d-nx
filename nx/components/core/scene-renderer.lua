@@ -71,7 +71,7 @@ function SceneRenderer:onMouseMove(x, y, dx, dy, isHoverConsumed)
         else
             self.scene.isHoverConsumed = true
         end
-        self.scene:onMouseMove(x + self.scene.camera.x, y + self.scene.camera.y, dx, dy)
+        self.scene:onMouseMove(x + self.scene:getViewportPosition().x, y + self.scene:getViewportPosition().y, dx, dy)
     end
 end
 
@@ -87,7 +87,12 @@ function SceneRenderer:onMousePress(x, y, button, wasRelease, isClickConsumed)
     if self.scene and not isClickConsumed then
         self.scene.isClickConsumed = false
         if not wasRelease then
-            self.scene:onMousePress(x, y, button, wasRelease)
+            self.scene:onMousePress(
+                x + self.scene:getViewportPosition().x,
+                y + self.scene:getViewportPosition().y,
+                button,
+                wasRelease
+            )
         end
 
         if clickedOnScene then
@@ -96,7 +101,12 @@ function SceneRenderer:onMousePress(x, y, button, wasRelease, isClickConsumed)
     end
 
     if wasRelease then
-        self.scene:onMousePress(x + self.scene.camera.x, y + self.scene.camera.y, button, wasRelease)
+        self.scene:onMousePress(
+            x + self.scene:getViewportPosition().x,
+            y + self.scene:getViewportPosition().y,
+            button,
+            wasRelease
+        )
     end
 end
 
