@@ -172,7 +172,7 @@ function Scene:getAllActorsWithBehavior(behavior)
     local i = 1
 
     for j, actor in ipairs(self.actors) do
-        if actor[behavior.name] then
+        if (not actor.isDestroyed) and actor[behavior.name] then
             result[i] = actor
             i = i + 1
         end
@@ -183,24 +183,14 @@ end
 
 function Scene:getFirstActorWithBehavior(behavior)
     assert(behavior, "null component")
-    local result = {}
-
-    for j, actor in ipairs(self.actors) do
-        if actor[behavior.name] then
-            return actor
-        end
-    end
-
-    return nil
+    local actors = self:getAllActorsWithBehavior(behavior)
+    return actors[1]
 end
 
 function Scene:getFirstBehavior(behavior)
     assert(behavior, "null component")
-    for j, actor in ipairs(self.actors) do
-        if actor[behavior.name] then
-            return actor[behavior.name]
-        end
-    end
+    local actors = self:getAllActorsWithBehavior(behavior)
+    return actors[1][behavior.name]
 end
 
 -- for i,actor in self.actor:scene():eachActorWith(Components.foo) do
