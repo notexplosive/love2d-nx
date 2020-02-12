@@ -56,4 +56,4 @@ end
 
 -- Recurse into each of these folders and call require() on all of them
 requireComponents("nx/components/")
-requireComponents("lexi/")
+--requireComponents("mygame/")
