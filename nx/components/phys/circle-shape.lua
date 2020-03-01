@@ -2,9 +2,10 @@ local CircleShape = {}
 
 registerComponent(CircleShape, "CircleShape", {"Body"})
 
-function CircleShape:setup(radius, density)
+function CircleShape:setup(radius, _density)
+    assert(radius)
     self.shape = love.physics.newCircleShape(radius)
-    self.fixture = love.physics.newFixture(self.actor:Body(), self.shape, density or 1)
+    self.fixture = love.physics.newFixture(self.actor:Body(), self.shape, _density or 1)
 
     self.actor:addComponentSafe(Components.Fixtures, self.fixture)
 end

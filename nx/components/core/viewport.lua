@@ -11,6 +11,7 @@ end
 function Viewport:awake()
     self.actor:addComponent(Components.BoundingBox)
     self.scale = 1
+    self.screenScaleFactor = 1
 
     self.actor:scene():setViewport(self)
 end
@@ -35,6 +36,8 @@ end
 function Viewport:update(dt)
     self.actor.BoundingBox:setWidth(love.graphics.getWidth() / self.scale)
     self.actor.BoundingBox:setHeight(love.graphics.getHeight() / self.scale)
+
+    self.screenScaleFactor = math.min(love.graphics.getWidth() / 1920, love.graphics.getHeight() / 1080)
 end
 
 --
@@ -42,7 +45,7 @@ end
 --
 
 function Viewport:getScale()
-    return self.scale
+    return self.scale * self.screenScaleFactor
 end
 
 function Viewport:setScale(scale)

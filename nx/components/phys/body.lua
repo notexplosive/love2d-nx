@@ -3,6 +3,7 @@ local Body = {}
 registerComponent(Body, "Body")
 
 function Body:setup(bodyType, _startingMass)
+    assert(bodyType)
     local x, y = self.actor:pos():xy()
     self.world = self.actor:scene():getFirstBehavior(Components.World)()
     self.body = love.physics.newBody(self.world, x, y, bodyType)
@@ -39,12 +40,6 @@ end
 function Body:update(dt)
     self.actor:setPos(self.body:getPosition())
     self.actor:setAngle(self.body:getAngle())
-end
-
-function Body:onKeyPress(key, scancode, wasRelease)
-    if key == "space" and wasRelease then
-        self.actor:setPos(200, 200)
-    end
 end
 
 --
