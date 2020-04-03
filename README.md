@@ -1,5 +1,11 @@
 # LOVE2D NX: A LOVE Entity-Component System by NotExplosive
 
+### `!! WARNING !!`
+
+Much of the below documentation is going to be out of date. I'm ripping apart a lot of stuff that doesn't work and as a result something I say below might not be true anymore. The code samples should still work (hopefully!) but the explanations might not be 100% accurate!
+
+## `!! /WARNING !!`
+
 My personal setup/framework/boilerplate for LOVE2D games.
 
 This is just a bunch of utility code and an entity component framework I made in LOVE2D. I'm just putting this up here so I have a convenient way to grab it and start projects. If you're interested in learning more about it, reach out to me on twitter, @NotExplosive.
