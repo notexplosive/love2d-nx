@@ -4,8 +4,10 @@ registerComponent(Viewport, "Viewport")
 
 local font = love.graphics.newFont(22)
 
-function Viewport:setup(scale)
+function Viewport:setup(scale, desiredWidth, desiredHeight)
     self.scale = scale
+    self.desiredWidth = desiredWidth or 1920
+    self.desiredHeight = desiredHeight or 1080
 end
 
 function Viewport:awake()
@@ -37,7 +39,8 @@ function Viewport:update(dt)
     self.actor.BoundingBox:setWidth(love.graphics.getWidth() / self.scale)
     self.actor.BoundingBox:setHeight(love.graphics.getHeight() / self.scale)
 
-    self.screenScaleFactor = math.min(love.graphics.getWidth() / 1920, love.graphics.getHeight() / 1080)
+    self.screenScaleFactor =
+        math.min(love.graphics.getWidth() / self.desiredWidth, love.graphics.getHeight() / self.desiredHeight)
 end
 
 --
