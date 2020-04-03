@@ -30,7 +30,8 @@ function TakeSnapshot:takeSnapshot()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setFont(love.graphics.newFont(24))
     love.graphics.print(os.date("%c"))
-    local screenshot = love.graphics.captureScreenshot(os.time() .. ".png")
+    love.filesystem.createDirectory("snapshots")
+    local screenshot = love.graphics.captureScreenshot("snapshots/" .. os.time() .. ".png")
     debugLog("snapshot taken")
 end
 
