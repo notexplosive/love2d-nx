@@ -120,6 +120,9 @@ function Actor:addComponent(componentClass, ...)
 
     if ... ~= nil then
         assert(component.setup, component.name .. " has no setup()")
+    end
+
+    if component.setup then
         component:setup(...)
     end
 

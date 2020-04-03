@@ -3,7 +3,7 @@ local FileSystem = {}
 registerComponent(FileSystem, "FileSystem")
 
 function FileSystem:setup(directory)
-    self:setDirectory(directory)
+    self:setDirectory(directory or "")
 end
 
 function FileSystem:awake()

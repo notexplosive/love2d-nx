@@ -80,16 +80,13 @@ function DataLoader.loadComponentListData(actor, componentList)
         local componentClass = Components[componentName]
         assert(componentName, "Nil component name, maybe your json is wrong?")
         assert(componentClass, componentName .. " is not a component")
-        local component = actor:addComponent(componentClass)
         local params = {}
 
         for j = 2, #componentData do
             params[j - 1] = componentData[j]
         end
 
-        if component.setup and #params > 0 then
-            actor[componentName]:setup(unpack(params))
-        end
+        local component = actor:addComponent(componentClass, unpack(params))
 
         actor.Serializable:addComponentList(componentData)
     end
