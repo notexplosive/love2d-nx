@@ -218,11 +218,6 @@ function insidePolygon(polygon, point)
     return oddNodes
 end
 
-function isWithinRect(mx, my, x, y, width, height)
-    assert(height, "Not enough arguments")
-    return mx > x and mx < x + width and my > y and my < y + height
-end
-
 function angleCompare(angle1, angle2)
     assert(angle1)
     assert(angle2)

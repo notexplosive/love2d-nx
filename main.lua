@@ -10,6 +10,7 @@ Assets = require("nx/game/assets")
 Vector = require("nx/vector")
 Size = require("nx/size")
 Rect = require("nx/rect")
+List = require("nx/list")
 
 local sceneLayers = require("nx/scene-layers")
 
