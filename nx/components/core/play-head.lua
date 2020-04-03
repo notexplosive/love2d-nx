@@ -3,7 +3,7 @@ local PlayHead = {}
 registerComponent(PlayHead, "PlayHead")
 
 function PlayHead:setup(maxTime)
-    self.maxTime = maxTime
+    self.maxTime = maxTime or self.maxTime
 end
 
 function PlayHead:awake()
@@ -23,8 +23,20 @@ end
 -- Public API
 --
 
+function PlayHead:setMaxTime(maxTime)
+    self.maxTime = maxTime
+    self:set(self.time)
+end
+
 function PlayHead:get()
     return self.time
+end
+
+function PlayHead:getPercent()
+    if self.maxTime == 0 then
+        return 0
+    end
+    return self.time / self.maxTime
 end
 
 function PlayHead:set(time)
@@ -105,6 +117,10 @@ Test.registerComponentTest(
 
         subject:stop()
         Test.assert(0, subject:get(), "Stop sets time to zero")
+
+        subject:set(1)
+        subject:setMaxTime(0.75)
+        Test.assert(0.25, subject:get(), "Setting maxTime to below current time pushes time down")
     end
 )
 

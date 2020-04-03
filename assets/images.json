@@ -26,7 +26,7 @@
       "translate": [8, 8]
     }
   ],
-  "linkin": ["linkin.png", 16, 16, { "walk": [7, 10] }],
+  "linkin": ["linkin.png", 16, 16, { "stand": [1, 6], "walk": [7, 10] }],
   "numbers": ["numbers.png", 16, 16],
   "windowchrome": ["window-frame.png", 32, 32],
   "platform": ["platform.png", 85, 85]
