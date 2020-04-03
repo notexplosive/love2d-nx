@@ -200,14 +200,6 @@ function getKeys(table)
     return keyset
 end
 
-function booleanToString(b)
-    if b then
-        return "true"
-    else
-        return "false"
-    end
-end
-
 -- From stackoverflow
 -- https://stackoverflow.com/questions/31730923/check-if-point-lies-in-polygon-lua
 function insidePolygon(polygon, point)
