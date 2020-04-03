@@ -1,9 +1,13 @@
 local List = {}
 
-function List.new(type)
+function List.new(elementType)
     local self = newObject(List)
-    self.isTyped = type ~= nil
-    self.elementType = type
+    if elementType then
+        assert(type(elementType) == "table", "List.new(elementType) expects table for elementType")
+    end
+
+    self.isTyped = elementType ~= nil
+    self.elementType = elementType
 
     self.innerList = {}
     self.listLength = 0
@@ -16,6 +20,15 @@ function List:clone()
     local newList = List.new(self.elementType)
     for i, v in self:each() do
         newList:add(v)
+    end
+
+    return newList
+end
+
+function List:cloneReversed()
+    local newList = List.new(self.elementType)
+    for i = self.listLength, 1, -1 do
+        newList:add(self:at(i))
     end
 
     return newList
@@ -181,6 +194,13 @@ Test.run(
         Test.assert(30, clone:at(3), "Removing an element from the clone modifies the clone but not the original")
         Test.assert(25, clone:at(2), "Clone's elements are disperate from the original")
         Test.assert(20, subject:at(2), "Subject's elements are disperate from the clone")
+
+        -- REVERSE CLONE TEST
+        subject = List.new()
+        subject:add(1, 2, 3, 4, 5)
+        local reversedClone = subject:cloneReversed()
+        Test.assert(5, reversedClone:at(1), "Reversed list's first element is original list's last element")
+        Test.assert(1, reversedClone:at(5), "Reversed list's last element is original list's first element")
     end
 )
 

@@ -293,7 +293,7 @@ Scene:createEvent("onNotify", {"msg"})
 -- MousePress is handled in REVERSE order because we want them in order with drawing
 function Scene:onMousePress(x, y, button, wasRelease)
     --self.isClickConsumed = false
-    for i, actor in self.actors:clone():eachReversed() do
+    for i, actor in self.actors:cloneReversed():each() do
         actor:onMousePress(x, y, button, wasRelease, self.isClickConsumed)
     end
 end
@@ -301,7 +301,7 @@ end
 -- MousePress is handled in REVERSE order because we want them in order with drawing
 function Scene:onMouseMove(x, y, dx, dy)
     --self.isHoverConsumed = false
-    for i, actor in self.actors:clone():eachReversed() do
+    for i, actor in self.actors:cloneReversed():each() do
         actor:onMouseMove(x, y, dx, dy, self.isHoverConsumed)
     end
 end
