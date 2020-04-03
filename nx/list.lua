@@ -97,7 +97,7 @@ function List:indexOf(element)
     return nil
 end
 
-function List:deleteElement(element)
+function List:removeElement(element)
     assert(element, "element cannot be nil")
     local index = self:indexOf(element)
 
@@ -168,7 +168,7 @@ Test.run(
         Test.assert(35, subject:pop(), "Pop returns last element")
 
         -- DELETE ELEMENT
-        Test.assert(10, subject:deleteElement(10), "Deleting an element returns that element")
+        Test.assert(10, subject:removeElement(10), "Deleting an element returns that element")
         Test.assert(nil, subject:indexOf(10), "Deleting an element causes it to no longer exist in the list")
 
         -- CLONE TESTS

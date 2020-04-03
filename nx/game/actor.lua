@@ -12,7 +12,7 @@ function Actor.new(name)
     assert(type(name) == "string", "name must be a string")
     local self = newObject(Actor)
     self.name = name
-    self.components = {}
+    self.components = List.new()
     self.visible = true
 
     -- Private
@@ -108,7 +108,7 @@ function Actor:addComponent(componentClass, ...)
 
     self[component.name] = component
 
-    append(self.components, component)
+    self.components:add(component)
 
     if component.start then
         component._hasNotRunStart = true
@@ -135,7 +135,8 @@ function Actor:removeComponent(componentClass)
         component:onDestroy()
     end
 
-    deleteFromList(self.components, component)
+    assert(self.components:removeElement(component) ~= nil, "Removed a component that never existed(?!)")
+
     self[componentClass.name] = nil
 
     return componentClass
@@ -179,12 +180,13 @@ function Actor:createEvent(methodName, args)
     print("Actor Event " .. "Actor:" .. methodName .. "(" .. string.join(args, ", ") .. ")")
 
     self[methodName] = function(self, ...)
-        assert(#{...} <= #args + 1, "Wrong number of arguments passed to Actor:" .. methodName)
+        --assert(#{...} <= #args + 1, "Wrong number of arguments passed to Actor:" .. methodName)
         self:callForAllComponents(methodName, ...)
     end
 end
 
 -- Called by Scene
+-- Events are propagated down to each component
 Actor:createEvent("update", {"dt"})
 Actor:createEvent("start")
 Actor:createEvent("draw", {"x", "y"})
@@ -194,9 +196,9 @@ Actor:createEvent("onMouseMove", {"x", "y", "dx", "dy", "isHoverConsumed"})
 
 -- Calls method on all components that have this method
 function Actor:callForAllComponents(methodName, ...)
-    local components = copyList(self.components)
-    for i, component in ipairs(components) do
-        if component[methodName] and not components._isDestroyed then
+    local components = self.components:clone()
+    for i, component in components:each() do
+        if component[methodName] and not component._isDestroyed then
             component[methodName](component, ...)
         end
     end
@@ -215,7 +217,7 @@ function Actor:clone()
 
     clone.name = self.name .. " clone"
 
-    for i, component in ipairs(self.components) do
+    for i, component in self.components:each() do
         local componentClass = Components[component.name]
         assert(componentClass, component.name .. " class does not exist")
         clone:addComponentSafe(componentClass, component:reverseSetupSafe())
