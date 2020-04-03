@@ -21,6 +21,12 @@ function love.draw()
     end
 end
 
+function love.quit()
+    for _, scene in sceneLayers:eachInReverseDrawOrder() do
+        scene:onApplicationClose()
+    end
+end
+
 function love.load(argv)
     -- Global classes, for better performance these should be require'd in each file as needed
     Assets = require("nx/game/assets")
@@ -40,4 +46,8 @@ function love.load(argv)
     sceneLayers:add(uiScene)
 
     love.graphics.setBackgroundColor(0 / 255, 127 / 255, 255 / 255)
+
+    if ALLOW_DEBUG then
+        debugLog("ALLOW_DEBUG is enabled")
+    end
 end

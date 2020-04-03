@@ -289,6 +289,7 @@ Scene:createEvent("onMouseFocus", {"focus"})
 
 -- Custom events
 Scene:createEvent("onNotify", {"msg"})
+Scene:createEvent("onApplicationClose", {})
 
 -- MousePress is handled in REVERSE order because we want them in order with drawing
 function Scene:onMousePress(x, y, button, wasRelease)
