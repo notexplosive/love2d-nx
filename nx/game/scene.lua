@@ -43,11 +43,7 @@ function Scene.fromSceneData(sceneData, sceneToAppendTo)
 
     if sceneData.actors then
         for i, actorData in ipairs(sceneData.actors) do
-            if actorData.prefab then
-                DataLoader.loadPrefabData(scene, actorData)
-            else
-                DataLoader.loadActorData(scene, actorData)
-            end
+            DataLoader.loadActorData(scene, actorData)
         end
     end
 
@@ -108,18 +104,6 @@ function Scene:addActor(actor)
     end -- /fenestra hack
 
     self.actors:add(actor)
-
-    return actor
-end
-
-function Scene:addPrefab(prefabName, ...)
-    -- Dehydrate the actor to a prefab node
-    local nodeData = {
-        prefab = prefabName,
-        arguments = {...}
-    }
-
-    local actor = DataLoader.loadPrefabData(self, nodeData)
 
     return actor
 end

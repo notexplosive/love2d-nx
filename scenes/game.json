@@ -2,7 +2,7 @@
   "root": [["CloseOnEscape"]],
   "actors": [
     {
-      "components": [["Viewport", 1, 1920, 1080]]
+      "components": [["Viewport", 1, 1600, 900]]
     },
     {
       "components": [["TriangleRenderer", 20], ["RotateTowardsMouse"]],
@@ -15,6 +15,7 @@
     {
       "components": [["RectRenderer", 40, 40], ["RandomRotate"]],
       "pos": [400, 200]
-    }
+    },
+    { "components": [["SerialRenderer"]] }
   ]
 }

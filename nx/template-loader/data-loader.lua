@@ -4,7 +4,7 @@ local DataLoader = {}
 
 function DataLoader.loadTemplateFile(path, args)
     if args and type(args) ~= "table" then
-        assert(false, 'arguments passed to a prefab must be an array "' .. args .. '" -> ["' .. args .. '"]')
+        assert(false, 'arguments must be an array "' .. args .. '" -> ["' .. args .. '"]')
     end
 
     local json = love.filesystem.read(path)
@@ -92,13 +92,9 @@ function DataLoader.loadComponentListData(actor, componentList)
     end
 end
 
-function DataLoader.loadActorData(scene, actorData, prefabName, prefabArguments, prefabTemplatedVars)
+function DataLoader.loadActorData(scene, actorData)
     local actor = scene:addActor(actorData.name or "ACTOR" .. love.math.random(899) + 100)
     actor:addComponent(Components.Serializable)
-
-    if prefabName then
-        actor.Serializable:setPrefabInfo(prefabName, prefabArguments, prefabTemplatedVars)
-    end
 
     if actorData.pos then
         assert(#actorData.pos == 2, "pos should be two numbers: [x,y]")
@@ -113,36 +109,6 @@ function DataLoader.loadActorData(scene, actorData, prefabName, prefabArguments,
     DataLoader.loadComponentListData(actor, actorData.components)
 
     return actor
-end
-
-function DataLoader.loadPrefabData(scene, nodeData)
-    assert(nodeData.prefab, "Attempted to load prefab data on something that was not a prefab")
-    local prefabData = DataLoader.loadTemplateFile("prefabs/" .. nodeData.prefab .. ".json", nodeData.arguments)
-
-    if nodeData.name then
-        prefabData.name = nodeData.name
-    end
-
-    if nodeData.pos then
-        prefabData.pos = nodeData.pos
-    end
-
-    if nodeData.angle then
-        prefabData.angle = nodeData.angle
-    end
-
-    local componentCount = #prefabData.components
-    for i, componentData in ipairs(nodeData.components or {}) do
-        prefabData.components[componentCount + i] = componentData
-    end
-
-    return DataLoader.loadActorData(
-        scene,
-        prefabData,
-        nodeData.prefab,
-        nodeData.arguments,
-        prefabData.templatedVarsList
-    )
 end
 
 return DataLoader
