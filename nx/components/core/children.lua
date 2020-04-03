@@ -54,10 +54,6 @@ function Children:onBringToFront()
 end
 
 function Children:onSendToBack()
-    -- this might be wrong
-    for i, childActor in ipairs(self:get()) do
-        --self.actor:scene():sendToBack(childActor)
-    end
 end
 
 return Children

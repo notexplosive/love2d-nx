@@ -213,7 +213,7 @@ Scene.getFirstComponent = Scene.getfirstBehavior
 Scene.getFirstActorWith = Scene.getFirstActorWithBehavior
 Scene.getAllActorsWith = Scene.getAllActorsWithBehavior
 
--- Ordering functions
+-- Ordering functions, o(n)
 function Scene:sendToBack(actor)
     assert(actor, "sendToBack needs one argument")
     local movedActor = self.actors:removeFromList(actor)
@@ -221,7 +221,7 @@ function Scene:sendToBack(actor)
         self.actors:enqueue(movedActor)
     end
 
-    actor:callForAllComponents("onSendToBack")
+    actor:onSendToBack()
 end
 
 function Scene:bringToFront(actor)
@@ -231,14 +231,7 @@ function Scene:bringToFront(actor)
         self.actors:add(movedActor)
     end
 
-    actor:callForAllComponents("onBringToFront")
-
-    -- TODO: move this to Children:onBringToFront()
-    if actor.Children then
-        for i, child in ipairs(actor.Children:get()) do
-            self:bringToFront(child)
-        end
-    end
+    actor:onBringToFront()
 end
 
 function Scene:getScale()
