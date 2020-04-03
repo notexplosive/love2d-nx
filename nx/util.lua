@@ -65,11 +65,13 @@ end
 
 -- Generic list utilities
 function append(table, element)
+    assert(not table.type, "Attempted to append on something that is not a generic sequence")
     table[#table + 1] = element
     return element
 end
 
 function copyList(list)
+    assert(not list.type, "Attempted to copy on something that is not a generic sequence")
     local copy = {}
     for i, v in ipairs(list) do
         append(copy, v)
