@@ -11,7 +11,7 @@ function SceneRenderer:setup(pathOrScene, args)
         if args then
             assert(type(args) == "table", "SceneRenderer must take arguments as a list")
         end
-        self.scene = Scene.fromPath(path, args)
+        self.scene = Scene.fromJson(path, args)
     else
         local scene = pathOrScene
         self.scene = pathOrScene
@@ -144,8 +144,8 @@ function SceneRenderer:onDestroy()
     self.scene:removeAllActors()
 end
 
-function SceneRenderer:appendFromPath(path)
-    Scene.appendFromPath(path, self.scene)
+function SceneRenderer:appendFromJson(path)
+    Scene.appendFromJson(path, self.scene)
 end
 
 -- fenestra hack

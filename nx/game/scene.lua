@@ -54,14 +54,14 @@ function Scene.fromSceneData(sceneData, sceneToAppendTo)
     return scene
 end
 
-function Scene.fromPath(path, ...)
+function Scene.fromJson(path, ...)
     local args = {...}
     local sceneData = DataLoader.loadTemplateFile("scenes/" .. path .. ".json", args)
     local scene = Scene.fromSceneData(sceneData)
     return scene
 end
 
-function Scene.appendFromPath(path, sceneToAppendTo)
+function Scene.appendFromJson(path, sceneToAppendTo)
     assert(sceneToAppendTo, "Must supply scene to append to")
     local sceneData = DataLoader.loadTemplateFile("scenes/" .. path .. ".json", args)
     local scene = Scene.fromSceneData(sceneData, sceneToAppendTo)

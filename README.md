@@ -45,7 +45,7 @@ You can load `game.json` by doing the following. This is already included in `ma
 
 ```lua
 local Scene = require("nx/game/scene")
-gameScene = Scene.fromPath("game")
+gameScene = Scene.fromJson("game")
 sceneLayers:add(gameScene)
 ```
 
@@ -57,7 +57,7 @@ This will show you how to write the equivalent code to the above JSON instructio
 local sceneLayers = require("nx/scene-layers")
 local Scene = require("nx/game/scene")
 -- Load scenes/game.json into the gameScene object
-gameScene = Scene.fromPath("game")
+gameScene = Scene.fromJson("game")
 sceneLayers:add(gameScene)
 
 -- Root is just like any other actor, it's a convenient place to attach components that affect the whole world
@@ -198,7 +198,7 @@ actor:addComponent(Components.MyComponent, some, args, to, initialize) -- runs a
 
 ## With JSON
 
-The json file needs to live `/scenes` or some subdirectory therein. You'll then need to load it with `Scene.fromPath` as seen above
+The json file needs to live `/scenes` or some subdirectory therein. You'll then need to load it with `Scene.fromJson` as seen above
 
 The following will run `awake()` and then `setup("someString", {argTable = 420}, 69, nil)`
 
