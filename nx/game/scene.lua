@@ -6,7 +6,7 @@ local Scene = {}
 function Scene.new(width, height)
     local self = newObject(Scene)
     self.hasStarted = false
-    self.actors = {}
+    self.actors = List.new()
     self:setDimensions(width, height)
     self.freeze = false
     self.world = love.physics.newWorld(0, 9.8, true)
@@ -107,7 +107,7 @@ function Scene:addActor(actor)
         actor._hasNotRunStart = true
     end -- /fenestra hack
 
-    append(self.actors, actor)
+    self.actors:add(actor)
 
     return actor
 end
@@ -127,7 +127,7 @@ end
 -- Get actor by name
 function Scene:getActor(actorName)
     assert(actorName)
-    for i, actor in ipairs(self.actors) do
+    for i, actor in self.actors:each() do
         if actor.name == actorName then
             return actor, i
         end
@@ -139,7 +139,7 @@ end
 -- Get index of actor in actor list
 function Scene:getActorIndex(actor)
     assert(actor)
-    for i, iactor in ipairs(self.actors) do
+    for i, iactor in self.actors:each() do
         if iactor == actor then
             return i
         end
@@ -149,21 +149,21 @@ function Scene:getActorIndex(actor)
 end
 
 function Scene:destroyAllActors()
-    local actors = self:getAllActors()
-    for i, v in ipairs(actors) do
+    local actors = self.actors:clone()
+    for i, v in actors:each() do
         v:destroy()
     end
 end
 
 function Scene:removeAllActors()
-    local actors = self:getAllActors()
-    for i, v in ipairs(actors) do
+    local actors = self.actors:clone()
+    for i, v in actors:each() do
         v:removeFromScene()
     end
 end
 
 function Scene:getAllActors()
-    return copyList(self.actors)
+    return self.actors:copyInner()
 end
 
 function Scene:getAllActorsWithBehavior(behavior)
@@ -171,7 +171,7 @@ function Scene:getAllActorsWithBehavior(behavior)
     local result = {}
     local i = 1
 
-    for j, actor in ipairs(self.actors) do
+    for j, actor in self.actors:each() do
         if (not actor.isDestroyed) and actor[behavior.name] then
             result[i] = actor
             i = i + 1
@@ -184,18 +184,20 @@ end
 function Scene:getFirstActorWithBehavior(behavior)
     assert(behavior, "null component")
     local actors = self:getAllActorsWithBehavior(behavior)
+    assert(#actors > 0, "No actors with behavior " .. behavior.name)
     return actors[1]
 end
 
 function Scene:getFirstBehavior(behavior)
     assert(behavior, "null component")
     local actors = self:getAllActorsWithBehavior(behavior)
+    assert(#actors > 0, "No actors with behavior " .. behavior.name)
     return actors[1][behavior.name]
 end
 
 -- for i,actor in self.actor:scene():eachActorWith(Components.foo) do
 function Scene:eachActor()
-    return ipairs(copyList(self.actors))
+    return self.actors:clone():each()
 end
 
 function Scene:eachActorWith(componentClass)
@@ -214,14 +216,9 @@ Scene.getAllActorsWith = Scene.getAllActorsWithBehavior
 -- Ordering functions
 function Scene:sendToBack(actor)
     assert(actor, "sendToBack needs one argument")
-    local movedActor = deleteFromList(self.actors, actor)
+    local movedActor = self.actors:removeFromList(actor)
     if movedActor then
-        local actors = copyList(self.actors)
-        self.actors = {}
-        self.actors[1] = movedActor
-        for i = 1, #actors do
-            self.actors[i + 1] = actors[i]
-        end
+        self.actors:enqueue(movedActor)
     end
 
     actor:callForAllComponents("onSendToBack")
@@ -229,13 +226,14 @@ end
 
 function Scene:bringToFront(actor)
     assert(actor, "bringToFront needs one argument")
-    local movedActor = deleteFromList(self.actors, actor)
+    local movedActor = self.actors:removeElement(actor)
     if movedActor then
-        append(self.actors, movedActor)
+        self.actors:add(movedActor)
     end
 
     actor:callForAllComponents("onBringToFront")
 
+    -- TODO: move this to Children:onBringToFront()
     if actor.Children then
         for i, child in ipairs(actor.Children:get()) do
             self:bringToFront(child)
@@ -302,7 +300,7 @@ Scene:createEvent("onNotify", {"msg"})
 -- MousePress is handled in REVERSE order because we want them in order with drawing
 function Scene:onMousePress(x, y, button, wasRelease)
     --self.isClickConsumed = false
-    for i, actor in ipairs(copyReversed(self.actors)) do
+    for i, actor in self.actors:clone():eachReversed() do
         actor:onMousePress(x, y, button, wasRelease, self.isClickConsumed)
     end
 end
@@ -310,7 +308,7 @@ end
 -- MousePress is handled in REVERSE order because we want them in order with drawing
 function Scene:onMouseMove(x, y, dx, dy)
     --self.isHoverConsumed = false
-    for i, actor in ipairs(copyReversed(self.actors)) do
+    for i, actor in self.actors:clone():eachReversed() do
         actor:onMouseMove(x, y, dx, dy, self.isHoverConsumed)
     end
 end
@@ -326,21 +324,21 @@ end
 
 -- Game Events: These are special events that don't work like regular events
 function Scene:update(dt)
-    for i, actor in ipairs(copyList(self.actors)) do
+    for i, actor in self.actors:clone():each() do
         if actor.isDestroyed then
             actor:removeFromScene()
         end
     end
 
     -- Run any applicable start functions
-    for i, actor in ipairs(self.actors) do
+    for i, actor in self.actors:clone():each() do
         if actor._hasNotRunStart then
             actor._hasNotRunStart = nil
             actor:start()
         end
     end
 
-    for i, actor in ipairs(self.actors) do
+    for i, actor in self.actors:clone():each() do
         if not self.freeze then
             actor:update(dt)
         end
@@ -363,7 +361,7 @@ function Scene:draw_impl()
         self.shakeFrames = self.shakeFrames - 1
     end
 
-    for i, actor in ipairs(self.actors) do
+    for i, actor in self.actors:each() do
         if actor.visible then
             local x, y = actor:pos().x + shake.x, actor:pos().y + shake.y
             actor:draw(x, y)
