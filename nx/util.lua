@@ -52,6 +52,17 @@ function radianToDegree(radian)
     return radian * 180 / math.pi
 end
 
+function angleCompare(angle1, angle2)
+    assert(angle1)
+    assert(angle2)
+    local delta = math.abs(angle2 - angle1) % (math.pi * 2)
+    if delta > math.pi then
+        return math.pi * 2 - delta
+    else
+        return delta
+    end
+end
+
 -- Generic list utilities
 function append(table, element)
     table[#table + 1] = element
@@ -214,15 +225,4 @@ function insidePolygon(polygon, point)
         j = i
     end
     return oddNodes
-end
-
-function angleCompare(angle1, angle2)
-    assert(angle1)
-    assert(angle2)
-    local delta = math.abs(angle2 - angle1) % (math.pi * 2)
-    if delta > math.pi then
-        return math.pi * 2 - delta
-    else
-        return delta
-    end
 end
