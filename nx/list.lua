@@ -35,6 +35,7 @@ function List:each()
     return ipairs(self.innerList)
 end
 
+-- this is o(n), :(
 function List:eachReversed()
     local reversedList = copyReversed(self.innerList)
     return ipairs(reversedList)
