@@ -1,13 +1,13 @@
 local sceneLayers = require("nx/scene-layers")
-local GameSceneSecondsRenderer = {}
+local SecondsRenderer = {}
 
-registerComponent(GameSceneSecondsRenderer, "GameSceneSecondsRenderer")
+registerComponent(SecondsRenderer, "SecondsRenderer")
 
-function GameSceneSecondsRenderer:awake()
+function SecondsRenderer:awake()
     self.time = 0
 end
 
-function GameSceneSecondsRenderer:draw(x, y)
+function SecondsRenderer:draw(x, y)
     local size = 32
     local cx = math.cos(self.time - math.pi / 2) * size
     local cy = math.sin(self.time - math.pi / 2) * size
@@ -28,8 +28,8 @@ function GameSceneSecondsRenderer:draw(x, y)
     love.graphics.line(x, y, x + cx * 0.9, y + cy * 0.9)
 end
 
-function GameSceneSecondsRenderer:setTime(time)
+function SecondsRenderer:setTime(time)
     self.time = time
 end
 
-return GameSceneSecondsRenderer
+return SecondsRenderer

@@ -4,7 +4,7 @@ local FrameFreezeMode = {}
 registerComponent(FrameFreezeMode, "FrameFreezeMode")
 
 function FrameFreezeMode:awake()
-    self.actor:addComponent(Components.GameSceneSecondsRenderer)
+    self.actor:addComponent(Components.SecondsRenderer)
     self.actor:addComponent(Components.SidebarIcon, 1)
 
     for i, scene in sceneLayers:each() do
@@ -39,7 +39,7 @@ function FrameFreezeMode:onScroll(x, y)
         end
 
         self.time = self.time + self.stepSize
-        self.actor.GameSceneSecondsRenderer:setTime(self.time * 6) -- this is wrong
+        self.actor.SecondsRenderer:setTime(self.time * 6) -- this is wrong
     end
 end
 
