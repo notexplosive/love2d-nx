@@ -21,7 +21,7 @@ end
 function Selectable:draw(x, y)
     love.graphics.setColor(1, 0.5, 0)
     if self:selected() then
-        local rect = self.actor.BoundingBox:getDrawableRect()
+        local rect = self.actor.BoundingBox:getRect()
         rect:inflate(8, 8)
         love.graphics.rectangle("line", rect:xywh())
     end

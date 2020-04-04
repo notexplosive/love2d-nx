@@ -54,15 +54,6 @@ function BoundingBox:getRect()
     )
 end
 
-function BoundingBox:getDrawableRect()
-    return Rect.new(
-        self.actor:pos().x - self.offset.x,
-        self.actor:pos().y - self.offset.y,
-        self.size.width,
-        self.size.height
-    )
-end
-
 function BoundingBox:setDimensions(w, h)
     self.size = Size.new(w, h)
     self.forceCustom = true
