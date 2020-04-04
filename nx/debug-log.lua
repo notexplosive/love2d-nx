@@ -8,7 +8,7 @@ function debugLog(str, ...)
 
     local debugScene = sceneLayers:peek()
     if debugScene then
-        local debugRenderer = debugScene:getFirstBehavior(Components.DebugRenderer)
+        local debugRenderer = debugScene:getFirstBehavior(Components.DebugLogRenderer)
         if debugRenderer then
             debugRenderer:append(str)
             print(str)

@@ -1,6 +1,6 @@
-local DebugRenderer = {}
+local DebugLogRenderer = {}
 
-registerComponent(DebugRenderer, "DebugRenderer")
+registerComponent(DebugLogRenderer, "DebugLogRenderer")
 
 local fontHeight = 20
 local font = love.graphics.newFont(fontHeight)
@@ -8,7 +8,7 @@ local font = love.graphics.newFont(fontHeight)
 local fadeOutDuration = 1
 local timeBeforeFade = 3
 
-function DebugRenderer:awake()
+function DebugLogRenderer:awake()
     self.content = {}
     self.timer = 0
     self.opacity = 0
@@ -16,14 +16,14 @@ function DebugRenderer:awake()
     self._contentSize = 0
 end
 
-function DebugRenderer:start()
+function DebugLogRenderer:start()
     if DEBUG then
         debugLog("DebugMode is enabled")
         debugLog(love.window.getTitle())
     end
 end
 
-function DebugRenderer:draw(x, y)
+function DebugLogRenderer:draw(x, y)
     love.graphics.setFont(font)
 
     for i, str in ipairs(copyReversed(self.content)) do
@@ -36,7 +36,7 @@ function DebugRenderer:draw(x, y)
     self.actor:setPos(0, self.actor:scene().height / 2 - fontHeight)
 end
 
-function DebugRenderer:update(dt)
+function DebugLogRenderer:update(dt)
     self.timer = self.timer - dt
     if self.timer < fadeOutDuration then
         self.opacity = self.timer / fadeOutDuration
@@ -50,10 +50,10 @@ function DebugRenderer:update(dt)
     end
 end
 
-function DebugRenderer:append(str)
+function DebugLogRenderer:append(str)
     self._contentSize = self._contentSize + 1
     self.content[self._contentSize] = str
     self.timer = timeBeforeFade + fadeOutDuration
 end
 
-return DebugRenderer
+return DebugLogRenderer

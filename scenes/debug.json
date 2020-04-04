@@ -3,7 +3,7 @@
   "actors": [
     {
       "components": [
-        ["DebugRenderer"],
+        ["DebugLogRenderer"],
         ["TakeSnapshot", 15],
         ["ToggleFrameFreezeMode"],
         ["ToggleEditMode"]
