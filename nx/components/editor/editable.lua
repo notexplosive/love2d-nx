@@ -1,3 +1,4 @@
+local sceneLayers = require("nx/scene-layers")
 local Editable = {}
 
 registerComponent(Editable, "Editable")
@@ -41,7 +42,8 @@ function Editable:Selectable_onSelect()
         self.actor:addComponentSafe(Components.BoundingBoxEditor)
     end
 
-    local ribbon = uiScene:getFirstBehavior(Components.EditorRibbon)
+    local debugScene = sceneLayers:peek()
+    local ribbon = debugScene:getFirstBehavior(Components.EditorRibbon)
     if ribbon then
         ribbon:onActorSelect(self.actor)
     end

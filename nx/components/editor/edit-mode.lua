@@ -1,9 +1,11 @@
+local sceneLayers = require("nx/scene-layers")
 local EditMode = {}
 
 registerComponent(EditMode, "EditMode")
 
 function EditMode:awake()
-    local iconActor = uiScene:addActor()
+    local debugScene = sceneLayers:peek()
+    local iconActor = debugScene:addActor()
     iconActor:addComponent(Components.BoundingBox, 32, 48)
     iconActor:addComponent(Components.EditorRibbon)
     iconActor:addComponent(Components.EditorRibbonBackground)

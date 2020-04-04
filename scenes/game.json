@@ -15,7 +15,6 @@
     {
       "components": [["RectRenderer", 40, 40], ["RandomRotate"]],
       "pos": [400, 200]
-    },
-    { "components": [["SerialRenderer"]] }
+    }
   ]
 }

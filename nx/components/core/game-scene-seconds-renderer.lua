@@ -1,3 +1,4 @@
+local sceneLayers = require("nx/scene-layers")
 local GameSceneSecondsRenderer = {}
 
 registerComponent(GameSceneSecondsRenderer, "GameSceneSecondsRenderer")
@@ -32,7 +33,7 @@ function GameSceneSecondsRenderer:draw(x, y)
             love.graphics.line(x + dx * 0.9, y + dy * 0.9, x + dx * 0.95, y + dy * 0.95)
         end
 
-        love.graphics.setColor(0.5,0,0,1)
+        love.graphics.setColor(0.5, 0, 0, 1)
         love.graphics.line(x, y, x + cx * 0.9, y + cy * 0.9)
     end
 end
@@ -50,7 +51,7 @@ function GameSceneSecondsRenderer:getTime()
 end
 
 function GameSceneSecondsRenderer:isInGameScene()
-    return self.actor:scene() == gameScene
+    return self.actor:scene() == sceneLayers:at(1)
 end
 
 return GameSceneSecondsRenderer

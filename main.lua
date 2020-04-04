@@ -39,11 +39,11 @@ function love.load(argv)
 
     Test.runComponentTests()
 
-    uiScene = Scene.fromJson("ui")
     gameScene = Scene.fromJson("game")
 
     sceneLayers:add(gameScene)
-    sceneLayers:add(uiScene)
+    sceneLayers:add(Scene.fromJson("ui"))
+    sceneLayers:add(Scene.fromJson("debug"))
 
     love.graphics.setBackgroundColor(0 / 255, 127 / 255, 255 / 255)
 

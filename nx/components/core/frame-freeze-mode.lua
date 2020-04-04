@@ -5,7 +5,7 @@ registerComponent(FrameFreezeMode, "FrameFreezeMode")
 function FrameFreezeMode:awake()
     self.actor:addComponent(Components.FrameStep)
     local renderer = self.actor:addComponent(Components.GameSceneSecondsRenderer)
-    self.actor:addComponent(Components.SidebarIcon, 2, renderer)
+    self.actor:addComponent(Components.SidebarIcon, 1, renderer)
     gameScene.freeze = true
 end
 

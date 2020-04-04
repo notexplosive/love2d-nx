@@ -95,6 +95,10 @@ function List:pop()
     return self:removeAt(self.listLength)
 end
 
+function List:peek()
+    return self:at(self.listLength)
+end
+
 function List:clear()
     self.innerList = {}
     self.listLength = 0

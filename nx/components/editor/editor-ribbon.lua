@@ -1,3 +1,4 @@
+local sceneLayers = require("nx/scene-layers")
 local EditorRibbon = {}
 
 registerComponent(EditorRibbon, "EditorRibbon", {"BoundingBox"})
@@ -14,12 +15,17 @@ function EditorRibbon:onActorDeselect()
         function()
             self:createPlaceButton(1, "Target", Components.BecomeTarget, 1)
             self:createPlaceButton(2, "Player", Components.BecomePlayer, 1)
-            self:createPlaceButton(3, "Wall", Components.BecomeWall, 100,100, 'grass')
+            self:createPlaceButton(3, "Wall", Components.BecomeWall, 100, 100, "grass")
         end
     )
-    self:createRibbonButton("save", 2, function()
-        uiScene:getFirstBehavior(Components.SaveMap):save()
-    end)
+    self:createRibbonButton(
+        "save",
+        2,
+        function()
+            local debugScene = sceneLayers:peek()
+            debugScene:getFirstBehavior(Components.SaveMap):save()
+        end
+    )
 end
 
 function EditorRibbon:createPlaceButton(index, buttonLabel, componentClass, ...)

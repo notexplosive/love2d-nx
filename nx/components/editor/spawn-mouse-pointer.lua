@@ -1,11 +1,13 @@
+local sceneLayers = require("nx/scene-layers")
 local SpawnMousePointer = {}
 
-registerComponent(SpawnMousePointer,'SpawnMousePointer')
+registerComponent(SpawnMousePointer, "SpawnMousePointer")
 
 function SpawnMousePointer:awake()
-    local actor = uiScene:addActor()
+    local debugScene = sceneLayers:peek()
+    local actor = debugScene:addActor()
 
-    actor:addComponent(Components.SpriteRenderer,'cursor')
+    actor:addComponent(Components.SpriteRenderer, "cursor")
     actor:addComponent(Components.FollowMouse, -16, -16)
     actor:addComponent(Components.MousePointer)
 

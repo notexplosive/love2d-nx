@@ -1,3 +1,4 @@
+local sceneLayers = require("nx/scene-layers")
 local ReloadScene = {}
 
 registerComponent(ReloadScene, "ReloadScene")
@@ -16,9 +17,10 @@ end
 
 function ReloadScene:onKeyPress(key, scancode, wasRelease)
     if key == self.keybind and not wasRelease then
-        local mapFile = uiScene:getFirstBehavior(Components.MapFile)
+        local debugScene = sceneLayers:peek()
+        local mapFile = debugScene:getFirstBehavior(Components.MapFile)
         local newActorDatas = mapFile:getSceneData().actors
-        
+
         mapFile:clearActors()
         mapFile:spawnNewActors(newActorDatas)
     end
