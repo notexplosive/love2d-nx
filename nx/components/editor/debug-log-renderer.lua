@@ -7,18 +7,12 @@ local font = love.graphics.newFont(fontHeight)
 
 local fadeOutDuration = 1
 local timeBeforeFade = 3
+local maxBufferSize = 10
 
 function DebugLogRenderer:awake()
     self.content = List.new()
     self.timer = 0
     self.opacity = 0
-end
-
-function DebugLogRenderer:start()
-    if DEBUG then
-        debugLog("DebugMode is enabled")
-        debugLog(love.window.getTitle())
-    end
 end
 
 function DebugLogRenderer:draw(x, y)
@@ -28,19 +22,18 @@ function DebugLogRenderer:draw(x, y)
     love.graphics.rectangle(
         "fill",
         x,
-        y - fontHeight * (self.content:length() - 1),
+        y - fontHeight * (maxBufferSize - 1) + fontHeight * (maxBufferSize - 1),
         love.graphics.getWidth(),
         fontHeight * self.content:length()
     )
 
     for i, str in self.content:cloneReversed():each() do
+        local printY = y + (i) * fontHeight - fontHeight * maxBufferSize + fontHeight * (maxBufferSize - 1)
         love.graphics.setColor(0.1, 0.1, 0.1, self.opacity)
-        love.graphics.print(str, x + 1, y - (i - 1) * fontHeight + 1)
+        love.graphics.print(str, x + 1, printY + 1)
         love.graphics.setColor(1, 1, 1, self.opacity)
-        love.graphics.print(str, x, y - (i - 1) * fontHeight)
+        love.graphics.print(str, x, printY)
     end
-
-    self.actor:setPos(0, self.actor:scene().height / 2 - fontHeight)
 end
 
 function DebugLogRenderer:update(dt)
@@ -57,8 +50,12 @@ function DebugLogRenderer:update(dt)
 end
 
 function DebugLogRenderer:append(str)
-    self.content:add(str)
+    self.content:enqueue(str)
     self.timer = timeBeforeFade + fadeOutDuration
+
+    if self.content:length() > maxBufferSize then
+        self.content:pop()
+    end
 end
 
 return DebugLogRenderer

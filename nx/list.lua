@@ -84,11 +84,21 @@ end
 -- This is o(n), jesus christ
 function List:enqueue(element)
     assert(element, "element cannot be nil")
-    local newInnerList = {element}
-    for i, v in self:each() do
-        newInnerList[i + 1] = v
+
+    if self.listLength == 0 then
+        self:add(element)
+        return
     end
-    self.innerList = newInnerList
+
+    local invertedList = self:cloneReversed()
+    invertedList:add(element)
+
+    self:clear()
+    self:add(invertedList:cloneReversed():unpack())
+end
+
+function List:unpack()
+    return unpack(self.innerList)
 end
 
 function List:pop()
@@ -205,6 +215,15 @@ Test.run(
         local reversedClone = subject:cloneReversed()
         Test.assert(5, reversedClone:at(1), "Reversed list's first element is original list's last element")
         Test.assert(1, reversedClone:at(5), "Reversed list's last element is original list's first element")
+
+        -- ENQUEUE TEST
+        subject = List.new()
+        subject:enqueue(1)
+        subject:enqueue(2)
+        subject:enqueue(3)
+        Test.assert(3, subject:at(1), "Enqueue first element")
+        Test.assert(2, subject:at(2), "Enqueue second element")
+        Test.assert(1, subject:at(3), "Enqueue last element")
     end
 )
 
