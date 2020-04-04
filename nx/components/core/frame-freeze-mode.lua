@@ -11,18 +11,18 @@ function FrameFreezeMode:awake()
     self.actor:addComponent(Components.SidebarIcon, 1)
 
     for i, scene in sceneLayers:each() do
-        local canBeFrameFrozen = scene:getFirstBehaviorIfExists(Components.FrameFreezeListener)
-        if canBeFrameFrozen then
-            canBeFrameFrozen:freeze()
+        local listener = scene:getFirstBehaviorIfExists(Components.FrameFreezeListener)
+        if listener then
+            listener:freeze()
         end
     end
 end
 
 function FrameFreezeMode:onDestroy()
     for i, scene in sceneLayers:each() do
-        local canBeFrameFrozen = scene:getFirstBehaviorIfExists(Components.FrameFreezeListener)
-        if canBeFrameFrozen then
-            canBeFrameFrozen:unfreeze()
+        local listener = scene:getFirstBehaviorIfExists(Components.FrameFreezeListener)
+        if listener then
+            listener:unfreeze()
         end
     end
 
@@ -32,9 +32,9 @@ end
 function FrameFreezeMode:onScroll(x, y)
     if y < 0 then
         for i, scene in sceneLayers:each() do
-            local canBeFrameFrozen = scene:getFirstBehaviorIfExists(Components.FrameFreezeListener)
-            if canBeFrameFrozen then
-                canBeFrameFrozen:tick(self.stepSize)
+            local listener = scene:getFirstBehaviorIfExists(Components.FrameFreezeListener)
+            if listener then
+                listener:tick(self.stepSize)
             end
         end
 

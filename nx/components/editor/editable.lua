@@ -10,7 +10,7 @@ function Editable:awake()
     self:addComponentSafe(Components.BoundingBox)
 
     if self.actor.SpriteRenderer then
-        self.actor.SpriteRenderer:setupBoundingBox()
+    --self.actor.SpriteRenderer:setupBoundingBox()
     end
 
     --self:addComponentSafe(Components.NameRenderer)
@@ -19,10 +19,12 @@ function Editable:awake()
     self:addComponentSafe(Components.Draggable)
     self:addComponentSafe(Components.MoveOnDrag)
     self:addComponentSafe(Components.Selectable)
+    self:addComponentSafe(Components.SelectOnClick)
 
-    self:addComponentSafe(Components.Keybind)
-    self:addComponentSafe(Components.Duplicatable, "^d")
-    self:addComponentSafe(Components.Destroyable, "delete")
+    -- Broken because they depend on editor serializer
+    --self:addComponentSafe(Components.Keybind)
+    --self:addComponentSafe(Components.Duplicatable, "^d")
+    --self:addComponentSafe(Components.Destroyable, "delete")
 
     if self.actor.AngleEditable then
         self:addComponentSafe(Components.AngleEditor)
@@ -34,12 +36,6 @@ end
 function Editable:Selectable_onSelect()
     if self.actor.NinePatch then
         self.actor:addComponentSafe(Components.BoundingBoxEditor)
-    end
-
-    local debugScene = sceneLayers:peek()
-    local ribbon = debugScene:getFirstBehavior(Components.EditorRibbon)
-    if ribbon then
-        ribbon:onActorSelect(self.actor)
     end
 end
 

@@ -172,6 +172,15 @@ function Scene:getFirstActorWithBehavior(behavior)
     return actors[1]
 end
 
+function Scene:getFirstActorWithBehaviorIfExists(behavior)
+    assert(behavior, "null component")
+    local actors = self:getAllActorsWithBehavior(behavior)
+    if #actors == 0 then
+        return nil
+    end
+    return actors[1]
+end
+
 function Scene:getFirstBehavior(behavior)
     assert(behavior, "null component")
     local actors = self:getAllActorsWithBehavior(behavior)
@@ -202,8 +211,9 @@ function Scene:eachActorWithReversed(componentClass)
 end
 
 -- aliases, eventually "Behavior" will become "Component"
-Scene.getFirstComponent = Scene.getfirstBehavior
+Scene.getFirstComponent = Scene.getFirstBehavior
 Scene.getFirstActorWith = Scene.getFirstActorWithBehavior
+Scene.getFirstActorWithIfExists = Scene.getFirstActorWithBehaviorIfExists
 Scene.getAllActorsWith = Scene.getAllActorsWithBehavior
 
 -- Ordering functions, o(n)

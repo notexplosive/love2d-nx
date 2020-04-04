@@ -7,7 +7,7 @@ local font = love.graphics.newFont(fontHeight)
 
 local fadeOutDuration = 1
 local timeBeforeFade = 3
-local maxBufferSize = 10
+local maxBufferSize = 40
 
 function DebugLogRenderer:awake()
     self.content = List.new()

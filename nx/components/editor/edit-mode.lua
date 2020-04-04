@@ -4,19 +4,10 @@ local EditMode = {}
 registerComponent(EditMode, "EditMode")
 
 function EditMode:awake()
-    local debugScene = sceneLayers:peek()
-    local iconActor = debugScene:addActor()
-    iconActor:addComponent(Components.BoundingBox, 32, 48)
-    iconActor:addComponent(Components.EditorRibbon)
-    iconActor:addComponent(Components.EditorRibbonBackground)
-    iconActor:addComponent(Components.EaseFromTo, Vector.new(0, -iconActor.BoundingBox:height()), Vector.new(0, 0))
-    iconActor:addComponent(Components.BoundingBoxToSceneWidth)
-
-    self.icon = iconActor
+    self.actor:addComponent(Components.SidebarIcon, 0.5)
+    self.actor:addComponent(Components.SpriteRenderer, "linkin", "walk", 4)
 
     self.actor:addComponentSafe(Components.Uneditable)
-    self.actor:addComponent(Components.Selector)
-    self.actor:addComponent(Components.MiddleMousePan)
     self.actor:addComponent(Components.SpawnMousePointer)
 
     self:makeAllObjectsEditable()
@@ -27,17 +18,21 @@ function EditMode:update(dt)
 end
 
 function EditMode:onDestroy()
-    for i, actor in self.actor:scene():eachActorWith(Components.Editable) do
-        actor:removeComponent(Components.Editable)
+    for _, scene in sceneLayers:each() do
+        local listener = scene:getFirstBehaviorIfExists(Components.EditModeListener)
+        if listener then
+            listener:disableEditor()
+        end
     end
 
-    self.icon:destroy()
+    self.actor.SidebarIcon:retract()
 end
 
 function EditMode:makeAllObjectsEditable()
-    for i, actor in ipairs(self.actor:scene():getAllActors()) do
-        if not actor.Uneditable and not actor.Editable then
-            actor:addComponent(Components.Editable)
+    for _, scene in sceneLayers:each() do
+        local listener = scene:getFirstBehaviorIfExists(Components.EditModeListener)
+        if listener then
+            listener:enableEditor()
         end
     end
 end

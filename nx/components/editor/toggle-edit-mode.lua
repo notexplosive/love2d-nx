@@ -8,12 +8,12 @@ end
 
 function ToggleEditMode:onKeyPress(key, scancode, wasRelease)
     if key == "e" and wasRelease and ALLOW_DEBUG and self.actor.TrackModifierKeys.ctrl then
-        local editModeActor = self.actor:scene():getFirstActorWith(Components.EditMode)
+        local editModeActor = self.actor:scene():getFirstActorWithIfExists(Components.EditMode)
         if not editModeActor then
             editModeActor = self.actor:scene():addActor("EditMode")
             editModeActor:addComponent(Components.EditMode)
         else
-            editModeActor:destroy()
+            editModeActor.EditMode:destroy()
         end
     end
 end

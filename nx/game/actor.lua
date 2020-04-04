@@ -39,6 +39,8 @@ function Actor:destroy()
     if self.isDestroyed then
         return
     end
+
+    -- Flag to the scene that this actor needs to be destroyed
     self.isDestroyed = true
     self:onDestroy()
 end
@@ -46,7 +48,7 @@ end
 -- Deletes actor from scene without calling onDestroy
 function Actor:removeFromScene()
     if self:scene() then
-        deleteFromList(self:scene().actors, self)
+        self:scene().actors:removeElement(self)
     end
 end
 
@@ -200,13 +202,13 @@ end
 -- Called by Scene
 -- Events are propagated down to each component
 function Actor:update(dt)
-    self:callForAllComponents("update", dt)
-
-    for i, component in self.components:each() do
+    for i, component in self.components:cloneReversed():each() do
         if component._componentDestroyed then
             self:deleteComponent(component)
         end
     end
+
+    self:callForAllComponents("update", dt)
 end
 
 Actor:createEvent("start")
@@ -221,7 +223,7 @@ Actor:createEvent("onSendToBack")
 function Actor:callForAllComponents(methodName, ...)
     local components = self.components:clone()
     for i, component in components:each() do
-        if component[methodName] and not component._isDestroyed then
+        if component[methodName] and not component._componentDestroyed then
             component[methodName](component, ...)
         end
     end

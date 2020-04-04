@@ -23,6 +23,14 @@ function registerComponent(componentClass, name, deps)
         assert(false, self.name .. " has setup but no reverseSetup")
     end
 
+    function componentClass.supportsReverseSetup(self)
+        if self.setup then
+            return self.reverseSetup ~= nil
+        end
+
+        return true
+    end
+
     function componentClass.destroy(self)
         if self._componentDestroyed then
             return

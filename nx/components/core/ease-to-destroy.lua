@@ -1,6 +1,6 @@
 local EaseToDestroy = {}
 
-registerComponent(EaseToDestroy,'EaseToDestroy')
+registerComponent(EaseToDestroy, "EaseToDestroy")
 
 function EaseToDestroy:update(dt)
     if not self.actor.EaseTo then

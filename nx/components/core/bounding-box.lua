@@ -3,26 +3,12 @@ local BoundingBox = {}
 registerComponent(BoundingBox, "BoundingBox")
 
 function BoundingBox:setup(w, h, ox, oy)
-    self.forceCustom = true
-    self.size = Size.new(w, h)
-    self.offset = Vector.new(ox, oy)
+    self.size = Size.new(w or 64, h or 64)
+    self.offset = Vector.new(ox or 0, oy or 0)
 end
 
 function BoundingBox:reverseSetup()
     return self:width(), self:height(), self.offset.x, self.offset.y
-end
-
-function BoundingBox:awake()
-    self.size = Size.new(64, 64)
-    self.offset = Vector.new(0, 0)
-    self.forceCustom = false
-    self.visible = false
-end
-
-function BoundingBox:draw(x, y)
-    if self.visible then
-        love.graphics.rectangle("line", self:getRect():xywh())
-    end
 end
 
 function BoundingBox:getArea()
@@ -56,7 +42,6 @@ end
 
 function BoundingBox:setDimensions(w, h)
     self.size = Size.new(w, h)
-    self.forceCustom = true
 end
 
 function BoundingBox:getDimensions()

@@ -3,8 +3,8 @@ local Draggable = {}
 registerComponent(Draggable, "Draggable", {"Clickable"})
 
 function Draggable:setup(button, friction)
-    self.button = button
-    self.friction = friction
+    self.button = button or self.button
+    self.friction = friction or self.friction
 end
 
 function Draggable:reverseSetup()

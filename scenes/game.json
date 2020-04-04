@@ -1,19 +1,27 @@
 {
-  "root": [["CloseOnEscape"], ["FrameFreezeListener"]],
+  "root": [
+    ["CloseOnEscape"],
+    ["FrameFreezeListener"],
+    ["EditModeListener"],
+    ["Selector"]
+  ],
   "actors": [
     {
-      "components": [["Viewport", 1, 1600, 900]]
+      "components": [["Viewport", 1, 1600, 900], ["Uneditable"]]
     },
     {
       "components": [["TriangleRenderer", 20]],
+      "name": "Terry Triangle",
       "pos": [200, 200]
     },
     {
       "components": [["CircleRenderer", 20]],
+      "name": "Carrie Circle",
       "pos": [300, 200]
     },
     {
       "components": [["RectRenderer", 40, 40]],
+      "name": "Rodney Rectangle",
       "pos": [400, 200]
     }
   ]
