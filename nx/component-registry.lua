@@ -29,13 +29,8 @@ function registerComponent(componentClass, name, deps)
         end
 
         if self.actor then
-            if self.onDestroy then
-            --self:onDestroy()
-            end
             self.actor:removeComponent(componentClass)
         end
-
-        self._componentDestroyed = true
     end
 
     Components[componentClass.name] = componentClass

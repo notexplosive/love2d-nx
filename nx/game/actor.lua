@@ -129,6 +129,7 @@ function Actor:addComponent(componentClass, ...)
     return component
 end
 
+-- public
 function Actor:removeComponent(componentClass)
     assert(componentClass, "Actor:removeComponent() was passed nil")
     assert(componentClass.name, "Component needs a name")
@@ -138,11 +139,19 @@ function Actor:removeComponent(componentClass)
         component:onDestroy()
     end
 
-    assert(self.components:removeElement(component) ~= nil, "Removed a component that never existed(?!)")
-
-    self[componentClass.name] = nil
+    component._componentDestroyed = true
 
     return componentClass
+end
+
+-- private
+function Actor:deleteComponent(component)
+    assert(
+        self[component.name],
+        "Tried to delete " .. component.name .. " which is either not a component or actor doesn't have one"
+    )
+    assert(self.components:removeElement(component) ~= nil, "Removed a component that never existed(?!)")
+    self[component.name] = nil
 end
 
 function Actor:addComponentSafe(componentClass, ...)
@@ -190,7 +199,16 @@ end
 
 -- Called by Scene
 -- Events are propagated down to each component
-Actor:createEvent("update", {"dt"})
+function Actor:update(dt)
+    self:callForAllComponents("update", dt)
+
+    for i, component in self.components:each() do
+        if component._componentDestroyed then
+            self:deleteComponent(component)
+        end
+    end
+end
+
 Actor:createEvent("start")
 Actor:createEvent("draw", {"x", "y"})
 Actor:createEvent("onDestroy")
