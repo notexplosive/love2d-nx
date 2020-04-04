@@ -34,6 +34,7 @@ function love.load(argv)
     Size = require("nx/size")
     Rect = require("nx/rect")
     List = require("nx/list")
+    Color = require("nx/color")
 
     require("nx/component-registry")
 

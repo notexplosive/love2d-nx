@@ -35,6 +35,7 @@ function Test.assert(expected, actual, message)
     assert(message, "no description supplied for test case")
     message = Test.currentSuiteName .. ": " .. message
 
+    -- Assert equal types
     Test.assertEqualValues(
         Test.getType(expected),
         Test.getType(actual),
@@ -61,6 +62,7 @@ end
 -- This way we can a red/green test these asserts to make sure they actually work
 function Test.assertEqualValues(expected, actual, message)
     assert(message, "no message provided")
+
     local expectedString = tostring(expected)
     local actualString = tostring(actual)
 
@@ -69,7 +71,14 @@ function Test.assertEqualValues(expected, actual, message)
         actualString = actual:toString()
     end
 
-    assert(expected == actual, message .. "\nexpected: " .. expectedString .. "\nactual: " .. actualString)
+    local failureMessage = message .. "\nexpected: " .. expectedString .. "\nactual: " .. actualString
+
+    if Test.isFloatingPoint(expected) and Test.isFloatingPoint(actual) then
+        local epsilon = 0.00000000000001
+        assert(math.abs(expected - actual) < epsilon, failureMessage)
+    else
+        assert(expected == actual, failureMessage)
+    end
 end
 
 function Test.assertEqualLists(expected, actual, message)
@@ -113,6 +122,17 @@ function Test.getType(thing)
     return type(thing)
 end
 
+function Test.isFloatingPoint(num)
+    if type(num) == "number" then
+        local int, frac = math.modf(num)
+        if frac ~= 0 then
+            return true
+        end
+    end
+    return false
+end
+
+-- Test the test framework. Someone has to watch the watchmen
 Test.run(
     "Test",
     function()
@@ -131,10 +151,14 @@ Test.run(
         Test.assert(false, Test.isList(5), "number is not a list")
         Test.assert(false, Test.isList({hello = 5, world = 10}), "arbitrary table is not a list")
         Test.assert(false, Test.isNxObject({}), "{} is not an NxObject")
+        Test.assert(false, Test.isFloatingPoint(5), "Integer is not a floating point")
+        Test.assert(true, Test.isFloatingPoint(5.3), "Floating point is a floating point")
 
         Test.assertEqualLists({}, {}, "Empty lists are equal lists")
 
         Test.assertEqualLists({{1, 3}, {2}}, {{1, 3}, {2}}, "Nested lists are equal lists")
+
+        Test.assertEqualValues(0.3, 0.2 + 0.1, "Test fuzzy floating points")
     end
 )
 
