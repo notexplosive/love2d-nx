@@ -3,14 +3,14 @@ local SecondsRenderer = {}
 
 registerComponent(SecondsRenderer, "SecondsRenderer")
 
-function SecondsRenderer:awake()
+function SecondsRenderer:setup()
     self.time = 0
 end
 
 function SecondsRenderer:draw(x, y)
     local size = 32
-    local cx = math.cos(self.time - math.pi / 2) * size
-    local cy = math.sin(self.time - math.pi / 2) * size
+    local cx = math.cos((self.time * math.pi * 2) - math.pi / 2) * size
+    local cy = math.sin((self.time * math.pi * 2) - math.pi / 2) * size
 
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.circle("fill", x, y, size)

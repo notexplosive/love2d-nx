@@ -4,6 +4,9 @@ local FrameFreezeMode = {}
 registerComponent(FrameFreezeMode, "FrameFreezeMode")
 
 function FrameFreezeMode:awake()
+    self.time = 0
+    self.stepSize = 1 / 60
+
     self.actor:addComponent(Components.SecondsRenderer)
     self.actor:addComponent(Components.SidebarIcon, 1)
 
@@ -13,9 +16,6 @@ function FrameFreezeMode:awake()
             canBeFrameFrozen:freeze()
         end
     end
-
-    self.time = 0
-    self.stepSize = 1 / 60
 end
 
 function FrameFreezeMode:onDestroy()
@@ -39,7 +39,7 @@ function FrameFreezeMode:onScroll(x, y)
         end
 
         self.time = self.time + self.stepSize
-        self.actor.SecondsRenderer:setTime(self.time * 6) -- this is wrong
+        self.actor.SecondsRenderer:setTime(self.time) -- this is wrong
     end
 end
 

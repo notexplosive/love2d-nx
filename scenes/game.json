@@ -13,7 +13,7 @@
       "pos": [300, 200]
     },
     {
-      "components": [["RectRenderer", 40, 40], ["RandomRotate"]],
+      "components": [["SecondsRenderer"]],
       "pos": [400, 200]
     }
   ]
