@@ -9,8 +9,8 @@ function ToggleFrameFreezeMode:onKeyPress(button, scancode, wasRelease)
         end
 
         assert(
-            not self.actor:scene():getFirstBehaviorIfExists(Components.SceneCanBeFrameFrozen),
-            "Scene has both ToggleFrameFreezeMode and SceneCanBeFrameFrozen. A given scene needs to have one or the other"
+            not self.actor:scene():getFirstBehaviorIfExists(Components.FrameFreezeListener),
+            "Scene has both ToggleFrameFreezeMode and FrameFreezeListener. A given scene needs to have one or the other"
         )
 
         if self.ctrlDown and not wasRelease and button == "space" then

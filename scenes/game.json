@@ -1,5 +1,5 @@
 {
-  "root": [["CloseOnEscape"], ["SceneCanBeFrameFrozen"]],
+  "root": [["CloseOnEscape"], ["FrameFreezeListener"]],
   "actors": [
     {
       "components": [["Viewport", 1, 1600, 900]]

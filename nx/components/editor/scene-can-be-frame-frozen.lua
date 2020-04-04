@@ -1,22 +1,22 @@
-local SceneCanBeFrameFrozen = {}
+local FrameFreezeListener = {}
 
-registerComponent(SceneCanBeFrameFrozen, "SceneCanBeFrameFrozen")
+registerComponent(FrameFreezeListener, "FrameFreezeListener")
 
-function SceneCanBeFrameFrozen:setup(boolean)
+function FrameFreezeListener:setup(boolean)
     if boolean == false then
         self:destroy()
     end
 end
 
-function SceneCanBeFrameFrozen:freeze()
+function FrameFreezeListener:freeze()
     self.actor:scene().freeze = true
 end
 
-function SceneCanBeFrameFrozen:unfreeze()
+function FrameFreezeListener:unfreeze()
     self.actor:scene().freeze = false
 end
 
-function SceneCanBeFrameFrozen:tick(seconds)
+function FrameFreezeListener:tick(seconds)
     if self.actor:scene().freeze then
         self.actor:scene().freeze = false
         self.actor:scene():update(seconds)
@@ -24,4 +24,4 @@ function SceneCanBeFrameFrozen:tick(seconds)
     end
 end
 
-return SceneCanBeFrameFrozen
+return FrameFreezeListener

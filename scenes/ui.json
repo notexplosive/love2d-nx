@@ -1,5 +1,5 @@
 {
-  "root": [["SceneCanBeFrameFrozen"]],
+  "root": [["FrameFreezeListener"]],
   "actors": [
     {
       "components": [["SpriteRenderer", "linkin", "walk", 8]],
