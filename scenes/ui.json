@@ -1,9 +1,4 @@
 {
   "root": [["FrameFreezeListener"]],
-  "actors": [
-    {
-      "components": [["SpriteRenderer", "linkin", "walk", 8]],
-      "pos": [100, 100]
-    }
-  ]
+  "actors": []
 }
