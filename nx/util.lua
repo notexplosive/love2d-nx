@@ -80,6 +80,7 @@ function copyList(list)
 end
 
 function copyReversed(list)
+    assert(not list.type, "Attempted to copy on something that is not a generic sequence")
     local copy = {}
     local sz = 1
     for i = #list, 1, -1 do
@@ -90,6 +91,7 @@ function copyReversed(list)
 end
 
 function deleteAt(table, index)
+    assert(not table.type, "Attempted to delete on something that is not a generic sequence")
     local deleted = table[index]
     for i = index, #table do
         table[i] = table[i + 1]
@@ -98,6 +100,7 @@ function deleteAt(table, index)
 end
 
 function deleteFromList(table, element)
+    assert(not table.type, "Attempted to delete on something that is not a generic sequence")
     local index = indexOf(table, element)
     if index then
         return deleteAt(table, index)
@@ -106,6 +109,7 @@ function deleteFromList(table, element)
 end
 
 function indexOf(table, element)
+    assert(not table.type, "Attempted to indexOf on something that is not a generic sequence")
     for i, v in ipairs(table) do
         if v == element then
             return i
@@ -115,6 +119,7 @@ function indexOf(table, element)
 end
 
 function shuffle(table)
+    assert(not table.type, "Attempted to delete on something that is not a generic sequence")
     local size = #table
     for i = size, 1, -1 do
         local rand = love.math.random(i)
