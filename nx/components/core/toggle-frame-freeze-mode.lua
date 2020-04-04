@@ -16,9 +16,10 @@ function ToggleFrameFreezeMode:onKeyPress(button, scancode, wasRelease)
         if self.ctrlDown and not wasRelease and button == "space" then
             if not self.freezeActor then
                 self.freezeActor = self.actor:scene():addActor()
+                self.freezeActor.name = "FrameFreeze"
                 self.freezeActor:addComponent(Components.FrameFreezeMode)
             else
-                self.freezeActor:destroy()
+                self.freezeActor.FrameFreezeMode:destroy()
                 self.freezeActor = nil
             end
         end

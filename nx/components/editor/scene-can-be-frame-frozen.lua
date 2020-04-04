@@ -10,18 +10,16 @@ end
 
 function SceneCanBeFrameFrozen:freeze()
     self.actor:scene().freeze = true
-    debugLog("freezin")
 end
 
 function SceneCanBeFrameFrozen:unfreeze()
     self.actor:scene().freeze = false
-    debugLog("unfreezin")
 end
 
-function SceneCanBeFrameFrozen:onScroll(x, y)
-    if self.actor:scene().freeze and y < 0 then
+function SceneCanBeFrameFrozen:tick(seconds)
+    if self.actor:scene().freeze then
         self.actor:scene().freeze = false
-        self.actor:scene():update(1 / 60)
+        self.actor:scene():update(seconds)
         self.actor:scene().freeze = true
     end
 end

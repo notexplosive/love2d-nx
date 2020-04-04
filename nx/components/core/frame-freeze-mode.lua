@@ -4,8 +4,8 @@ local FrameFreezeMode = {}
 registerComponent(FrameFreezeMode, "FrameFreezeMode")
 
 function FrameFreezeMode:awake()
-    local renderer = self.actor:addComponent(Components.GameSceneSecondsRenderer)
-    self.actor:addComponent(Components.SidebarIcon, 1, renderer)
+    self.actor:addComponent(Components.GameSceneSecondsRenderer)
+    self.actor:addComponent(Components.SidebarIcon, 1)
 
     for i, scene in sceneLayers:each() do
         local canBeFrameFrozen = scene:getFirstBehaviorIfExists(Components.SceneCanBeFrameFrozen)
@@ -13,6 +13,9 @@ function FrameFreezeMode:awake()
             canBeFrameFrozen:freeze()
         end
     end
+
+    self.time = 0
+    self.stepSize = 1 / 60
 end
 
 function FrameFreezeMode:onDestroy()
@@ -21,6 +24,22 @@ function FrameFreezeMode:onDestroy()
         if canBeFrameFrozen then
             canBeFrameFrozen:unfreeze()
         end
+    end
+
+    self.actor.SidebarIcon:retract()
+end
+
+function FrameFreezeMode:onScroll(x, y)
+    if y < 0 then
+        for i, scene in sceneLayers:each() do
+            local canBeFrameFrozen = scene:getFirstBehaviorIfExists(Components.SceneCanBeFrameFrozen)
+            if canBeFrameFrozen then
+                canBeFrameFrozen:tick(self.stepSize)
+            end
+        end
+
+        self.time = self.time + self.stepSize
+        self.actor.GameSceneSecondsRenderer:setTime(self.time * 6) -- this is wrong
     end
 end
 

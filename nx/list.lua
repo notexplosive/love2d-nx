@@ -39,7 +39,7 @@ function List:length()
 end
 
 function List:at(index)
-    assert(type(index) == "number", "List:at() takes a number")
+    assert(type(index) == "number", "List:at() takes a number, got " .. type(index))
     self:assertInBounds(index)
     return self.innerList[index]
 end
