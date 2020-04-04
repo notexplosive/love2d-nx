@@ -1,4 +1,4 @@
-# LOVE2D NX: A LOVE Entity-Component System by NotExplosive
+# LOVE2D NX: A LOVE Component Framework by NotExplosive
 
 ### `!! WARNING !!`
 
