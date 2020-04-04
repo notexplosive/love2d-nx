@@ -9,11 +9,9 @@ local fadeOutDuration = 1
 local timeBeforeFade = 3
 
 function DebugLogRenderer:awake()
-    self.content = {}
+    self.content = List.new()
     self.timer = 0
     self.opacity = 0
-
-    self._contentSize = 0
 end
 
 function DebugLogRenderer:start()
@@ -26,7 +24,16 @@ end
 function DebugLogRenderer:draw(x, y)
     love.graphics.setFont(font)
 
-    for i, str in ipairs(copyReversed(self.content)) do
+    love.graphics.setColor(0, 0, 0, self.opacity * 0.25)
+    love.graphics.rectangle(
+        "fill",
+        x,
+        y - fontHeight * (self.content:length() - 1),
+        love.graphics.getWidth(),
+        fontHeight * self.content:length()
+    )
+
+    for i, str in self.content:cloneReversed():each() do
         love.graphics.setColor(0.1, 0.1, 0.1, self.opacity)
         love.graphics.print(str, x + 1, y - (i - 1) * fontHeight + 1)
         love.graphics.setColor(1, 1, 1, self.opacity)
@@ -45,14 +52,12 @@ function DebugLogRenderer:update(dt)
     end
 
     if self.timer < 0 then
-        self.content = {}
-        self._contentSize = 0
+        self.content:clear()
     end
 end
 
 function DebugLogRenderer:append(str)
-    self._contentSize = self._contentSize + 1
-    self.content[self._contentSize] = str
+    self.content:add(str)
     self.timer = timeBeforeFade + fadeOutDuration
 end
 
