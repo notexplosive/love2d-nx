@@ -40,7 +40,9 @@ function Selectable:Draggable_onDragStart()
 end
 
 function Selectable:getSelector()
-    return gameScene:getFirstBehavior(Components.Selector)
+    local selector = self.actor:scene():getFirstBehavior(Components.Selector)
+    assert(selector, "No Selector component")
+    return selector
 end
 
 function Selectable:deselectAll()

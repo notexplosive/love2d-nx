@@ -7,7 +7,7 @@ local DataLoader = require("nx/template-loader/data-loader")
 
 function MapFile:getSceneData()
     local sceneData = {actors = {}, root = {{}}}
-    for i, actor in gameScene:eachActorWith(Components.EditorSerializable) do
+    for i, actor in self.actor:scene():eachActorWith(Components.EditorSerializable) do
         local actorData = {
             components = {{actor.EditorSerializable:getComponentClass().name, actor.EditorSerializable:getArgs()}},
             pos = {actor:pos():xy()},
@@ -27,7 +27,7 @@ end
 
 function MapFile:clearActors()
     local oldActors = {}
-    for i, actor in gameScene:eachActor() do
+    for i, actor in self.actor:scene():eachActor() do
         if not actor.Uneditable then
             append(oldActors, actor)
         end
@@ -40,7 +40,7 @@ end
 
 function MapFile:spawnNewActors(newActorDatas)
     for i, actorData in ipairs(newActorDatas) do
-        DataLoader.loadActorData(gameScene, actorData)
+        DataLoader.loadActorData(self.actor:scene(), actorData)
     end
 end
 

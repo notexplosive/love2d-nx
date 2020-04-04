@@ -47,7 +47,11 @@ function EditorRibbon:placeActorWith(componentClass, ...)
     end
 
     self.pendingPlaceActor =
-        gameScene:addActor("Place" .. componentClass.name):addComponent(Components.PlaceActorWith, componentClass, ...)
+        self.actor:scene():addActor("Place" .. componentClass.name):addComponent(
+        Components.PlaceActorWith,
+        componentClass,
+        ...
+    )
 end
 
 function EditorRibbon:onActorSelect(actor)

@@ -13,7 +13,7 @@ end
 function MousePointer:update(dt)
     if not self.leftButtonDown then
         local hoverIndex = nil
-        for i, actor in gameScene:eachActorWith(Components.BoundingBoxEditor) do
+        for i, actor in self.actor:scene():eachActorWith(Components.BoundingBoxEditor) do
             if actor.BoundingBoxEditor.hoverIndex then
                 hoverIndex = actor.BoundingBoxEditor.hoverIndex
                 break
@@ -37,7 +37,7 @@ function MousePointer:update(dt)
     end
 
     if self.leftButtonDown then
-        for i, actor in gameScene:eachActorWith(Components.MoveOnDrag) do
+        for i, actor in self.actor:scene():eachActorWith(Components.MoveOnDrag) do
             if actor.Draggable.dragging then
                 self.actor.SpriteRenderer:setAnimation("translate")
                 break
