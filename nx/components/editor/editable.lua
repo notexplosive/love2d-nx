@@ -13,28 +13,22 @@ function Editable:awake()
         self.actor.SpriteRenderer:setupBoundingBox()
     end
 
-    if self.actor.WorldDrag then
-        self:removeComponent(Components.Draggable)
-        self:removeComponent(Components.Clickable)
-        self:removeComponent(Components.Hoverable)
-    else
-        --self:addComponentSafe(Components.NameRenderer)
-        self:addComponentSafe(Components.Hoverable)
-        self:addComponentSafe(Components.Clickable)
-        self:addComponentSafe(Components.Draggable)
-        self:addComponentSafe(Components.MoveOnDrag)
-        self:addComponentSafe(Components.Selectable)
+    --self:addComponentSafe(Components.NameRenderer)
+    self:addComponentSafe(Components.Hoverable)
+    self:addComponentSafe(Components.Clickable)
+    self:addComponentSafe(Components.Draggable)
+    self:addComponentSafe(Components.MoveOnDrag)
+    self:addComponentSafe(Components.Selectable)
 
-        self:addComponentSafe(Components.Keybind)
-        self:addComponentSafe(Components.Duplicatable, "^d")
-        self:addComponentSafe(Components.Destroyable, "delete")
+    self:addComponentSafe(Components.Keybind)
+    self:addComponentSafe(Components.Duplicatable, "^d")
+    self:addComponentSafe(Components.Destroyable, "delete")
 
-        if self.actor.AngleEditable then
-            self:addComponentSafe(Components.AngleEditor)
-        end
-
-        self:addComponentSafe(Components.HoverableRenderer)
+    if self.actor.AngleEditable then
+        self:addComponentSafe(Components.AngleEditor)
     end
+
+    self:addComponentSafe(Components.HoverableRenderer)
 end
 
 function Editable:Selectable_onSelect()
