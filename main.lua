@@ -39,9 +39,7 @@ function love.load(argv)
 
     Test.runComponentTests()
 
-    gameScene = Scene.fromJson("game")
-
-    sceneLayers:add(gameScene)
+    sceneLayers:add(Scene.fromJson("game"))
     sceneLayers:add(Scene.fromJson("ui"))
 
     -- debugScene must always be the top most scene
