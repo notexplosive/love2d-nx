@@ -1,16 +1,27 @@
+local sceneLayers = require("nx/scene-layers")
 local FrameFreezeMode = {}
 
 registerComponent(FrameFreezeMode, "FrameFreezeMode")
 
 function FrameFreezeMode:awake()
-    self.actor:addComponent(Components.FrameStep)
     local renderer = self.actor:addComponent(Components.GameSceneSecondsRenderer)
     self.actor:addComponent(Components.SidebarIcon, 1, renderer)
-    gameScene.freeze = true
+
+    for i, scene in sceneLayers:each() do
+        local canBeFrameFrozen = scene:getFirstBehaviorIfExists(Components.SceneCanBeFrameFrozen)
+        if canBeFrameFrozen then
+            canBeFrameFrozen:freeze()
+        end
+    end
 end
 
 function FrameFreezeMode:onDestroy()
-    gameScene.freeze = false
+    for i, scene in sceneLayers:each() do
+        local canBeFrameFrozen = scene:getFirstBehaviorIfExists(Components.SceneCanBeFrameFrozen)
+        if canBeFrameFrozen then
+            canBeFrameFrozen:unfreeze()
+        end
+    end
 end
 
 return FrameFreezeMode

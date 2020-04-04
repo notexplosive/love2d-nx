@@ -179,6 +179,15 @@ function Scene:getFirstBehavior(behavior)
     return actors[1][behavior.name]
 end
 
+function Scene:getFirstBehaviorIfExists(behavior)
+    assert(behavior, "null component")
+    local actors = self:getAllActorsWithBehavior(behavior)
+    if #actors == 0 then
+        return nil
+    end
+    return actors[1][behavior.name]
+end
+
 -- for i,actor in self.actor:scene():eachActorWith(Components.foo) do
 function Scene:eachActor()
     return self.actors:clone():each()

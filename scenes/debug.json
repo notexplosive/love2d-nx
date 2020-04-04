@@ -1,12 +1,11 @@
 {
-  "root": [],
+  "root": [["EnableDebug"]],
   "actors": [
     {
       "components": [
         ["DebugRenderer"],
         ["TakeSnapshot", 15],
         ["ToggleFrameFreezeMode"],
-        ["EnableDebug"],
         ["ToggleEditMode"]
       ]
     },

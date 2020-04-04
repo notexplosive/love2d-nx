@@ -43,6 +43,8 @@ function love.load(argv)
 
     sceneLayers:add(gameScene)
     sceneLayers:add(Scene.fromJson("ui"))
+
+    -- debugScene must always be the top most scene
     sceneLayers:add(Scene.fromJson("debug"))
 
     love.graphics.setBackgroundColor(0 / 255, 127 / 255, 255 / 255)
