@@ -21,10 +21,10 @@ function Editable:awake()
     self:addComponentSafe(Components.Selectable)
     self:addComponentSafe(Components.SelectOnClick)
 
-    -- Broken because they depend on editor serializer
-    --self:addComponentSafe(Components.Keybind)
+    self:addComponentSafe(Components.Keybind)
+    self:addComponentSafe(Components.Destroyable, "delete")
+    -- Broken because it depends on editor serializer, we can't duplicate all the components wholesale because editable actors have a ton of stuff
     --self:addComponentSafe(Components.Duplicatable, "^d")
-    --self:addComponentSafe(Components.Destroyable, "delete")
 
     if self.actor.AngleEditable then
         self:addComponentSafe(Components.AngleEditor)
