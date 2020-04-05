@@ -36,8 +36,11 @@ function Scene.fromSceneData(sceneData, sceneToAppendTo)
     -- Root is just an actor with components just like anybody else.
     -- Root will be at 0,0 and can technically be reassigned although probably shouldn't.
     if sceneData.root then
+        -- Root cannot be positioned, angled, or edited, even though it's otherwise an "Actor"
+        -- Ideally I'd like "ComponentList" to be its own object, and actor.components is a "ComponentList"
         local actor = scene:addActor("root")
-        actor:addComponent(Components.Serializable) -- code smell!
+        scene:setRoot(actor)
+        actor:addComponent(Components.Uneditable)
         DataLoader.loadComponentListData(actor, sceneData.root)
     end
 
@@ -61,6 +64,26 @@ function Scene.appendFromJson(path, sceneToAppendTo)
     assert(sceneToAppendTo, "Must supply scene to append to")
     local sceneData = DataLoader.loadTemplateFile("scenes/" .. path .. ".json", args)
     local scene = Scene.fromSceneData(sceneData, sceneToAppendTo)
+end
+
+function Scene:setRoot(actor)
+    local notSupportedFunction = function(fnName)
+        return function()
+            assert(false, "Root does not support " .. fnName)
+        end
+    end
+    actor.isRoot = true
+    actor.setPos = notSupportedFunction("setPos()")
+    actor.pos = notSupportedFunction("pos()")
+    actor.setAngle = notSupportedFunction("setAngle()")
+    actor.angle = notSupportedFunction("angle()")
+
+    self.root = actor
+end
+
+function Scene:getRoot()
+    assert(self.root, "Scene does not have a root")
+    return self.root
 end
 
 function Scene:setDimensions(width, height)

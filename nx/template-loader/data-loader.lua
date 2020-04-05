@@ -74,6 +74,8 @@ function DataLoader.replaceUnderscoresWithValues(data, args)
 end
 
 function DataLoader.loadComponentListData(actor, componentList)
+    actor:addComponent(Components.Serializable)
+
     local skippedComponentLists = {}
     for i, componentData in ipairs(componentList or {}) do
         local componentName = componentData[1]
@@ -94,7 +96,6 @@ end
 
 function DataLoader.loadActorData(scene, actorData)
     local actor = scene:addActor(actorData.name or "ACTOR" .. love.math.random(899) + 100)
-    actor:addComponent(Components.Serializable)
 
     if actorData.pos then
         assert(#actorData.pos == 2, "pos should be two numbers: [x,y]")
