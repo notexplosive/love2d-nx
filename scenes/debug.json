@@ -1,5 +1,5 @@
 {
-  "root": [["EnableDebug"]],
+  "root": [["EnableDebug"], ["DebugResetGame"]],
   "actors": [
     {
       "components": [

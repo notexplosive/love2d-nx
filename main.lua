@@ -27,6 +27,14 @@ function love.quit()
     end
 end
 
+function runGame()
+    sceneLayers:clear()
+    sceneLayers:add(Scene.fromJson("game"))
+    sceneLayers:add(Scene.fromJson("ui"))
+    -- debugScene must always be the top most scene
+    sceneLayers:add(Scene.fromJson("debug"))
+end
+
 function love.load(argv)
     -- Global classes, for better performance these should be require'd in each file as needed
     Assets = require("nx/game/assets")
@@ -40,11 +48,7 @@ function love.load(argv)
 
     Test.runComponentTests()
 
-    sceneLayers:add(Scene.fromJson("game"))
-    sceneLayers:add(Scene.fromJson("ui"))
-
-    -- debugScene must always be the top most scene
-    sceneLayers:add(Scene.fromJson("debug"))
+    runGame()
 
     love.graphics.setBackgroundColor(0 / 255, 127 / 255, 255 / 255)
 
