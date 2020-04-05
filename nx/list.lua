@@ -76,32 +76,18 @@ end
 
 function List:removeAt(index)
     self:assertInBounds(index)
-
-    local deleted = self.innerList[index]
-
-    for i = index, #self.innerList do
-        self.innerList[i] = self.innerList[i + 1]
-    end
-
     self.listLength = self.listLength - 1
-
-    return deleted
+    return table.remove(self.innerList, index)
 end
 
--- This is o(n), jesus christ
-function List:enqueue(element)
-    assert(element, "element cannot be nil")
+function List:insert(index, value)
+    self.listLength = self.listLength + 1
+    return table.insert(self.innerList, index, value)
+end
 
-    if self.listLength == 0 then
-        self:add(element)
-        return
-    end
-
-    local invertedList = self:cloneReversed()
-    invertedList:add(element)
-
-    self:clear()
-    self:add(invertedList:cloneReversed():unpack())
+function List:enqueue(value)
+    assert(value, "element cannot be nil")
+    self:insert(1, value)
 end
 
 function List:unpack()
@@ -222,6 +208,13 @@ Test.run(
         local reversedClone = subject:cloneReversed()
         Test.assert(5, reversedClone:at(1), "Reversed list's first element is original list's last element")
         Test.assert(1, reversedClone:at(5), "Reversed list's last element is original list's first element")
+
+        -- INSERT TESTS
+        subject = List.new()
+        subject:add(1, 4)
+        subject:insert(2, 2)
+        subject:insert(3, 3)
+        Test.assert({1, 2, 3, 4}, subject:rawInner(), "Insert")
 
         -- ENQUEUE TEST
         subject = List.new()
