@@ -10,8 +10,11 @@ function Scene.new(width, height)
     self:setDimensions(width, height)
     self.freeze = false
     self.world = love.physics.newWorld(0, 9.8, true)
+
     self.isClickConsumed = false
     self.isHoverConsumed = false
+    self.isKeyConsumed = false
+
     self.viewport = nil
 
     -- Scene Shake
@@ -74,9 +77,7 @@ function Scene:setRoot(actor)
     end
     actor.isRoot = true
     actor.setPos = notSupportedFunction("setPos()")
-    actor.pos = notSupportedFunction("pos()")
     actor.setAngle = notSupportedFunction("setAngle()")
-    actor.angle = notSupportedFunction("angle()")
 
     self.root = actor
 end
@@ -308,7 +309,6 @@ function Scene:createEvent(functionName, args)
 end
 
 -- Input Events
-Scene:createEvent("onKeyPress", {"key", "scancode", "wasRelease"})
 Scene:createEvent("onScroll", {"x", "y"})
 Scene:createEvent("onTextInput", {"text"})
 Scene:createEvent("onMouseFocus", {"focus"})
@@ -317,9 +317,15 @@ Scene:createEvent("onMouseFocus", {"focus"})
 Scene:createEvent("onNotify", {"msg"})
 Scene:createEvent("onApplicationClose", {})
 
+-- Keypress is handled in REVERSE order because we want them in order with drawing
+function Scene:onKeyPress(key, scancode, wasRelease)
+    for i, actor in self.actors:cloneReversed():each() do
+        actor:onKeyPress(key, scancode, wasRelease, self.isKeyConsumed)
+    end
+end
+
 -- MousePress is handled in REVERSE order because we want them in order with drawing
 function Scene:onMousePress(x, y, button, wasRelease)
-    --self.isClickConsumed = false
     for i, actor in self.actors:cloneReversed():each() do
         actor:onMousePress(x, y, button, wasRelease, self.isClickConsumed)
     end
@@ -327,7 +333,6 @@ end
 
 -- MousePress is handled in REVERSE order because we want them in order with drawing
 function Scene:onMouseMove(x, y, dx, dy)
-    --self.isHoverConsumed = false
     for i, actor in self.actors:cloneReversed():each() do
         actor:onMouseMove(x, y, dx, dy, self.isHoverConsumed)
     end

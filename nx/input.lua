@@ -40,8 +40,13 @@ function love.mousemoved(x, y, dx, dy)
 end
 
 function love.keypressed(key, scancode)
+    local isConsumed = false
     for _, scene in sceneLayers:eachInReverseDrawOrder() do
+        scene.isKeyConsumed = isConsumed
         scene:onKeyPress(key, scancode, false)
+        if scene.isKeyConsumed then
+            isConsumed = true
+        end
     end
 end
 

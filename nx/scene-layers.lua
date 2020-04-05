@@ -11,5 +11,13 @@ function sceneLayers:eachInReverseDrawOrder()
     return self:eachReversed()
 end
 
+-- Tests
+local Test = require("nx/test")
+Test.run(
+    "SceneLayers",
+    function()
+    end
+)
+
 -- Singleton!
 return sceneLayers

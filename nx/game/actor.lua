@@ -216,6 +216,7 @@ Actor:createEvent("draw", {"x", "y"})
 Actor:createEvent("onDestroy")
 Actor:createEvent("onMousePress", {"x", "y", "button", "wasRelease", "isClickConsumed"})
 Actor:createEvent("onMouseMove", {"x", "y", "dx", "dy", "isHoverConsumed"})
+Actor:createEvent("onKeyPress", {"key", "scancode", "wasRelease", "isKeyConsumed"})
 Actor:createEvent("onBringToFront")
 Actor:createEvent("onSendToBack")
 
