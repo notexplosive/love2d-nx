@@ -28,6 +28,7 @@ function love.quit()
 end
 
 function runGame()
+    collectgarbage("collect")
     sceneLayers:clear()
     local gameScene = sceneLayers:add(Scene.fromJson("game"))
     sceneLayers:add(Scene.fromJson("ui"))

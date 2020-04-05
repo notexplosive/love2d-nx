@@ -15,6 +15,7 @@ function Test.run(name, testFunction)
         Test.currentSuiteName = name
         testFunction()
         print(name .. " tests completed successfully")
+        collectgarbage("collect")
     end
 end
 

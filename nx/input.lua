@@ -2,12 +2,12 @@ local sceneLayers = require("nx/scene-layers")
 
 function love.mousepressed(x, y, button)
     love.mousemoved(x, y, 0, 0)
-    sceneLayers:onMousePress(x, y, button)
+    sceneLayers:onMousePress(x, y, button, false)
 end
 
 function love.mousereleased(x, y, button)
     love.mousemoved(x, y, 0, 0)
-    sceneLayers:onMouseRelease(x, y, button)
+    sceneLayers:onMousePress(x, y, button, true)
 end
 
 function love.mousemoved(x, y, dx, dy)

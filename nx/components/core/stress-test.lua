@@ -31,4 +31,16 @@ function StressTest:update(dt)
     end
 end
 
+-- Tests
+local Test = require("nx/test")
+Test.registerComponentTest(
+    StressTest,
+    function()
+        local Scene = require("nx/game/scene")
+        local Actor = require("nx/game/actor")
+        local actor = Scene.new():addActor("testActor")
+        local subject = actor:addComponent(StressTest)
+    end
+)
+
 return StressTest
