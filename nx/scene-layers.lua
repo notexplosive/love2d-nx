@@ -11,24 +11,12 @@ function sceneLayers:eachInReverseDrawOrder()
     return self:eachReversed()
 end
 
-function sceneLayers:onMousePress(x, y, button)
+function sceneLayers:onMousePress(x, y, button, wasRelease)
     local isConsumed = false
     for _, scene in self:eachInReverseDrawOrder() do
         scene.isClickConsumed = isConsumed
         local mousePoint = scene:getMousePosition(x, y)
-        scene:onMousePress(mousePoint.x, mousePoint.y, button, false)
-        if scene.isClickConsumed then
-            isConsumed = true
-        end
-    end
-end
-
-function sceneLayers:onMouseRelease(x, y, button)
-    local isConsumed = false
-    for _, scene in self:eachInReverseDrawOrder() do
-        scene.isClickConsumed = isConsumed
-        local mousePoint = scene:getMousePosition(x, y)
-        scene:onMousePress(mousePoint.x, mousePoint.y, button, true)
+        scene:onMousePress(mousePoint.x, mousePoint.y, button, wasRelease)
         if scene.isClickConsumed then
             isConsumed = true
         end
