@@ -281,6 +281,10 @@ function Scene:getRect()
     return Rect.new(0, 0, self.width, self.height)
 end
 
+function Scene:getMousePosition(x, y)
+    return Vector.new(x, y) / self:getScale() + self:getViewportPosition()
+end
+
 -- TODO: move this out
 function Scene:shake(frames, variance)
     self.shakeFrames = frames or 5

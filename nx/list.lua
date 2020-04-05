@@ -71,6 +71,7 @@ function List:add(...)
         self.listLength = self.listLength + 1
         self.innerList[self.listLength] = object
     end
+    return params[1]
 end
 
 function List:removeAt(index)
