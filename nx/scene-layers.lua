@@ -36,6 +36,17 @@ function sceneLayers:onMouseMove(x, y, dx, dy)
     end
 end
 
+function sceneLayers:onKeyPress(key, scancode)
+    local isConsumed = false
+    for _, scene in self:eachInReverseDrawOrder() do
+        scene.isKeyConsumed = isConsumed
+        scene:onKeyPress(key, scancode, false)
+        if scene.isKeyConsumed then
+            isConsumed = true
+        end
+    end
+end
+
 -- Tests
 local Test = require("nx/test")
 Test.run(
