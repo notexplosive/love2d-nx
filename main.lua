@@ -34,8 +34,6 @@ function runGame()
     sceneLayers:add(Scene.fromJson("ui"))
     -- debugScene must always be the top most scene
     sceneLayers:add(Scene.fromJson("debug"))
-
-    gameScene:getViewport().actor:setPos(-100, -100)
 end
 
 function love.load(argv)

@@ -11,7 +11,7 @@ function Color.new(r, g, b, a)
     self:setRed(r)
     self:setGreen(g)
     self:setBlue(b)
-    self:setAlpha(a)
+    self:setAlpha(a or 1)
 
     return self
 end
@@ -94,6 +94,17 @@ function Color:rgbaTable()
     return {self:red(), self:green(), self:blue(), self:alpha()}
 end
 
+Color.constants = {
+    black = Color.new(0, 0, 0),
+    white = Color.new(1, 1, 1),
+    red = Color.new(1, 0, 0),
+    green = Color.new(0, 1, 0),
+    blue = Color.new(0, 0, 1),
+    magenta = Color.new(1, 0, 1),
+    yellow = Color.new(1, 1, 0),
+    cyan = Color.new(0, 1, 1)
+}
+
 -- Tests
 local Test = require("nx/test")
 Test.run(
@@ -105,6 +116,8 @@ Test.run(
         Test.assert(0.75, subject:green(), "Constructor sets green")
         Test.assert(0.85, subject:blue(), "Constructor sets blue")
         Test.assert(0.95, subject:alpha(), "Constuctor sets alpha")
+        subject = Color.new(0, 0, 0)
+        Test.assert(1, subject:alpha(), "Alpha channel is 1 by default")
 
         -- SETTERS TESTS
         subject = Color.new(0, 0, 0, 0)
