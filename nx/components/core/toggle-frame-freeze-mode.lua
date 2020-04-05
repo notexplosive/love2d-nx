@@ -22,6 +22,8 @@ function ToggleFrameFreezeMode:onKeyPress(button, scancode, wasRelease)
                 self.freezeActor.FrameFreezeMode:destroy()
                 self.freezeActor = nil
             end
+
+            self.actor:scene():consumeKeyPress()
         end
     end
 end

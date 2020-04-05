@@ -36,11 +36,11 @@ function sceneLayers:onMouseMove(x, y, dx, dy)
     end
 end
 
-function sceneLayers:onKeyPress(key, scancode)
+function sceneLayers:onKeyPress(key, scancode, wasRelease)
     local isConsumed = false
     for _, scene in self:eachInReverseDrawOrder() do
         scene.isKeyConsumed = isConsumed
-        scene:onKeyPress(key, scancode, false)
+        scene:onKeyPress(key, scancode, wasRelease)
         if scene.isKeyConsumed then
             isConsumed = true
         end

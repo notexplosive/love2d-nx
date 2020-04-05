@@ -15,13 +15,11 @@ function love.mousemoved(x, y, dx, dy)
 end
 
 function love.keypressed(key, scancode)
-    sceneLayers:onKeyPress(key, scancode)
+    sceneLayers:onKeyPress(key, scancode, false)
 end
 
 function love.keyreleased(key, scancode)
-    for _, scene in sceneLayers:eachInReverseDrawOrder() do
-        scene:onKeyPress(key, scancode, true)
-    end
+    sceneLayers:onKeyPress(key, scancode, true)
 end
 
 function love.wheelmoved(x, y)

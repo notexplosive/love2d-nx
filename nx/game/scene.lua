@@ -352,6 +352,10 @@ function Scene:consumeHover()
     self.isHoverConsumed = true
 end
 
+function Scene:consumeKeyPress()
+    self.isKeyConsumed = true
+end
+
 -- Game Events: These are special events that don't work like regular events
 function Scene:update(dt)
     for i, actor in self.actors:clone():each() do
