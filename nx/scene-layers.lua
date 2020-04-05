@@ -47,13 +47,5 @@ function sceneLayers:onKeyPress(key, scancode, wasRelease)
     end
 end
 
--- Tests
-local Test = require("nx/test")
-Test.run(
-    "SceneLayers",
-    function()
-    end
-)
-
 -- Singleton!
 return sceneLayers
