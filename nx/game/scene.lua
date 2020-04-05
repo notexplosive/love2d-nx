@@ -1,4 +1,5 @@
 local Actor = require("nx/game/actor")
+local List = require("nx/list")
 local Vector = require("nx/vector")
 local DataLoader = require("nx/template-loader/data-loader")
 local Scene = {}

@@ -2,6 +2,8 @@
 -- 99% of the time you can juse use:
 --  `local actor = scene:addActor("actorName")`
 local DataLoader = require("nx/template-loader/data-loader")
+local Vector = require("nx/vector")
+local List = require("nx/list")
 local Actor = {}
 
 function Actor.new(name)
