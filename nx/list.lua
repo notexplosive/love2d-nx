@@ -44,6 +44,12 @@ function List:at(index)
     return self.innerList[index]
 end
 
+function List:setAt(index, value)
+    assert(type(index) == "number", "List:at() takes a number, got " .. type(index))
+    self:assertInBounds(index)
+    self.innerList[index] = value
+end
+
 function List:each()
     return ipairs(self.innerList)
 end

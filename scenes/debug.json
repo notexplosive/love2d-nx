@@ -11,6 +11,10 @@
     },
     {
       "components": [["FramerateCounter"]]
+    },
+    {
+      "components": [["MemoryTracker"]],
+      "pos": [0, 200]
     }
   ]
 }

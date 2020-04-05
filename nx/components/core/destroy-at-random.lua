@@ -1,6 +1,6 @@
 local DestroyAtRandomTime = {}
 
-registerComponent(DestroyAtRandomTime,'DestroyAtRandomTime')
+registerComponent(DestroyAtRandomTime, "DestroyAtRandomTime")
 
 function DestroyAtRandomTime:update()
     if love.math.random() < 0.01 then

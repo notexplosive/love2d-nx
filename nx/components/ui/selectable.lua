@@ -3,12 +3,6 @@ local Selectable = {}
 registerComponent(Selectable, "Selectable", {"BoundingBox"})
 
 function Selectable:setup(suppressWarning, selected)
-    if DEBUG then
-        if not suppressWarning then
-            debugLog("WARNING: Selectable shouldn't be used directly, call setup(true) if you know what you're doing")
-        end
-    end
-
     if selected then
         self:select()
     end
