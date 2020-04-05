@@ -78,6 +78,11 @@ function DataLoader.loadComponentListData(actor, componentList)
 
     local skippedComponentLists = {}
     for i, componentData in ipairs(componentList or {}) do
+        assert(
+            type(componentData) == "table",
+            "Expected table, got " .. type(componentData) .. ": " .. tostring(componentData)
+        )
+
         local componentName = componentData[1]
         local componentClass = Components[componentName]
         assert(componentName, "Nil component name, maybe your json is wrong?")
