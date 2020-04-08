@@ -5,11 +5,11 @@ registerComponent(FollowMouse, "FollowMouse")
 function FollowMouse:setup(v, y)
     self.offset = Vector.new(v, y)
     self.cachedMousePos = Vector.new(love.mouse.getPosition())
+    self:update(0)
 end
 
 function FollowMouse:awake()
     self.offset = Vector.new()
-    self.actor:setPos(Vector.new(love.mouse.getPosition()))
 end
 
 function FollowMouse:update(dt)
