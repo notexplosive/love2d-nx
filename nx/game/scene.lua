@@ -17,10 +17,6 @@ function Scene.new(width, height)
 
     self.viewport = nil
 
-    -- Scene Shake
-    self.shakeFrames = 0
-    self.shakeVariance = 0
-
     if width == nil then
         self:setDimensions(love.graphics.getDimensions())
     end
@@ -282,12 +278,6 @@ function Scene:getMousePosition(x, y)
     return Vector.new(x, y) / self:getScale() + self:getViewportPosition()
 end
 
--- TODO: move this out
-function Scene:shake(frames, variance)
-    self.shakeFrames = frames or 5
-    self.shakeVariance = variance or 2
-end
-
 -- Creates an event with a list of strings representing the args for that event
 function Scene:createEvent(functionName, args)
     assert(Scene[functionName] == nil, "Scene already has an event called " .. functionName)
@@ -367,6 +357,14 @@ function Scene:update(dt)
     end
 end
 
+function Scene:shake(frames, magnitude)
+    if self.viewport then
+        self.viewport:shake(frames, magnitude)
+    else
+        debugLog("Shake ignored because there's no viewport")
+    end
+end
+
 function Scene:draw()
     if self.viewport then
         self.viewport:sceneDraw()
@@ -376,16 +374,9 @@ function Scene:draw()
 end
 
 function Scene:draw_impl()
-    local shake = Vector.new()
-    if self.shakeFrames > 0 then
-        shake.x = love.math.random(-self.shakeVariance, self.shakeVariance)
-        shake.y = love.math.random(-self.shakeVariance, self.shakeVariance)
-        self.shakeFrames = self.shakeFrames - 1
-    end
-
     for i, actor in self.actors:each() do
         if actor.visible then
-            local x, y = actor:pos().x + shake.x, actor:pos().y + shake.y
+            local x, y = actor:pos().x, actor:pos().y
             actor:draw(x, y)
         end
     end

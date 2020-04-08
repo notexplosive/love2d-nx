@@ -8,12 +8,17 @@ function Viewport:setup(scale, desiredWidth, desiredHeight)
     self.scale = scale
     self.desiredWidth = desiredWidth or 1920
     self.desiredHeight = desiredHeight or 1080
+    self.offset = Vector.new()
 end
 
 function Viewport:awake()
     self.actor:addComponent(Components.BoundingBox)
     self.scale = 1
     self.screenScaleFactor = 1
+    self.shakeFrames = 0
+    self.shakeMagnitude = 0
+
+    self:shake(50, 10)
 
     self.actor:scene():setViewport(self)
 end
@@ -39,13 +44,36 @@ function Viewport:update(dt)
     self.actor.BoundingBox:setWidth(love.graphics.getWidth() / self.scale)
     self.actor.BoundingBox:setHeight(love.graphics.getHeight() / self.scale)
 
+    self:computeShake()
+
     self.screenScaleFactor =
         math.min(love.graphics.getWidth() / self.desiredWidth, love.graphics.getHeight() / self.desiredHeight)
+end
+
+function Viewport:computeShake()
+    if self.shakeFrames > 0 then
+        self.offset =
+            Vector.new(
+            love.math.random(-self.shakeMagnitude, self.shakeMagnitude),
+            love.math.random(-self.shakeMagnitude, self.shakeMagnitude)
+        )
+        self.shakeFrames = self.shakeFrames - 1
+    else
+        self.offset = Vector.new()
+        self.shakeFrames = 0
+        self.shakeMagnitude = 0
+    end
 end
 
 --
 -- api
 --
+
+function Viewport:shake(numberOfFrames, magnitude)
+    assert(numberOfFrames)
+    self.shakeMagnitude = magnitude or 10
+    self.shakeFrames = numberOfFrames
+end
 
 function Viewport:getScale()
     return self.scale * self.screenScaleFactor
@@ -59,7 +87,7 @@ function Viewport:sceneDraw()
     love.graphics.push()
     local scale = self:getScale()
     love.graphics.scale(scale, scale)
-    love.graphics.translate((-self.actor:pos()):xy())
+    love.graphics.translate((-self.actor:pos() + self.offset):xy())
     self.actor:scene():draw_impl()
     love.graphics.pop()
 
