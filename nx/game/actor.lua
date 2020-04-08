@@ -203,6 +203,14 @@ end
 
 -- Called by Scene
 function Actor:update(dt)
+    -- Run any applicable start functions
+    for i, component in self.components:cloneReversed():each() do
+        if component._hasNotRunStart then
+            component._hasNotRunStart = nil
+            component:start()
+        end
+    end
+
     for i, component in self.components:cloneReversed():each() do
         if component._componentDestroyed then
             self:deleteComponent(component)

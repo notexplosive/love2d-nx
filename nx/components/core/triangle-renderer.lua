@@ -11,6 +11,10 @@ function TriangleRenderer:reverseSetup()
     return self.size, self.color
 end
 
+function TriangleRenderer:BoundingBox_deferredSetup()
+    self.actor.BoundingBox:setup(self.size * 2, self.size * 2, self.size, self.size)
+end
+
 function TriangleRenderer:draw(x, y)
     local pos = Vector.new(x, y)
     local angle = self.actor:angle() - math.pi / 2

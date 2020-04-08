@@ -7,6 +7,10 @@ function CircleRenderer:setup(radius, color)
     self.color = color
 end
 
+function CircleRenderer:BoundingBox_deferredSetup()
+    self.actor.BoundingBox:setup(self.radius * 2, self.radius * 2, self.radius, self.radius)
+end
+
 function CircleRenderer:draw(x, y)
     love.graphics.setColor(self.color or {1, 1, 1, 1})
     love.graphics.circle("fill", x, y, self.radius)

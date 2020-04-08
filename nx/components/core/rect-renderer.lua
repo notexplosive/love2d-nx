@@ -5,8 +5,8 @@ registerComponent(RectRenderer, "RectRenderer")
 function RectRenderer:setup(width, height, color, offsetV, offsetY)
     assert(width)
     assert(height)
-    self.width = width / 2
-    self.height = height / 2
+    self.width = width
+    self.height = height
     self.color = color
     self.offset = Vector.new(offsetV, offsetY)
 end
@@ -16,8 +16,12 @@ function RectRenderer:reverseSetup()
 end
 
 function RectRenderer:BoundingBox_deferredSetup()
-    debugLog("rectRenderer")
-    self.actor.BoundingBox:setup(self.width, self.height, self.offset:xy())
+    self.actor.BoundingBox:setup(
+        self.width * 2,
+        self.height * 2,
+        self.width + self.offset.x,
+        self.height + self.offset.y
+    )
 end
 
 function RectRenderer:draw(x, y)

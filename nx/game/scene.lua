@@ -6,7 +6,6 @@ local Scene = {}
 
 function Scene.new(width, height)
     local self = newObject(Scene)
-    self.hasStarted = false
     self.actors = List.new()
     self:setDimensions(width, height)
     self.freeze = false
@@ -124,9 +123,6 @@ function Scene:addActor(actor)
     assert(actor:type() == Actor, "Can't add a non-actor to a scene")
 
     actor.originalScene = self
-    if not actor._hasNotRunStart then -- fenestra hack
-        actor._hasNotRunStart = true
-    end -- /fenestra hack
 
     self.actors:add(actor)
 
@@ -361,14 +357,6 @@ function Scene:update(dt)
     for i, actor in self.actors:clone():each() do
         if actor.isDestroyed then
             actor:removeFromScene()
-        end
-    end
-
-    -- Run any applicable start functions
-    for i, actor in self.actors:clone():each() do
-        if actor._hasNotRunStart then
-            actor._hasNotRunStart = nil
-            actor:start()
         end
     end
 
