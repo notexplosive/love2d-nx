@@ -30,6 +30,14 @@ function Sprite.new(filename, gridSizeX, gridSizeY)
     return self
 end
 
+function Sprite:getImageDimensions()
+    return self.image:getDimensions()
+end
+
+function Sprite:getGridCellDimensions()
+    return self.gridWidth, self.gridHeight
+end
+
 function Sprite:getQuadAt(index)
     assert(index > 0 and index <= self.frames, "Attempted to index quad " .. index .. ", expected 0 to " .. self.frames)
     index = math.floor(index) - 1
