@@ -33,16 +33,11 @@ function SpriteRenderer:setup(spriteName, anim, scale, color, offx, offy)
 
     self.scale = scale or self.scale
     self.color = color or self.color
+end
 
-    if self.actor.BoundingBox then
-        local x, y, w, h = self:getSpriteBoundingBox():xywh()
-        self.actor.BoundingBox:setup(
-            w,
-            h,
-            self.sprite.gridWidth * self.scale / 2,
-            self.sprite.gridHeight * self.scale / 2
-        )
-    end
+function SpriteRenderer:BoundingBox_deferredSetup()
+    local x, y, w, h = self:getSpriteBoundingBox():xywh()
+    self.actor.BoundingBox:setup(w, h, self.sprite.gridWidth * self.scale / 2, self.sprite.gridHeight * self.scale / 2)
 end
 
 function SpriteRenderer:draw(x, y)

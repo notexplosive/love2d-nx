@@ -5,10 +5,22 @@ registerComponent(BoundingBox, "BoundingBox")
 function BoundingBox:setup(w, h, ox, oy)
     self.size = Size.new(w or 64, h or 64)
     self.offset = Vector.new(ox or 0, oy or 0)
+    self.askOtherComponentsToSetup = false
+
+    -- aka: no arguments
+    if not w and not h then
+        self.askOtherComponentsToSetup = true
+    end
 end
 
 function BoundingBox:reverseSetup()
     return self:width(), self:height(), self.offset.x, self.offset.y
+end
+
+function BoundingBox:start()
+    if self.askOtherComponentsToSetup then
+        self.actor:callForAllComponents("BoundingBox_deferredSetup")
+    end
 end
 
 function BoundingBox:getArea()
