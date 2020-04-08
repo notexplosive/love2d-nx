@@ -5,7 +5,7 @@ registerComponent(EditMode, "EditMode")
 
 function EditMode:awake()
     self.actor:addComponent(Components.SidebarIcon, 0.5)
-    self.actor:addComponent(Components.SpriteRenderer, "linkin", "walk", 4)
+    self.actor:addComponent(Components.SpriteRenderer, "linkin", "stand", 4)
 
     self.actor:addComponentSafe(Components.Uneditable)
     self.actor:addComponent(Components.SpawnMousePointer)
