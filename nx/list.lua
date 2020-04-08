@@ -99,6 +99,10 @@ function List:pop()
 end
 
 function List:peek()
+    if self.listLength == 0 then
+        return nil
+    end
+
     return self:at(self.listLength)
 end
 
@@ -224,6 +228,10 @@ Test.run(
         Test.assert(3, subject:at(1), "Enqueue first element")
         Test.assert(2, subject:at(2), "Enqueue second element")
         Test.assert(1, subject:at(3), "Enqueue last element")
+
+        -- EDGE CASE
+        subject = List.new()
+        Test.assert(nil, subject:peek(), "Peeking an empty list is nil")
     end
 )
 

@@ -202,7 +202,6 @@ function Actor:createEvent(methodName, args)
 end
 
 -- Called by Scene
--- Events are propagated down to each component
 function Actor:update(dt)
     for i, component in self.components:cloneReversed():each() do
         if component._componentDestroyed then
@@ -213,6 +212,7 @@ function Actor:update(dt)
     self:callForAllComponents("update", dt)
 end
 
+-- Events are propagated down to each component
 Actor:createEvent("start")
 Actor:createEvent("draw", {"x", "y"})
 Actor:createEvent("onDestroy")

@@ -15,6 +15,11 @@ function RectRenderer:reverseSetup()
     return self.width, self.height, self.color, self.offsetV, self.offsetY
 end
 
+function RectRenderer:BoundingBox_deferredSetup()
+    debugLog("rectRenderer")
+    self.actor.BoundingBox:setup(self.width, self.height, self.offset:xy())
+end
+
 function RectRenderer:draw(x, y)
     love.graphics.setColor(self.color or {1, 1, 1, 1})
 
