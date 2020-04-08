@@ -9,10 +9,11 @@ function ParticleSystem:setup(imageName, buffer)
     self.particleSystem:setEmissionRate(50)
     self.particleSystem:setSizeVariation(1)
     self.particleSystem:setLinearAcceleration(-100, -100, 100, 100) -- Random movement in all directions.
-    self.particleSystem:setColors(0, 0, 0, 0.5)
+    self.particleSystem:setColors(1, 1, 1, 0.5)
 end
 
 function ParticleSystem:draw(x, y)
+    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(self.particleSystem, x, y)
 end
 
