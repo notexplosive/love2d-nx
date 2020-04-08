@@ -1,16 +1,4 @@
 {
-  "editor-icons": [
-    "editor-icons.png",
-    32,
-    32,
-    {
-      "create": [1, 1],
-      "delete": [2, 2],
-      "bring-to-front": [3, 3],
-      "send-to-back": [4, 4],
-      "save": [5, 5]
-    }
-  ],
   "cursor": [
     "cursor.png",
     64,

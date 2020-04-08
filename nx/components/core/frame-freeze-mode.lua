@@ -8,7 +8,7 @@ function FrameFreezeMode:awake()
     self.stepSize = 1 / 60
 
     self.actor:addComponent(Components.SecondsRenderer)
-    self.actor:addComponent(Components.SidebarIcon, 1)
+    self.actor:addComponent(Components.SidebarIcon)
 
     for i, scene in sceneLayers:each() do
         local listener = scene:getFirstBehaviorIfExists(Components.FrameFreezeListener)

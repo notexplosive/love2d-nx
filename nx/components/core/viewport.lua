@@ -18,8 +18,6 @@ function Viewport:awake()
     self.shakeFrames = 0
     self.shakeMagnitude = 0
 
-    self:shake(50, 10)
-
     self.actor:scene():setViewport(self)
 end
 
