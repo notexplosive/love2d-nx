@@ -5,8 +5,8 @@ registerComponent(BoundingBoxEditor, "BoundingBoxEditor", {"BoundingBox"})
 local topBuffer = 8
 
 function BoundingBoxEditor:setup(minWidth, minHeight, grabHandleWidth)
-    assert(minWidth)
-    assert(minHeight)
+    assert(minWidth, "missing setup parmeter minWidth")
+    assert(minHeight, "missing setup parmeter minHeight")
     self.minimumSize = Size.new(minWidth, minHeight)
     self.grabHandleWidth = grabHandleWidth or self.grabHandleWidth
 end

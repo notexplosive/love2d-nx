@@ -18,19 +18,21 @@ function NinePatch:setup(spriteName, inflateWidth, inflateHeight, offsetX, offse
     local middleX = gw
     local middleY = gh
 
-    self.topImage = self:getCroppedImage(middleX, top)
-    self.topLeftCornerImage = self:getCroppedImage(left, top)
-    self.topRightCornerImage = self:getCroppedImage(right, top)
-    self.leftImage = self:getCroppedImage(left, middleY)
-    self.rightImage = self:getCroppedImage(right, middleY)
-    self.bottomImage = self:getCroppedImage(middleX, bottom)
-    self.bottomLeftImage = self:getCroppedImage(left, bottom)
-    self.bottomRightImage = self:getCroppedImage(right, bottom)
-    self.middleImage = self:getCroppedImage(middleX, middleY)
-
     self.topBottomQuad = love.graphics.newQuad(0, 0, 0, 0, gw, gh)
     self.leftRightQuad = love.graphics.newQuad(0, 0, 0, 0, gw, gh)
     self.middleQuad = love.graphics.newQuad(0, 0, 0, 0, gw, gh)
+
+    self.imageAndQuads = {
+        top = {image = self:getCroppedImage(middleX, top), quad = self.topBottomQuad},
+        bottom = {image = self:getCroppedImage(middleX, bottom), quad = self.topBottomQuad},
+        left = {image = self:getCroppedImage(left, middleY), quad = self.leftRightQuad},
+        right = {image = self:getCroppedImage(right, middleY), quad = self.leftRightQuad},
+        middle = {image = self:getCroppedImage(middleX, middleY), quad = self.middleQuad},
+        topLeft = {image = self:getCroppedImage(left, top)},
+        topRight = {image = self:getCroppedImage(right, top)},
+        bottomLeft = {image = self:getCroppedImage(left, bottom)},
+        bottomRight = {image = self:getCroppedImage(right, bottom)}
+    }
 end
 
 function NinePatch:reverseSetup()
@@ -58,16 +60,16 @@ function NinePatch:draw(x, y)
     self.middleQuad:setViewport(0, 0, middleWidth, middleHeight)
 
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(self.topLeftCornerImage, x, y)
-    love.graphics.draw(self.topRightCornerImage, rightX, y)
-    love.graphics.draw(self.bottomLeftImage, x, bottomY)
-    love.graphics.draw(self.bottomRightImage, rightX, bottomY)
+    love.graphics.draw(self.imageAndQuads.topLeft.image, x, y)
+    love.graphics.draw(self.imageAndQuads.topRight.image, rightX, y)
+    love.graphics.draw(self.imageAndQuads.bottomLeft.image, x, bottomY)
+    love.graphics.draw(self.imageAndQuads.bottomRight.image, rightX, bottomY)
 
-    love.graphics.draw(self.topImage, self.topBottomQuad, middleX, y)
-    love.graphics.draw(self.leftImage, self.leftRightQuad, x, middleY)
-    love.graphics.draw(self.rightImage, self.leftRightQuad, rightX, middleY)
-    love.graphics.draw(self.bottomImage, self.topBottomQuad, middleX, bottomY)
-    love.graphics.draw(self.middleImage, self.middleQuad, middleX, middleY)
+    love.graphics.draw(self.imageAndQuads.top.image, self.imageAndQuads.top.quad, middleX, y)
+    love.graphics.draw(self.imageAndQuads.left.image, self.imageAndQuads.left.quad, x, middleY)
+    love.graphics.draw(self.imageAndQuads.right.image, self.imageAndQuads.right.quad, rightX, middleY)
+    love.graphics.draw(self.imageAndQuads.bottom.image, self.imageAndQuads.bottom.quad, middleX, bottomY)
+    love.graphics.draw(self.imageAndQuads.middle.image, self.imageAndQuads.middle.quad, middleX, middleY)
 end
 
 function NinePatch:getCroppedImage(x, y)
@@ -81,6 +83,10 @@ function NinePatch:getCroppedImage(x, y)
     croppedImage:setWrap("repeat", "repeat")
 
     return croppedImage
+end
+
+function NinePatch:getCellDimensions()
+    return self.sprite:getGridCellDimensions()
 end
 
 function NinePatch:getRect()

@@ -35,7 +35,7 @@ end
 
 function Editable:Selectable_onSelect()
     if self.actor.NinePatch then
-        self.actor:addComponentSafe(Components.BoundingBoxEditor)
+        self.actor:addComponentSafe(Components.BoundingBoxEditor, self.actor.NinePatch:getCellDimensions())
     end
 end
 
