@@ -14,7 +14,8 @@ function StressTest:spawn(x, y)
     actor:addComponent(Components.DestroyAtRandomTime)
     actor:addComponent(Components.MoveByRandom)
     actor:addComponent(Components.MouseSelectable)
-    actor:addComponent(Components.SpriteRenderer, "linkin", "walk", 2)
+    actor:addComponent(Components.BoundingBoxRenderer)
+    --actor:addComponent(Components.SpriteRenderer, "linkin", "walk", 2)
 end
 
 function StressTest:onMousePress(x, y, button, wasRelease)
