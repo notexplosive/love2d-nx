@@ -54,6 +54,10 @@ function Selectable:selected()
 end
 
 function Selectable:select(forceGroupSelect)
+    if self:selected() and not forceGroupSelect then
+        return
+    end
+
     local groupSelect = forceGroupSelect
     if not groupSelect then
         self:deselectAll()

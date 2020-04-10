@@ -2,7 +2,7 @@ local BoundingBoxEditor = {}
 
 registerComponent(BoundingBoxEditor, "BoundingBoxEditor", {"BoundingBox"})
 
-local topBuffer = 8
+local topBuffer = 0
 
 function BoundingBoxEditor:setup(minWidth, minHeight, grabHandleWidth)
     assert(minWidth, "missing setup parmeter minWidth")

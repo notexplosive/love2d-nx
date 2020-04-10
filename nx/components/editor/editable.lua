@@ -36,11 +36,13 @@ end
 function Editable:Selectable_onSelect()
     if self.actor.NinePatch then
         self.actor:addComponentSafe(Components.BoundingBoxEditor, self.actor.NinePatch:getCellDimensions())
+        self.actor:addComponentSafe(Components.BoundingBoxEditorRenderer)
     end
 end
 
 function Editable:Selectable_onDeselect()
     self.actor:removeComponentSafe(Components.BoundingBoxEditor)
+    self.actor:removeComponentSafe(Components.BoundingBoxEditorRenderer)
 end
 
 function Editable:onDestroy()

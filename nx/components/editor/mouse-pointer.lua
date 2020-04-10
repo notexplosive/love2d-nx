@@ -1,3 +1,4 @@
+local sceneLayers = require("nx/scene-layers")
 local MousePointer = {}
 
 registerComponent(MousePointer, "MousePointer")
@@ -6,17 +7,17 @@ function MousePointer:awake()
     love.mouse.setVisible(false)
     self.actor.SpriteRenderer:setAnimation("up-down")
     self.leftButtonDown = false
-
-    self.actor:addComponent(Components.AlwaysOnTop)
 end
 
 function MousePointer:update(dt)
     if not self.leftButtonDown then
         local hoverIndex = nil
-        for i, actor in self.actor:scene():eachActorWith(Components.BoundingBoxEditor) do
-            if actor.BoundingBoxEditor.hoverIndex then
-                hoverIndex = actor.BoundingBoxEditor.hoverIndex
-                break
+        for _, scene in sceneLayers:eachInReverseDrawOrder() do
+            for i, actor in scene:eachActorWith(Components.BoundingBoxEditor) do
+                if actor.BoundingBoxEditor.hoverIndex then
+                    hoverIndex = actor.BoundingBoxEditor.hoverIndex
+                    break
+                end
             end
         end
 
@@ -33,15 +34,6 @@ function MousePointer:update(dt)
         end
         if hoverIndex == 6 or hoverIndex == 7 then
             self.actor.SpriteRenderer:setAnimation("top-right")
-        end
-    end
-
-    if self.leftButtonDown then
-        for i, actor in self.actor:scene():eachActorWith(Components.MoveOnDrag) do
-            if actor.Draggable.dragging then
-                self.actor.SpriteRenderer:setAnimation("translate")
-                break
-            end
         end
     end
 end
