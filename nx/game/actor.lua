@@ -83,6 +83,16 @@ function Actor:setPos(v, y)
     self._localPos = v
 end
 
+function Actor:setPosX(x)
+    assert(tonumber(x), "expected number got " .. type(x))
+    self._localPos.x = tonumber(x)
+end
+
+function Actor:setPosY(y)
+    assert(tonumber(y), "expected number got " .. type(y))
+    self._localPos.y = tonumber(y)
+end
+
 -- takes a vector or x,y
 function Actor:setLocalPos(v, y)
     -- Handle (x,y) case

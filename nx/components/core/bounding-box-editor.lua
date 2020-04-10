@@ -2,8 +2,6 @@ local BoundingBoxEditor = {}
 
 registerComponent(BoundingBoxEditor, "BoundingBoxEditor", {"BoundingBox"})
 
-local topBuffer = 0
-
 function BoundingBoxEditor:setup(minWidth, minHeight, grabHandleWidth)
     assert(minWidth, "missing setup parmeter minWidth")
     assert(minHeight, "missing setup parmeter minHeight")
@@ -52,10 +50,6 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy, isHoverConsumed)
         return
     end
 
-    if self.actor.SpawnPopup then
-        return
-    end
-
     if not self.selectedIndex then
         if not isHoverConsumed then
             for i, rect in ipairs(self.sideGrabHandleRects) do
@@ -81,6 +75,9 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy, isHoverConsumed)
     end
 
     if self.selectedIndex then
+        local currentMousePos = Vector.new(x, y)
+        local mouseDeltaFromStart = currentMousePos - self.startPoint
+
         self.actor:scene():consumeHover()
         local bottomRight = self.selectedIndex == 8
         local topLeft = self.selectedIndex == 5
@@ -93,19 +90,19 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy, isHoverConsumed)
         local alongRight = self.selectedIndex == 4 or bottomRight or topRight
 
         if alongTop then
-            self:moveTopSide(dy, x, y)
+            self:moveTopSide(mouseDeltaFromStart.y, x, y)
         end
 
         if alongBottom then
-            self:moveBottomSide(dy, x, y)
+            self:moveBottomSide(mouseDeltaFromStart.y, x, y)
         end
 
         if alongLeft then
-            self:moveLeftSide(dx, x, y)
+            self:moveLeftSide(mouseDeltaFromStart.x, x, y)
         end
 
         if alongRight then
-            self:moveRightSide(dx, x, y)
+            self:moveRightSide(mouseDeltaFromStart.x, x, y)
         end
 
         self.actor:callForAllComponents("BoundingBoxEditor_onResizeDrag", self.actor.BoundingBox:getRect())
@@ -113,6 +110,8 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy, isHoverConsumed)
 end
 
 function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsumed)
+    local startedNotSelecting = self.selectedIndex == nil
+
     if not self.actor.visible then
         return
     end
@@ -124,13 +123,13 @@ function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsume
         return
     end
 
+    self.savedRect = nil
     self.selectedIndex = nil
     if button == 1 and not wasRelease and not isClickConsumed then
         if not self.actor.BoundingBox:getRect():isVectorWithin(x, y) then
             for i, rect in ipairs(self.cornerGrabHandleRects) do
                 if rect:isVectorWithin(x, y) then
-                    self.selectedIndex = i + 4
-                    self:startResize(x, y)
+                    self:startResize(i + 4, x, y)
                     return
                 end
             end
@@ -138,8 +137,7 @@ function BoundingBoxEditor:onMousePress(x, y, button, wasRelease, isClickConsume
 
         for i, rect in ipairs(self.sideGrabHandleRects) do
             if rect:isVectorWithin(x, y) then
-                self.selectedIndex = i
-                self:startResize(x, y)
+                self:startResize(i, x, y)
             end
         end
     end
@@ -159,9 +157,12 @@ function BoundingBoxEditor:endResizeIfApplicable()
     end
 end
 
-function BoundingBoxEditor:startResize(x, y)
-    self.actor:callForAllComponents("BoundingBoxEditor_onResizeStart")
+function BoundingBoxEditor:startResize(selectedIndex, x, y)
+    debugLog("started", selectedIndex)
+    self.savedRect = self.actor.BoundingBox:getRect()
+    self.selectedIndex = selectedIndex
     self.startPoint = Vector.new(x, y)
+    self.actor:callForAllComponents("BoundingBoxEditor_onResizeStart")
     self.actor:scene():consumeClick()
     self.resizeStarted = true
 end
@@ -172,63 +173,53 @@ end
 
 -- Mutators
 function BoundingBoxEditor:moveVerticallyBy(y)
-    self.actor:setPos(self.actor:pos() + Vector.new(0, y))
+    self.actor:setPosY(self.savedRect.pos.y + y)
 end
 
 function BoundingBoxEditor:moveHorizontallyBy(x)
-    self.actor:setPos(self.actor:pos() + Vector.new(x, 0))
+    self.actor:setPosX(self.savedRect.pos.x + x)
 end
 
 function BoundingBoxEditor:growHorizontallyBy(x)
-    self.actor.BoundingBox:setWidth(self.actor.BoundingBox:width() + x)
+    self.actor.BoundingBox:setWidth(self.savedRect:width() + x)
+
+    if self.actor.BoundingBox:width() < self.minimumSize.width then
+        local overage = self.actor.BoundingBox:width() - self.minimumSize.width
+        self.actor.BoundingBox:setWidth(self.minimumSize.width)
+        return overage
+    end
+
+    return 0
 end
 
 function BoundingBoxEditor:growVerticallyBy(y)
-    self.actor.BoundingBox:setHeight(self.actor.BoundingBox:height() + y)
-end
+    self.actor.BoundingBox:setHeight(self.savedRect:height() + y)
 
-function BoundingBoxEditor:getHorizontalOverage()
-    return math.max(self.minimumSize.width - self.actor.BoundingBox:width(), 0)
-end
+    if self.actor.BoundingBox:height() < self.minimumSize.height then
+        local overage = self.actor.BoundingBox:height() - self.minimumSize.height
+        self.actor.BoundingBox:setHeight(self.minimumSize.height)
+        return overage
+    end
 
-function BoundingBoxEditor:getVerticalOverage()
-    return math.max(self.minimumSize.height - self.actor.BoundingBox:height(), 0)
+    return 0
 end
 
 function BoundingBoxEditor:moveLeftSide(dx, x, y)
-    if x < self.actor:pos().x or dx > 0 then
-        self:moveHorizontallyBy(dx)
-        self:growHorizontallyBy(-dx)
-        local overage = self:getHorizontalOverage()
-        self:growHorizontallyBy(overage)
-        self:moveHorizontallyBy(-overage)
-    end
+    local overage = self:growHorizontallyBy(-dx)
+    self:moveHorizontallyBy(dx + overage)
 end
 
 function BoundingBoxEditor:moveTopSide(dy, x, y)
-    if y < self.actor:pos().y or dy > 0 then
-        self:moveVerticallyBy(dy)
-        self:growVerticallyBy(-dy)
-        local overage = self:getVerticalOverage()
-        self:growVerticallyBy(overage)
-        self:moveVerticallyBy(-overage)
-    end
+    local overage = self:growVerticallyBy(-dy)
+    self:moveVerticallyBy(dy + overage)
 end
 
 function BoundingBoxEditor:moveBottomSide(dy, x, y)
-    if y > self.actor:pos().y + self.actor.BoundingBox:height() or dy < 0 then
-        self:growVerticallyBy(dy)
-        local overage = self:getVerticalOverage()
-        self:growVerticallyBy(overage)
-    end
+    self:growVerticallyBy(dy)
 end
 
 function BoundingBoxEditor:moveRightSide(dx, x, y)
-    if x > self.actor:pos().x + self.actor.BoundingBox:width() or dx < 0 then
-        self:growHorizontallyBy(dx)
-        local overage = self:getHorizontalOverage()
-        self:growHorizontallyBy(overage)
-    end
+    self:growHorizontallyBy(dx)
 end
 
 -- Corners
@@ -240,11 +231,11 @@ function BoundingBoxEditor:getCornerRect(dx, dy)
 end
 
 function BoundingBoxEditor:getTopLeftGrabHandleRect()
-    return self:getCornerRect(0, 0):move(0, topBuffer)
+    return self:getCornerRect(0, 0):move(0, 0)
 end
 
 function BoundingBoxEditor:getTopRightGrabHandleRect()
-    return self:getCornerRect(self.actor.BoundingBox:getRect():width(), 0):move(0, topBuffer)
+    return self:getCornerRect(self.actor.BoundingBox:getRect():width(), 0):move(0, 0)
 end
 
 function BoundingBoxEditor:getBottomRightGrabHandleRect()
@@ -280,7 +271,7 @@ end
 function BoundingBoxEditor:getTopGrabHandleRect()
     local rect = self.actor.BoundingBox:getRect()
     rect:setHeight(self.grabHandleWidth)
-    rect:move(0, -self.grabHandleWidth + topBuffer)
+    rect:move(0, -self.grabHandleWidth)
     return rect
 end
 
