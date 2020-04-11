@@ -71,7 +71,7 @@ function List:add(...)
         self.listLength = self.listLength + 1
         self.innerList[self.listLength] = object
     end
-    return params[1]
+    return ...
 end
 
 function List:removeAt(index)
@@ -229,9 +229,11 @@ Test.run(
         Test.assert(2, subject:at(2), "Enqueue second element")
         Test.assert(1, subject:at(3), "Enqueue last element")
 
-        -- EDGE CASE
+        -- PEEK TESTS
         subject = List.new()
         Test.assert(nil, subject:peek(), "Peeking an empty list is nil")
+        subject:add(1, 7, 9, 11)
+        Test.assert(11, subject:peek(), "Peeking gets the last item")
     end
 )
 

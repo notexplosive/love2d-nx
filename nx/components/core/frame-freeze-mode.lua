@@ -1,4 +1,3 @@
-local sceneLayers = require("nx/scene-layers")
 local FrameFreezeMode = {}
 
 registerComponent(FrameFreezeMode, "FrameFreezeMode")
@@ -10,7 +9,7 @@ function FrameFreezeMode:awake()
     self.actor:addComponent(Components.SecondsRenderer)
     self.actor:addComponent(Components.SidebarIcon)
 
-    for i, scene in sceneLayers:each() do
+    for i, scene in sceneLayers:eachInReverseDrawOrder() do
         local listener = scene:getFirstBehaviorIfExists(Components.FrameFreezeListener)
         if listener then
             listener:freeze()
@@ -19,7 +18,7 @@ function FrameFreezeMode:awake()
 end
 
 function FrameFreezeMode:onDestroy()
-    for i, scene in sceneLayers:each() do
+    for i, scene in sceneLayers:eachInReverseDrawOrder() do
         local listener = scene:getFirstBehaviorIfExists(Components.FrameFreezeListener)
         if listener then
             listener:unfreeze()
@@ -31,7 +30,7 @@ end
 
 function FrameFreezeMode:onScroll(x, y)
     if y < 0 then
-        for i, scene in sceneLayers:each() do
+        for i, scene in sceneLayers:eachInReverseDrawOrder() do
             local listener = scene:getFirstBehaviorIfExists(Components.FrameFreezeListener)
             if listener then
                 listener:tick(self.stepSize)

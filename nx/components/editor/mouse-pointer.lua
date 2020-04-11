@@ -1,4 +1,3 @@
-local sceneLayers = require("nx/scene-layers")
 local MousePointer = {}
 
 registerComponent(MousePointer, "MousePointer")

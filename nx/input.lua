@@ -1,5 +1,3 @@
-local sceneLayers = require("nx/scene-layers")
-
 function love.mousepressed(x, y, button)
     love.mousemoved(x, y, 0, 0)
     sceneLayers:onMousePress(x, y, button, false)

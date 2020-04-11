@@ -1,4 +1,3 @@
-local sceneLayers = require("nx/scene-layers")
 local SceneGraphRenderer = {}
 
 registerComponent(SceneGraphRenderer, "SceneGraphRenderer")

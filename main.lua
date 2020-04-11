@@ -5,9 +5,11 @@ require("nx/util")
 require("nx/input")
 require("nx/debug-log")
 
-local sceneLayers = require("nx/scene-layers")
+local SceneLayers = require("nx/scene-layers")
 local Test = require("nx/test")
 local Scene = require("nx/game/scene")
+
+sceneLayers = SceneLayers.new()
 
 function love.update(dt)
     for _, scene in sceneLayers:eachInReverseDrawOrder() do

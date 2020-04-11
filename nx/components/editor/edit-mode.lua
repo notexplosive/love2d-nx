@@ -1,4 +1,3 @@
-local sceneLayers = require("nx/scene-layers")
 local EditMode = {}
 
 registerComponent(EditMode, "EditMode")
@@ -18,7 +17,7 @@ function EditMode:update(dt)
 end
 
 function EditMode:onDestroy()
-    for _, scene in sceneLayers:each() do
+    for _, scene in sceneLayers:eachInReverseDrawOrder() do
         local listener = scene:getFirstBehaviorIfExists(Components.EditModeListener)
         if listener then
             listener:disableEditor()
@@ -29,7 +28,7 @@ function EditMode:onDestroy()
 end
 
 function EditMode:makeAllObjectsEditable()
-    for _, scene in sceneLayers:each() do
+    for _, scene in sceneLayers:eachInReverseDrawOrder() do
         local listener = scene:getFirstBehaviorIfExists(Components.EditModeListener)
         if listener then
             listener:enableEditor()

@@ -1,17 +1,23 @@
 local Scene = require("nx/game/scene")
 local List = require("nx/list")
 
-local sceneLayers = List.new(Scene)
+local SceneLayers = {}
 
-function sceneLayers:eachInDrawOrder()
-    return self:each()
+function SceneLayers.new()
+    local self = newObject(SceneLayers)
+    self.list = List.new()
+    return self
 end
 
-function sceneLayers:eachInReverseDrawOrder()
-    return self:eachReversed()
+function SceneLayers:eachInDrawOrder()
+    return self.list:each()
 end
 
-function sceneLayers:onMousePress(x, y, button, wasRelease)
+function SceneLayers:eachInReverseDrawOrder()
+    return self.list:eachReversed()
+end
+
+function SceneLayers:onMousePress(x, y, button, wasRelease)
     local isConsumed = false
     for _, scene in self:eachInReverseDrawOrder() do
         scene.isClickConsumed = isConsumed
@@ -23,7 +29,7 @@ function sceneLayers:onMousePress(x, y, button, wasRelease)
     end
 end
 
-function sceneLayers:onMouseMove(x, y, dx, dy)
+function SceneLayers:onMouseMove(x, y, dx, dy)
     local isConsumed = false
     for _, scene in self:eachInReverseDrawOrder() do
         scene.isHoverConsumed = isConsumed
@@ -36,7 +42,7 @@ function sceneLayers:onMouseMove(x, y, dx, dy)
     end
 end
 
-function sceneLayers:onKeyPress(key, scancode, wasRelease)
+function SceneLayers:onKeyPress(key, scancode, wasRelease)
     local isConsumed = false
     for _, scene in self:eachInReverseDrawOrder() do
         scene.isKeyConsumed = isConsumed
@@ -47,5 +53,17 @@ function sceneLayers:onKeyPress(key, scancode, wasRelease)
     end
 end
 
+function SceneLayers:add(item)
+    return self.list:add(item)
+end
+
+function SceneLayers:clear()
+    self.list:clear()
+end
+
+function SceneLayers:getDebugScene()
+    return self.list:peek()
+end
+
 -- Singleton!
-return sceneLayers
+return SceneLayers

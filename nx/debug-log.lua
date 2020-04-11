@@ -1,5 +1,4 @@
 local List = require("nx/list")
-local sceneLayers = require("nx/scene-layers")
 
 local tempBuffer = List.new()
 
@@ -10,7 +9,8 @@ function debugLog(str, ...)
     end
 
     if sceneLayers then
-        local debugScene = sceneLayers:peek()
+        local debugScene = sceneLayers:getDebugScene()
+        print(debugScene)
         if debugScene then
             local debugRenderer = debugScene:getFirstBehavior(Components.DebugLogRenderer)
             if debugRenderer then
