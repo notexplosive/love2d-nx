@@ -1,0 +1,17 @@
+{
+  "root": [],
+  "actors": [
+    {
+      "components": [["Viewport", 1, 1600, 900], ["Uneditable"]]
+    },
+    {
+      "components": [
+        ["BoundingBox", 300, 200],
+        ["NinePatch", "windowchrome", 64, 64, 0, 0],
+        ["BoundingBoxEditor", 128, 128],
+        ["Canvas"]
+      ],
+      "pos": [50, 50]
+    }
+  ]
+}
