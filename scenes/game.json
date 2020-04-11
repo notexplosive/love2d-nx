@@ -23,13 +23,6 @@
       "components": [["RectRenderer", 20, 20]],
       "name": "Rodney Rectangle",
       "pos": [400, 200]
-    },
-    {
-      "components": [
-        ["BoundingBox", 300, 200],
-        ["NinePatch", "windowchrome"]
-      ],
-      "pos": [100, 100]
     }
   ]
 }
