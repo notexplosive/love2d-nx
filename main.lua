@@ -32,10 +32,9 @@ end
 function runGame()
     collectgarbage("collect")
     sceneLayers:clear()
-    local gameScene = sceneLayers:add(Scene.fromJson("game"))
+    sceneLayers:add(Scene.fromJson("game"))
     sceneLayers:add(Scene.fromJson("ui"))
-    -- debugScene must always be the top most scene
-    sceneLayers:add(Scene.fromJson("debug"))
+    sceneLayers:setDebugScene(Scene.fromJson("debug"))
 end
 
 function love.load(argv)

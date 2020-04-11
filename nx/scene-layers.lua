@@ -5,16 +5,19 @@ local SceneLayers = {}
 
 function SceneLayers.new()
     local self = newObject(SceneLayers)
-    self.list = List.new()
+    self.layers = List.new()
+    self.debugScene = Scene.new()
     return self
 end
 
 function SceneLayers:eachInDrawOrder()
-    return self.list:each()
+    local list = self.layers:clone():add(self.debugScene)
+    return list:each()
 end
 
 function SceneLayers:eachInReverseDrawOrder()
-    return self.list:eachReversed()
+    local list = self.layers:clone():add(self.debugScene)
+    return list:eachReversed()
 end
 
 function SceneLayers:onMousePress(x, y, button, wasRelease)
@@ -54,15 +57,19 @@ function SceneLayers:onKeyPress(key, scancode, wasRelease)
 end
 
 function SceneLayers:add(item)
-    return self.list:add(item)
+    return self.layers:add(item)
 end
 
 function SceneLayers:clear()
-    self.list:clear()
+    self.layers:clear()
 end
 
 function SceneLayers:getDebugScene()
-    return self.list:peek()
+    return self.debugScene
+end
+
+function SceneLayers:setDebugScene(scene)
+    self.debugScene = scene
 end
 
 -- Singleton!
