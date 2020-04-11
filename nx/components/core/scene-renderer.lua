@@ -157,7 +157,7 @@ end
 
 -- fenestra hack, as well as its usages
 function SceneRenderer:isInFocus()
-    return self.actor.WindowExternal:isInFocus()
+    --return self.actor.WindowExternal:isInFocus()
 end
 -- /fenestra hack
 

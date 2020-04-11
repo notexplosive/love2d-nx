@@ -105,7 +105,7 @@ function BoundingBoxEditor:onMouseMove(x, y, dx, dy, isHoverConsumed)
             self:moveRightSide(mouseDeltaFromStart.x, x, y)
         end
 
-        self.actor:callForAllComponents("BoundingBoxEditor_onResizeDrag", self:getResizeRect())
+        self.actor:callForAllComponents("BoundingBoxEditor_onResizeDrag", self.actor.BoundingBox:getRect())
     end
 end
 
@@ -153,7 +153,7 @@ end
 function BoundingBoxEditor:endResizeIfApplicable()
     if self.resizeStarted then
         self.resizeStarted = false
-        self.actor:callForAllComponents("BoundingBoxEditor_onResizeEnd", self:getResizeRect())
+        self.actor:callForAllComponents("BoundingBoxEditor_onResizeEnd", self.actor.BoundingBox:getRect())
     end
 end
 
@@ -284,9 +284,9 @@ end
 function BoundingBoxEditor:getResizeRect()
     local rect = self.actor.BoundingBox:getRect()
     -- fenestra hack
-    rect:inflate(-64, -64)
-    rect:move(0, -20)
-    rect:setHeight(rect:height() + 20)
+    --rect:inflate(-64, -64)
+    rect:move(0, -22)
+    rect:setHeight(rect:height() + 22)
     -- /fenestra hack
     return rect
 end

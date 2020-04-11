@@ -45,7 +45,7 @@ end
 
 function NinePatch:draw(x, y)
     local rect = self:getRect()
-    local _, _, width, height = rect:xywh()
+    local x, y, width, height = rect:xywh()
 
     local gw, gh = self.sprite:getGridCellDimensions()
     local middleWidth = width - gw * 2

@@ -35,7 +35,7 @@ end
 
 function Hoverable:getHoverOfPoint(v, y)
     local vec = Vector.new(v, y)
-    return self.actor.BoundingBox:getRect():isVectorWithin(vec)
+    return self.actor.BoundingBox:getRect():isVectorWithinInclusive(vec)
 end
 
 function Hoverable:getHoverIgnoreConsume()

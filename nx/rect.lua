@@ -154,6 +154,17 @@ function Rect:isVectorWithin(v, y)
     return cond1 and cond2 and cond3 and cond4
 end
 
+function Rect:isVectorWithinInclusive(v, y)
+    assert(v, "isVectorWithin needs an argument")
+    local vector = Vector.new(v, y)
+    local cond1 = vector.x >= self:x()
+    local cond2 = vector.x <= self:x() + self:width()
+    local cond3 = vector.y >= self:y()
+    local cond4 = vector.y <= self:y() + self:height()
+
+    return cond1 and cond2 and cond3 and cond4
+end
+
 function Rect:center()
     local x, y, w, h = self:xywh()
     return Vector.new(x + w / 2, y + h / 2)
@@ -210,6 +221,11 @@ Test.run(
         local pointOutside = Vector.new(50, 150)
         Test.assert(true, surface:isVectorWithin(pointInside), "Rect:isVectorWithinRect(), pointInside")
         Test.assert(false, surface:isVectorWithin(pointOnBoundary), "Rect:isVectorWithinRect(), pointOnBoundary")
+        Test.assert(
+            true,
+            surface:isVectorWithinInclusive(pointOnBoundary),
+            "Rect:isVectorWithinRect(), pointOnBoundary"
+        )
         Test.assert(false, surface:isVectorWithin(pointOutside), "Rect:isVectorWithinRect(), pointOutside")
 
         local mover = Rect.new(10, 10, 50, 50)
