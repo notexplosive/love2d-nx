@@ -1,6 +1,6 @@
 local EditorSerializable = {}
 
-registerComponent(EditorSerializable,'EditorSerializable')
+registerComponent(EditorSerializable, "EditorSerializable")
 
 function EditorSerializable:setup(component)
     self.component = component
@@ -26,7 +26,7 @@ function EditorSerializable:getAngle()
     if self.actor.DoNotSerializeAngle then
         return 0
     end
-    
+
     return radianToDegree(self.actor:angle())
 end
 
@@ -37,7 +37,7 @@ Test.registerComponentTest(
         local Actor = require("nx/game/actor")
         local setupArgs = {}
         local actor = Actor.new()
-        local subject = actor:addComponent(EditorSerializable,unpack(setupArgs))
+        local subject = actor:addComponent(EditorSerializable, unpack(setupArgs))
     end
 )
 
