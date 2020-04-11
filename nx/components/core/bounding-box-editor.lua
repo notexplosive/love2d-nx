@@ -282,9 +282,12 @@ function BoundingBoxEditor:getTopGrabHandleRect_Alt()
 end
 
 function BoundingBoxEditor:getResizeRect()
-    local rect = self.actor.BoundingBox:getRect():inflate(-64, -64)
+    local rect = self.actor.BoundingBox:getRect()
+    -- fenestra hack
+    rect:inflate(-64, -64)
     rect:move(0, -20)
     rect:setHeight(rect:height() + 20)
+    -- /fenestra hack
     return rect
 end
 
