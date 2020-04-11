@@ -33,7 +33,7 @@ function Canvas:drawWithoutClear(x, y)
     love.graphics.setCanvas(canvas)
 
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(self.canvas, x + self.offset.x, y + self.offset.y)
+    love.graphics.draw(self.canvas, math.floor(x + self.offset.x), math.floor(y + self.offset.y))
 end
 
 function Canvas:setDimensions(w, h)

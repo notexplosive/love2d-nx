@@ -7,9 +7,6 @@
   ],
   "actors": [
     {
-      "components": [["Viewport", 1, 1600, 900], ["Uneditable"]]
-    },
-    {
       "components": [["TriangleRenderer", 20]],
       "name": "Terry Triangle",
       "pos": [200, 200]
@@ -26,7 +23,7 @@
     },
     {
       "components": [
-        ["BoundingBox", 300, 200],
+        ["BoundingBox", 800, 600],
         ["NinePatch", "windowchrome", 64, 64, 0, 0],
         ["BoundingBoxEditor", 128, 128],
         ["Canvas"],
