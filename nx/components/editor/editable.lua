@@ -17,7 +17,7 @@ function Editable:awake()
     self:addComponentSafe(Components.Hoverable)
     self:addComponentSafe(Components.Clickable)
     self:addComponentSafe(Components.Draggable)
-    self:addComponentSafe(Components.MoveOnDrag)
+    --self:addComponentSafe(Components.MoveOnDrag)
     self:addComponentSafe(Components.Selectable)
     self:addComponentSafe(Components.SelectOnClick)
 
