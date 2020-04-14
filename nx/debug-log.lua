@@ -10,22 +10,25 @@ function debugLog(str, ...)
 
     if sceneLayers then
         local debugScene = sceneLayers:getDebugScene()
-        print(debugScene)
         if debugScene then
-            local debugRenderer = debugScene:getFirstBehavior(Components.DebugLogRenderer)
+            local debugRenderer = debugScene:getFirstBehaviorIfExists(Components.DebugLogRenderer)
             if debugRenderer then
                 if tempBuffer:length() > 0 then
                     for i, v in tempBuffer:each() do
-                        list:add(v)
+                        debugRenderer:append(v)
                     end
                     tempBuffer:clear()
                 end
 
                 debugRenderer:append(str)
                 print(str)
+            else
+                tempBuffer:add(str)
             end
+        else
+            tempBuffer:add(str)
         end
     else
-        list:add(str)
+        tempBuffer:add(str)
     end
 end
