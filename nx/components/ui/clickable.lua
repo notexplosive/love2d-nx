@@ -16,7 +16,7 @@ function Clickable:onMousePress(x, y, button, wasRelease, isClickConsumed)
         if self.actor.Hoverable:getHoverConsume() then
             if not wasRelease then
                 self.currentPressedButton = button
-                self.actor:callForAllComponents("Clickable_onClickStart", button,x,y)
+                self.actor:callForAllComponents("Clickable_onClickStart", button, x, y)
                 self.actor:scene():consumeClick()
             end
 
