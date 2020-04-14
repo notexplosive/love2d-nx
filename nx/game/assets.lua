@@ -43,7 +43,7 @@ end
 Assets["images"] = SpritesFromTemplate("assets/images.json")
 Assets["sounds"] = SoundsFromTemplate("assets/sounds.json")
 
-for i, filename in ipairs(love.filesystem.getDirectoryItems("images")) do
+for i, filename in ipairs(love.filesystem.getDirectoryItems(imagesPath)) do
     local filenameWithoutExt = string.split(filename, ".")[1]
     if not Assets["images"][filenameWithoutExt] then
         local image = love.graphics.newImage(imagesPath .. filename)
@@ -51,7 +51,7 @@ for i, filename in ipairs(love.filesystem.getDirectoryItems("images")) do
     end
 end
 
-for i, filename in ipairs(love.filesystem.getDirectoryItems("sounds")) do
+for i, filename in ipairs(love.filesystem.getDirectoryItems(soundsPath)) do
     local sp = string.split(filename, ".")
     local filenameWithoutExt = sp[1]
     local extension = sp[2]
