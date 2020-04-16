@@ -4,6 +4,8 @@ registerComponent(MousePointer, "MousePointer")
 
 function MousePointer:awake()
     love.mouse.setVisible(false)
+    self.actor:addComponent(Components.SpriteRenderer, "cursor")
+    self.actor:addComponent(Components.FollowMouse, -16, -16)
     self.actor.SpriteRenderer:setAnimation("up-down")
     self.leftButtonDown = false
 end

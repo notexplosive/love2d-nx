@@ -5,8 +5,6 @@ registerComponent(SpawnMousePointer, "SpawnMousePointer")
 function SpawnMousePointer:awake()
     local actor = self.actor:scene():addActor()
 
-    actor:addComponent(Components.SpriteRenderer, "cursor")
-    actor:addComponent(Components.FollowMouse, -16, -16)
     actor:addComponent(Components.MousePointer)
 
     self.child = actor
