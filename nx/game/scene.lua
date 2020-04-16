@@ -201,7 +201,10 @@ end
 function Scene:getFirstBehavior(behavior)
     assert(behavior, "null component")
     local actors = self:getAllActorsWithBehavior(behavior)
-    assert(#actors > 0, "No actors with behavior " .. behavior.name)
+    assert(
+        #actors > 0,
+        "No actors with behavior " .. behavior.name .. " if this is a valid case then use getFirstBehaviorIfExists"
+    )
     return actors[1][behavior.name]
 end
 
