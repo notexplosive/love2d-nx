@@ -22,7 +22,7 @@ function AffixPos:start()
 end
 
 function AffixPos:update(dt)
-    self:acti()
+    self:act()
 end
 
 function AffixPos:act()
