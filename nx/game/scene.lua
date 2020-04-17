@@ -306,6 +306,7 @@ end
 Scene:createEvent("onScroll", {"x", "y"})
 Scene:createEvent("onTextInput", {"text"})
 Scene:createEvent("onMouseFocus", {"focus"})
+Scene:createEvent("onWindowResize", {"newWidth", "newHeight"})
 
 -- Custom events
 Scene:createEvent("onNotify", {"msg"})

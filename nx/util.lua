@@ -143,6 +143,15 @@ function swap(table, index1, index2)
     table[index2] = e1
 end
 
+-- functional programming utilities
+function map(fn, ...)
+    local result = {}
+    for i, v in ipairs({...}) do
+        result[i] = fn(v)
+    end
+    return unpack(result)
+end
+
 -- TODO: get index of maximum, also does this function do what it claims?
 function getIndexOfMinimum(list)
     local index = 1
