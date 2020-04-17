@@ -154,6 +154,7 @@ function Actor:removeComponent(componentClass)
     end
 
     component._componentDestroyed = true
+    self[componentClass.name] = nil
 
     return componentClass
 end
