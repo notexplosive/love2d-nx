@@ -57,6 +57,20 @@ function requireComponents(path)
     end
 end
 
+local Test = require("nx/test")
+Test.run(
+    "Component",
+    function()
+        local Actor = require("nx/game/actor")
+        local BoundingBox = require("nx/components/core/bounding-box")
+        local actor = Actor.new()
+        local bbox = actor:addComponent(BoundingBox)
+        Test.assert(bbox, actor.BoundingBox, "Component is equivalent to the return value of addComponent")
+        actor.BoundingBox:destroy()
+        Test.assert(nil, actor.BoundingBox, "Component is nil after destroy")
+    end
+)
+
 -- Recurse into each of these folders and call require() on all of them
 requireComponents("nx/components/")
 --requireComponents("mygame/")
