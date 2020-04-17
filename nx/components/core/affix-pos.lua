@@ -13,13 +13,19 @@ function AffixPos:setup(nameOrActor, v, y)
 
     self.offset = Vector.new(v, y)
     assert(self.target, "AffixPos was given a target that does not exist")
+    self:act()
 end
 
 function AffixPos:start()
     assert(self.target, "AffixPos was not initialized with a target")
+    self:act()
 end
 
 function AffixPos:update(dt)
+    self:acti()
+end
+
+function AffixPos:act()
     self.actor:setPos(self.target:pos() + self.offset)
 end
 
