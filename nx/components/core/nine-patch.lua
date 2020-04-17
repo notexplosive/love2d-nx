@@ -19,28 +19,30 @@ end
 
 function NinePatch:draw(x, y)
     local rect = self:getRect()
-    local x, y, width, height = rect:xywh()
+    local rx, ry, width, height = rect:xywh()
+    rx = x - self.inflateSize.width / 2
+    ry = y - self.inflateSize.height / 2
 
     local gw, gh = self.sprite:getGridCellDimensions()
     local middleWidth = width - gw * 2
     local middleHeight = height - gh * 2
-    local rightX = x + width - gw
-    local bottomY = y + height - gw
-    local middleX = x + gw
-    local middleY = y + gh
+    local rightX = rx + width - gw
+    local bottomY = ry + height - gw
+    local middleX = rx + gw
+    local middleY = ry + gh
 
     self.topBottomQuad:setViewport(0, 0, middleWidth, gh)
     self.leftRightQuad:setViewport(0, 0, gw, middleHeight)
     self.middleQuad:setViewport(0, 0, middleWidth, middleHeight)
 
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(self.imageAndQuads.topLeft.image, x, y)
-    love.graphics.draw(self.imageAndQuads.topRight.image, rightX, y)
-    love.graphics.draw(self.imageAndQuads.bottomLeft.image, x, bottomY)
+    love.graphics.draw(self.imageAndQuads.topLeft.image, rx, ry)
+    love.graphics.draw(self.imageAndQuads.topRight.image, rightX, ry)
+    love.graphics.draw(self.imageAndQuads.bottomLeft.image, rx, bottomY)
     love.graphics.draw(self.imageAndQuads.bottomRight.image, rightX, bottomY)
 
-    love.graphics.draw(self.imageAndQuads.top.image, self.topBottomQuad, middleX, y)
-    love.graphics.draw(self.imageAndQuads.left.image, self.leftRightQuad, x, middleY)
+    love.graphics.draw(self.imageAndQuads.top.image, self.topBottomQuad, middleX, ry)
+    love.graphics.draw(self.imageAndQuads.left.image, self.leftRightQuad, rx, middleY)
     love.graphics.draw(self.imageAndQuads.right.image, self.leftRightQuad, rightX, middleY)
     love.graphics.draw(self.imageAndQuads.bottom.image, self.topBottomQuad, middleX, bottomY)
     love.graphics.draw(self.imageAndQuads.middle.image, self.middleQuad, middleX, middleY)
@@ -116,7 +118,7 @@ Test.registerComponentTest(
     function()
         local Actor = require("nx/game/actor")
         local actor = Actor.new()
-        local setupArgs = {"windowchrome", 20, 30, 40, 50}
+        local setupArgs = {"window", 20, 30, 40, 50}
         actor:addComponent(Components.BoundingBox)
         local subject = actor:addComponent(NinePatch, unpack(setupArgs))
         Test.assert(setupArgs, {subject:reverseSetup()}, "reverseSetup can be fed to setup")
