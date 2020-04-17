@@ -67,7 +67,9 @@ Test.run(
         local bbox = actor:addComponent(BoundingBox)
         Test.assert(bbox, actor.BoundingBox, "Component is equivalent to the return value of addComponent")
         actor.BoundingBox:destroy()
-        Test.assert(nil, actor.BoundingBox, "Component is nil after destroy")
+        Test.assert(bbox, actor.BoundingBox, "Component is not nil after destroy")
+        actor:update(0)
+        Test.assert(nil, actor.BoundingBox, "Component is nil after destroy and update")
     end
 )
 

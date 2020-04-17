@@ -153,8 +153,8 @@ function Actor:removeComponent(componentClass)
         component:onDestroy()
     end
 
+    -- Flag component to be deleted at the start of next update
     component._componentDestroyed = true
-    self[componentClass.name] = nil
 
     return componentClass
 end
