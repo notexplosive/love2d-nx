@@ -51,6 +51,9 @@ function NinePatch:getSpriteName()
 end
 
 function NinePatch:setSprite(spriteName)
+    if spriteName == self.spriteName then
+        return
+    end
     self.spriteName = spriteName
     self.sprite = Assets.images[spriteName]
     assert(self.sprite, "no sprite with name " .. spriteName)
