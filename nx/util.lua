@@ -1,18 +1,14 @@
 function newObject(obj_t)
-    object = {}
+    local object = {}
 
     -- Do some lua magic so that myActor:update() calls Actor.update(myActor)
     setmetatable(object, obj_t)
     obj_t.__index = obj_t
 
     -- Call actor:type to get Actor class.
-    function object:type()
-        return obj_t
-    end
-
-    if not object.toString then
-        function object:toString()
-            return "<object does not implement toString()>"
+    if not obj_t.type then
+        function obj_t:type()
+            return obj_t
         end
     end
 
@@ -190,7 +186,7 @@ function string.join(table, joiner)
     local result = ""
     local len = #table
     for i, v in ipairs(table) do
-        result = result .. v
+        result = result .. tostring(v)
         if i ~= len then
             result = result .. joiner
         end
@@ -233,4 +229,19 @@ function insidePolygon(polygon, point)
         j = i
     end
     return oddNodes
+end
+
+local assertLocal = assert
+function assertType(object, typeName)
+    if DEBUG then
+        assertLocal(type(object) == typeName, "Expected " .. typeName .. " got " .. type(object))
+    end
+end
+
+function assertTypeOrNil(object, typeName)
+    if DEBUG then
+        if object ~= nil then
+            assertLocal(type(object) == typeName, "Expected " .. typeName .. " got " .. type(object))
+        end
+    end
 end

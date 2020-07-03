@@ -42,7 +42,11 @@ function Vector.newCardinal(name, magnitude)
 end
 
 function Vector:toString()
-    return "(" .. self.x .. "," .. self.y .. ")"
+    return "Vec(" .. self.x .. "," .. self.y .. ")"
+end
+
+function Vector:__tostring()
+    return self:toString()
 end
 
 function Vector.__eq(lhs, rhs)
@@ -95,10 +99,6 @@ end
 
 function Vector:distanceTo(v)
     return (self - v):length()
-end
-
-function Vector:toString()
-    return self.x .. ", " .. self.y
 end
 
 function Vector:getCardinalName()
@@ -164,6 +164,13 @@ function Vector:setAngle(theta)
     self.x = math.cos(theta) * length
     self.y = math.sin(theta) * length
     return self
+end
+
+function Vector:distanceToSquared(other)
+    local a = self.x - other.x
+    local b = self.y - other.y
+
+    return a * a + b * b
 end
 
 function Vector:angle()

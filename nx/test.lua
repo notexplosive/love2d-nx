@@ -67,11 +67,6 @@ function Test.assertEqualValues(expected, actual, message)
     local expectedString = tostring(expected)
     local actualString = tostring(actual)
 
-    if Test.isNxObject(expected) then
-        expectedString = expected:toString()
-        actualString = actual:toString()
-    end
-
     local failureMessage = message .. "\nexpected: " .. expectedString .. "\nactual: " .. actualString
 
     if Test.isFloatingPoint(expected) and Test.isFloatingPoint(actual) then

@@ -11,8 +11,12 @@ function TakeSnapshot:awake()
 end
 
 function TakeSnapshot:start()
-    debugLog("SNAPSHOT enabled")
-    self:takeSnapshot()
+    if not ALLOW_DEBUG then
+        self:destroy()
+    else
+        debugLog("SNAPSHOT enabled")
+        self:takeSnapshot()
+    end
 end
 
 function TakeSnapshot:update(dt)

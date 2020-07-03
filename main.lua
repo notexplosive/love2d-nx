@@ -1,4 +1,4 @@
-ALLOW_DEBUG = true
+ALLOW_DEBUG = false
 DEBUG = false
 
 require("nx/util")
@@ -45,6 +45,12 @@ function love.load(argv)
     Rect = require("nx/rect")
     List = require("nx/list")
     Color = require("nx/color")
+
+    for i, arg in ipairs(argv) do
+        if arg == "--debug" then
+            ALLOW_DEBUG = true
+        end
+    end
 
     require("nx/component-registry")
 

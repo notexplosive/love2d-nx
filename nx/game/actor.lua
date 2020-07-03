@@ -228,7 +228,11 @@ function Actor:update(dt)
         end
     end
 
-    self:callForAllComponents("update", dt)
+    for i, component in self.components:each() do
+        if component["update"] and not component._componentDestroyed then
+            component:update(dt)
+        end
+    end
 end
 
 -- Events are propagated down to each component

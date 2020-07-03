@@ -1,18 +1,19 @@
-local Json = require('nx/json')
+local Json = require("nx/json")
 State = {}
 State.persistedData = {}
 
-if not love.filesystem.getInfo('savefile') then
-    love.filesystem.write('savefile','')
-    State.persistedData = {}
-end
-
 function State:load()
-    local text = love.filesystem.read('savefile')
+    -- moved this out of global space so we don't errantly save a file
+    if not love.filesystem.getInfo("savefile") then
+        love.filesystem.write("savefile", "")
+        State.persistedData = {}
+    end
+
+    local text = love.filesystem.read("savefile")
 
     if text ~= "" then
         local data = Json.decode(text)
-        for i,key in ipairs(getKeys(data)) do
+        for i, key in ipairs(getKeys(data)) do
             State[key] = data[key]
         end
 
@@ -21,8 +22,10 @@ function State:load()
 end
 
 -- Sets a flag, does not write it to disk
-function State:set(flagName,val)
-    if val == nil then val = true end
+function State:set(flagName, val)
+    if val == nil then
+        val = true
+    end
     State[flagName] = val
 end
 
@@ -34,20 +37,22 @@ function State:getBool(flagName)
     if State:get(flagName) == nil then
         return false
     end
-    
+
     return State:get(flagName)
 end
 
 -- Sets a flag and then writes it to disk
-function State:persist(flagName,val)
-    if val == nil then val = true end
-    State:set(flagName,val)
+function State:persist(flagName, val)
+    if val == nil then
+        val = true
+    end
+    State:set(flagName, val)
     self.persistedData[flagName] = val
-    love.filesystem.write('savefile',Json.encode(self.persistedData))
+    love.filesystem.write("savefile", Json.encode(self.persistedData))
 end
 
 function State:deleteSave()
-    love.filesystem.remove('savefile')
+    love.filesystem.remove("savefile")
 end
 
 State:load()

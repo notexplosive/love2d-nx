@@ -16,6 +16,28 @@ function Color.new(r, g, b, a)
     return self
 end
 
+function Color.newHex(str)
+    local self = newObject(Color)
+
+    assert(type(str), "string")
+    self.rgba = {}
+
+    local r = self:parseHex(str:charAt(1) .. str:charAt(2))
+    local g = self:parseHex(str:charAt(3) .. str:charAt(4))
+    local b = self:parseHex(str:charAt(5) .. str:charAt(6))
+
+    self:setRed(r)
+    self:setGreen(g)
+    self:setBlue(b)
+    self:setAlpha(a or 1)
+
+    return self
+end
+
+function Color:parseHex(hex)
+    return tonumber(hex, 16) / 255
+end
+
 function Color:red()
     return self.rgba[1]
 end
@@ -35,6 +57,27 @@ end
 function Color:setRed(c)
     c = clamp(c, 0, 1)
     self.rgba[1] = c
+end
+
+function Color:invert()
+    local r = 1 - self.rgba[1]
+    local g = 1 - self.rgba[2]
+    local b = 1 - self.rgba[3]
+    return Color.new(r, g, b, self:alpha())
+end
+
+function Color:darken(n)
+    local r = self.rgba[1] - n
+    local g = self.rgba[2] - n
+    local b = self.rgba[3] - n
+    return Color.new(r, g, b, self:alpha())
+end
+
+function Color:lighten(n)
+    local r = self.rgba[1] + n
+    local g = self.rgba[2] + n
+    local b = self.rgba[3] + n
+    return Color.new(r, g, b, self:alpha())
 end
 
 function Color:setGreen(c)
@@ -86,8 +129,8 @@ function Color.__sub(left, right)
     return left:subtract(right)
 end
 
-function Color:rgbTable()
-    return {self:red(), self:green(), self:blue()}
+function Color:rgbTable(a)
+    return {self:red(), self:green(), self:blue(), a or 1}
 end
 
 function Color:rgbaTable()
@@ -148,6 +191,12 @@ Test.run(
         Test.assert({0.3, 0.5, 0.7, 0.9}, added:rgbaTable(), "Table")
         local subtracted = left - right
         Test.assert({0.1, 0.1, 0.1, 0.1}, subtracted:rgbaTable(), "Table")
+
+        -- HEX STRING
+        local hexColor = Color.newHex("badbad")
+        Test.assert(0.72941176470588, hexColor:red(), "Hex")
+        Test.assert(0.85882352941176, hexColor:green(), "Hex")
+        Test.assert(0.67843137254902, hexColor:blue(), "Hex")
     end
 )
 

@@ -1,5 +1,7 @@
 local List = {}
 
+local local_ipairs = ipairs
+
 function List.new(elementType)
     local self = newObject(List)
     if elementType then
@@ -51,21 +53,41 @@ function List:setAt(index, value)
 end
 
 function List:each()
-    return ipairs(self.innerList)
+    return local_ipairs(self.innerList)
+end
+
+function List:__tostring()
+    return "List [" .. self:length() .. "] " .. string.join(self.innerList, ", ")
+end
+
+function List.__eq(left, right)
+    if left:length() == right:length() then
+        for i, v in left:each() do
+            if left.innerList[i] ~= right.innerList[i] then
+                return false
+            end
+        end
+
+        return true
+    end
+
+    return false
 end
 
 -- this is o(n), :(
 function List:eachReversed()
     local reversedList = copyReversed(self.innerList)
-    return ipairs(reversedList)
+    return local_ipairs(reversedList)
 end
 
 function List:add(...)
     local params = {...}
-    for i, object in ipairs(params) do
-        assert(object, "Cannot add a nil to a list")
+    local local_assert = assert
+    for i, object in local_ipairs(params) do
+        local_assert(object, "Cannot add a nil to a list")
         if self.isTyped then
-            assert(object:type() == self.elementType, "added object is wrong type")
+            local_assert(type(object) == "table", "Expected a table, got a " .. type(object))
+            local_assert(object:type() == self.elementType, "added object is wrong type")
         end
 
         self.listLength = self.listLength + 1
@@ -75,6 +97,9 @@ function List:add(...)
 end
 
 function List:removeAt(index)
+    if self:length() == 0 then
+        return nil
+    end
     self:assertInBounds(index)
     self.listLength = self.listLength - 1
     return table.remove(self.innerList, index)
@@ -104,6 +129,10 @@ function List:peek()
     end
 
     return self:at(self.listLength)
+end
+
+function List:sort(sortingfn)
+    table.sort(self.innerList, sortingfn)
 end
 
 function List:clear()
@@ -234,6 +263,26 @@ Test.run(
         Test.assert(nil, subject:peek(), "Peeking an empty list is nil")
         subject:add(1, 7, 9, 11)
         Test.assert(11, subject:peek(), "Peeking gets the last item")
+
+        -- REMOVE LAST THING TEST
+        subject = List.new()
+        subject:add(1, 2)
+        Test.assert(1, subject:removeAt(1), "Remove first thing")
+        Test.assert(2, subject:removeAt(1), "Remove second thing")
+        Test.assert(nil, subject:removeAt(1), "Attempt to remove when there's nothing left")
+
+        -- TEST EQ OPERATOR
+        local leftList = List.new()
+        local rightList = List.new()
+        Test.assert(true, leftList == rightList, "Empty lists are equal")
+        leftList:add(1, 2, 3, 4)
+        rightList:add(1, 2, 3, 4)
+        Test.assert(true, leftList == rightList, "Lists with same contents are equal")
+        rightList:add(5)
+        Test.assert(true, leftList ~= rightList, "Lists with different sizes are not equal")
+        leftList:add(5)
+        leftList:setAt(3, 20)
+        Test.assert(true, leftList ~= rightList, "Lists with different contents are not equal")
     end
 )
 

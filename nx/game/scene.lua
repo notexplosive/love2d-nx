@@ -92,7 +92,7 @@ function Scene:setViewport(viewportComponent)
     self.viewport = viewportComponent
 end
 
-function Scene:getViewport(viewportComponent)
+function Scene:getViewport()
     return self.viewport
 end
 
@@ -101,6 +101,12 @@ function Scene:getViewportPosition()
         return self.viewport.actor:pos()
     else
         return Vector.new()
+    end
+end
+
+function Scene:setViewportPosition(pos)
+    if self.viewport then
+        self.viewport.actor:setPos(pos)
     end
 end
 
@@ -278,7 +284,11 @@ function Scene:getRect()
 end
 
 function Scene:getMousePosition(x, y)
-    return Vector.new(x, y) / self:getScale() + self:getViewportPosition()
+    if self.gameCanvas then
+        return self.gameCanvas:screenPosToCanvasPos(x, y)
+    else
+        return Vector.new(x, y) / self:getScale() + self:getViewportPosition()
+    end
 end
 
 -- Creates an event with a list of strings representing the args for that event
@@ -311,6 +321,7 @@ Scene:createEvent("onWindowResize", {"newWidth", "newHeight"})
 -- Custom events
 Scene:createEvent("onNotify", {"msg"})
 Scene:createEvent("onApplicationClose", {})
+Scene:createEvent("uiDraw", {}) -- Draw after viewport
 
 -- Keypress is handled in REVERSE order because we want them in order with drawing
 function Scene:onKeyPress(key, scancode, wasRelease)
@@ -369,11 +380,25 @@ function Scene:shake(frames, magnitude)
     end
 end
 
+function Scene:setGameCanvas(gameCanvasComponent)
+    self.gameCanvas = gameCanvasComponent
+end
+
+function Scene:getGameCanvas()
+    return self.gameCanvas
+end
+
 function Scene:draw()
     if self.viewport then
-        self.viewport:sceneDraw()
+        if self.gameCanvas then
+            self.gameCanvas:screenDraw()
+        else
+            self:draw_impl()
+        end
+        self:uiDraw()
     else
         self:draw_impl()
+        self:uiDraw()
     end
 end
 

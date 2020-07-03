@@ -9,6 +9,7 @@
     {
       "components": [["Viewport", 1, 1600, 900], ["Uneditable"]]
     },
+
     {
       "components": [["TriangleRenderer", 20]],
       "name": "Terry Triangle",

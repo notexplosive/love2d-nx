@@ -28,18 +28,28 @@ function FrameFreezeMode:onDestroy()
     self.actor.SidebarIcon:retract()
 end
 
+function FrameFreezeMode:onKeyPress(key, scancode, wasRelease)
+    if key == "\\" and not wasRelease then
+        self:step()
+    end
+end
+
 function FrameFreezeMode:onScroll(x, y)
     if y < 0 then
-        for i, scene in sceneLayers:eachInReverseDrawOrder() do
-            local listener = scene:getFirstBehaviorIfExists(Components.FrameFreezeListener)
-            if listener then
-                listener:tick(self.stepSize)
-            end
-        end
-
-        self.time = self.time + self.stepSize
-        self.actor.SecondsRenderer:setTime(self.time) -- this is wrong
+        self:step()
     end
+end
+
+function FrameFreezeMode:step()
+    for i, scene in sceneLayers:eachInReverseDrawOrder() do
+        local listener = scene:getFirstBehaviorIfExists(Components.FrameFreezeListener)
+        if listener then
+            listener:tick(self.stepSize)
+        end
+    end
+
+    self.time = self.time + self.stepSize
+    self.actor.SecondsRenderer:setTime(self.time) -- this is wrong
 end
 
 return FrameFreezeMode
